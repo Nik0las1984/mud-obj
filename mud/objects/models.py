@@ -90,7 +90,7 @@ class PropertyValue(models.Model):
 
 def parse_data(d, r):
     for l in d:
-        m = r.match(l)
+        m = r.match(l.strip())
         if m:
             d.remove(l)
             return m.groups()
@@ -121,15 +121,19 @@ class Object(models.Model):
         return self.name
 
     def out(self):
-        print u'Предмет \033[92m"%s"\033[0m, тип : %s' % (self.name, self.material.name)
+        print u'Предмет \033[92m"%s"\033[0m, тип : %s' % (self.name, self.type.name)
         print u'Вес: %s, Цена: %s, Рента: %s(%s)' % (self.weight, self.cost, self.cost_per_day_on, self.cost_per_day_off)
         print u'Материал : %s' % self.material.name
         print u'Неудобен : %s' % ",".join(map(unicode, self.no_use.all()))
         print u'Недоступен : %s' % ",".join(map(unicode, self.no_avail.all()))
-        if self.ac:
+        if self.extra.count() > 0:
+            print u'Имеет экстрафлаги: \033[93m%s\033[0m' % ",".join(map(unicode, self.extra.all()))
+        if self.ac is not None:
             print u'защита (AC) : \033[93m%s\033[0m' % self.ac
-        if self.armor:
+        if self.armor is not None:
             print u'броня       : \033[93m%s\033[0m' % self.armor
+        if self.affects.count() > 0:
+            print u'Накладывает на Вас аффекты : \033[93m%s\033[0m' % ",".join(map(unicode, self.affects.all()))
         if self.prop.count() > 0:
             print u'Дополнительные свойства :'
             for p in self.prop.all():
@@ -138,7 +142,7 @@ class Object(models.Model):
     @staticmethod
     def create_from_string(a):
         o = Object()
-        data = a.split('\n')
+        data = re.split(ur'[\n\r]+', a)
         
         # Имя и тип
         name = parse_data(data, re_name)
@@ -181,7 +185,22 @@ class Object(models.Model):
             for i in no_avail[0].split(','):
                 if i != NOTHING:
                     o.no_avail.add(NoProperty.get_or_create(i))
-        
+
+        # Аффекты
+        aff = parse_data(data, re_aff)
+        if aff is not None:
+            for i in aff[0].split(','):
+                if i != NOTHING:
+                    o.affects.add(Affect.get_or_create(i))
+                    
+        # Экстрафлаги
+        ex = parse_data(data, re_extra)
+        if ex is not None:
+            for i in ex[0].split(','):
+                if i != NOTHING:
+                    o.extra.add(ExtraFlag.get_or_create(i))
+
+                    
         # Улучшает
         add = parse_data(data, re_add)
         while add is not None:
@@ -191,18 +210,32 @@ class Object(models.Model):
         # Ухучшает
         sub = parse_data(data, re_sub)
         while sub is not None:
-            o.prop.add(PropertyValue.get_or_create(add[0], -int(add[1])))
+            o.prop.add(PropertyValue.get_or_create(sub[0], -int(sub[1])))
             sub = parse_data(data, re_sub)
         
         # Сохраняем
         o.save()
         return o
-       
+    
+    @staticmethod
+    def has_obj(name):
+        return Object.objects.filter(name = name).count() > 0
+    
+    @staticmethod
+    def has_obj_by_desc(a):
+        data = re.split(ur'[\n\r]+', a)
+        name = parse_data(data, re_name)[0]
+        return Object.has_obj(name)
+    
+    @staticmethod
+    def get_obj(name):
+        return Object.objects.get(name = name)
+    
     @staticmethod
     def create_or_get_from_string(a):
-        data = a.split('\n')
+        #print "PARSE:", a
+        data = re.split(ur'[\n\r]+', a)
         name = parse_data(data, re_name)[0]
-        f = Object.objects.filter(name = name)
-        if f.count() > 0:
-            return f[0]
+        if Object.has_obj(name) > 0:
+            return Object.get_obj(name)
         return Object.create_from_string(a)
