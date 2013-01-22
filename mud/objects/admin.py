@@ -1,4 +1,8 @@
 from django.contrib import admin
 from objects.models import *
 
-admin.site.register(Object)
+class ObjectAdmin(admin.ModelAdmin):
+    list_filter = ['type', 'affects', 'prop', 'extra']
+
+admin.site.register(Object, ObjectAdmin)
+
