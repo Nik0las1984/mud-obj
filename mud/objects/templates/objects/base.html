@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        body {
+            font-family: monospace;
+            background: gray;
+        }
+        a.obj_name, span.obj_name {
+            color: blue;
+            font-weight:bold;
+        }
+        span.obj_type {
+            color: yellow;
+        }
+        span.obj_affect {
+            color: green;
+        }
+        span.obj_extra {
+            color: green;
+        }
+        span.obj_prop {
+            color: cyan;
+            /*font-weight:bold;*/
+        }
+    </style>
+    <title>{% block title %}Mud objects database.{% endblock %}</title>
+</head>
+
+<body>
+        {% block content %}{% endblock %}
+</body>
+</html>
