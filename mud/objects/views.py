@@ -28,3 +28,17 @@ def index(request):
 def obj(request, name):
     o = get_object_or_404(Object, name = name)
     return render(request, 'objects/object.html', {'obj': o})
+
+def shop(request):
+    data = request.POST.get('data')
+    if data:
+        objs = Object.parse_baz(data)
+        if len(objs['bad']) < 1 and len(objs['good']) < 1:
+            objs = Object.parse_shop(data)
+        if len(objs['bad']) < 1 and len(objs['good']) < 1:
+            objs = Object.parse_inv(data)
+    else:
+        objs = []
+        data = ''
+    context = {'objs': objs, 'data': data, }
+    return render(request, 'objects/shop.html', context)

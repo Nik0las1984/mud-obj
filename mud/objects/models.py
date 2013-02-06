@@ -117,6 +117,8 @@ class Object(models.Model):
     dmg_str = models.CharField(max_length = 250, blank = True, null = True)
     dmg_avg = models.FloatField(blank = True, null = True)
     
+    mud_desc = models.TextField()
+    
     def __unicode__(self):
         return self.name
 
@@ -143,6 +145,9 @@ class Object(models.Model):
     def create_from_string(a):
         o = Object()
         data = re.split(ur'[\n\r]+', a)
+        
+        # Описание из мада
+        o.mud_desc = a
         
         # Имя и тип
         name = parse_data(data, re_name)
@@ -219,7 +224,7 @@ class Object(models.Model):
     
     @staticmethod
     def has_obj(name):
-        return Object.objects.filter(name = name).count() > 0
+        return Object.objects.filter(name__iexact = name).count() > 0
     
     @staticmethod
     def has_obj_by_desc(a):
@@ -229,7 +234,7 @@ class Object(models.Model):
     
     @staticmethod
     def get_obj(name):
-        return Object.objects.get(name = name)
+        return Object.objects.get(name__iexact = name)
     
     @staticmethod
     def create_or_get_from_string(a):
@@ -239,3 +244,67 @@ class Object(models.Model):
         if Object.has_obj(name) > 0:
             return Object.get_obj(name)
         return Object.create_from_string(a)
+
+    @staticmethod
+    def parse_baz(a):
+        good = []
+        bad = []
+        parsed = []
+        data = re.split(ur'[\n\r]+', a)
+        for l in data:
+            l = l.strip()
+            if l == '':
+                continue
+            if l[0] == '[':
+                l = l[9:][:64]
+                l = l[:l.rfind(' ')].strip()
+                if parsed.count(l) > 0:
+                    continue
+                parsed.append(l)
+                if Object.has_obj(l):
+                    good.append(Object.get_obj(l))
+                else:
+                    bad.append(l)
+        return { 'good': good, 'bad': bad, }
+        
+    @staticmethod
+    def parse_shop(a):
+        good = []
+        bad = []
+        parsed = []
+        data = re.split(ur'[\n\r]+', a)
+        for l in data:
+            l = l.strip()
+            if l == '':
+                continue
+            if l[3] == ')' or l[2] == ')' or l[1] == ')':
+                l = l[17:]
+                l = l[:l.rfind(' ')].strip()
+                if parsed.count(l) > 0:
+                    continue
+                parsed.append(l)
+                if Object.has_obj(l):
+                    good.append(Object.get_obj(l))
+                else:
+                    bad.append(l)
+        return { 'good': good, 'bad': bad, }
+    @staticmethod
+    def parse_inv(a):
+        good = []
+        bad = []
+        parsed = []
+        data = re.split(ur'[\n\r]+', a)
+        for l in data:
+            l = l.strip()
+            if l == '':
+                continue
+            if l[-1] == ')' or l[-1] == ']' or l[-1] == '>':
+                l = re.compile(ur'[\[<\(]{1}').split(l)[0].strip()
+                if parsed.count(l) > 0:
+                    continue
+                parsed.append(l)
+                if Object.has_obj(l):
+                    good.append(Object.get_obj(l))
+                else:
+                    bad.append(l)
+        return { 'good': good, 'bad': bad, }

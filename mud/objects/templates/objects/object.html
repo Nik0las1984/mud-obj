@@ -1,5 +1,43 @@
 {% extends "objects/base.html" %}
 
+{% block title %}Предмет: {{ obj.name }}{% endblock %}
+
 {% block content %}
-<span>{{ obj.name }}</span>
+
+<h2>{{ obj.name }}</h2>
+
+Предмет "<span class="obj_name">{{ obj.name }}</span>", тип : <span class="obj_type">БРОНЯ</span>
+<br />
+Вес: {{ obj.weight }}, Цена: {{ obj.cost }}, Рента: {{ obj.cost_per_day_on }}({{ obj.cost_per_day_off }})
+<br />
+Материал : <span class="obj_material">{{ obj.material }}</span>
+<br />
+Неудобен : {{ obj.no_use.all|join:", " }}
+<br />
+Недоступен : {{ obj.no_avail.all|join:", " }}
+<br />
+Имеет экстрафлаги: <span class="obj_extra">{{ obj.extra.all|join:", " }}</span>
+{% if obj.ac %}
+<br />
+защита (AC) : <span class="obj_ac">{{ obj.ac }}</span>
+{% endif %}
+{% if obj.armor %}
+<br />
+броня&nbsp; &nbsp; &nbsp; &nbsp;: <span class="obj_armor">{{ obj.armor }}</span>
+{% endif %}
+<br />
+Накладывает на вас аффекты: <span class="obj_affect">{{ obj.affects.all|join:", "}}</span>
+<br />
+Дополнительные свойства :
+{% for p in obj.prop.all %}
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="obj_prop">{{ p }}</span>
+{% endfor %}
+
+<br />
+<br />
+<h2>Оригинальное описание:</h2>
+<br />
+{{ obj.mud_desc|linebreaksbr }}
+
 {% endblock %}

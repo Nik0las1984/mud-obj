@@ -1,0 +1,32 @@
+{% extends "objects/base.html" %}
+
+{% block content %}
+<form method="post" action="">
+    {% csrf_token %}
+    <h2>Поиск по списку:</h2>
+    <p>Чтобы найти по списку просто вставьте вывод из базара, магазина или инвентаря.</p>
+    <p><textarea cols="100" rows="10" name="data">{{ data }}</textarea></p>
+    <p><input type="submit" value="найти"></input></p>
+</form>
+
+<h2>Найдено: {{ objs.good|length }}</h2>
+
+<table>
+{% for obj in objs.good %}
+<tr><td>
+{% include "objects/object_short.html" %}
+</td></tr>
+{% endfor %}
+</table>
+
+<h2>Не найдено: {{ objs.bad|length }}</h2>
+
+<table>
+{% for obj in objs.bad %}
+<tr><td>
+<span class="obj_bad">{{ obj }}</span>
+</td></tr>
+{% endfor %}
+</table>
+
+{% endblock %}

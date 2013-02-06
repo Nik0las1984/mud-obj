@@ -4,13 +4,17 @@
     <style type="text/css">
         body {
             font-family: monospace;
-            background: gray;
+            background: black;
+            color: white;
         }
         a.obj_name, span.obj_name {
-            color: blue;
-            font-weight:bold;
+            color: #90EE90;
+            font-weight: bold;
         }
         span.obj_type {
+            color: yellow;
+        }
+        span.obj_material {
             color: yellow;
         }
         span.obj_affect {
@@ -22,6 +26,16 @@
         span.obj_prop {
             color: cyan;
             /*font-weight:bold;*/
+        }
+        span.obj_ac {
+            color: red;
+        }
+        span.obj_armor {
+            color: red;
+        }
+        span.obj_bad {
+            color: red;
+            font-weight: bold;
         }
     </style>
     <title>{% block title %}Mud objects database.{% endblock %}</title>

@@ -11,7 +11,10 @@ setup_environ(settings)
 
 from objects.models import *
 
-objs = re.split(ur'[\n\r]{3}', codecs.open(sys.argv[1], "r", "utf-8").read())
+d = codecs.open(sys.argv[1], "r", "utf-8").read()
+if d[0] != u'П':
+    d = d[1:]
+objs = re.split(ur'[\n\r]{3}', d)
 
 for o in objs:
     if o.strip() != "":
