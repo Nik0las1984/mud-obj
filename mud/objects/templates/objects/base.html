@@ -37,11 +37,27 @@
             color: red;
             font-weight: bold;
         }
+        .left {
+            float: left;
+            /*width: 100px;*/
+            height: 500px;
+            margin: 10px;
+        }
+        .right {
+            float: right;
+        }
+        .yellow {
+            color: yellow;
+        }
+
     </style>
     <title>{% block title %}Mud objects database.{% endblock %}</title>
 </head>
 
 <body>
-        {% block content %}{% endblock %}
+<div>
+<div class="left">{% block menu %}{% endblock %}</div>
+<div class="center">{% block content %}{% endblock %}</div>
+</div>
 </body>
 </html>

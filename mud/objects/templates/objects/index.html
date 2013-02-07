@@ -1,17 +1,18 @@
 {% extends "objects/base.html" %}
 
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+
 {% block content %}
+<h2>Поиск по названию:</h2>
 <form action="">
-    Поиск по названию: <input type="text" name="name" value="{{ name }}"></input>
+    Введите название предмета: <input type="text" name="name" value="{{ name }}"></input>
     <input type="submit" value="найти"></input>
 </form>
 <table>
-{% for obj in objects %}
-    <tr>
-        <td>{% include "objects/object_short.html" %}</td>
-    </tr>
-{% endfor %}
-</table>
+<tr><td>
 <div class="pagination">
     <span class="step-links">
         {% if objects.has_previous %}
@@ -27,5 +28,29 @@
         {% endif %}
     </span>
 </div>
+</td></tr>
 
+{% for obj in objects %}
+    <tr>
+        <td>{% include "objects/object_short.html" %}</td>
+    </tr>
+{% endfor %}
+<tr><td>
+<div class="pagination">
+    <span class="step-links">
+        {% if objects.has_previous %}
+            <a href="?page={{ objects.previous_page_number }}"><<</a>
+        {% endif %}
+
+        <span class="current">
+            {{ objects.number }} из {{ objects.paginator.num_pages }}
+        </span>
+
+        {% if objects.has_next %}
+            <a href="?page={{ objects.next_page_number }}">>></a>
+        {% endif %}
+    </span>
+</div>
+</td></tr>
+</table>
 {% endblock %}

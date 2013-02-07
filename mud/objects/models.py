@@ -11,10 +11,14 @@ re_unaval = re.compile(ur'^Недоступен\s*:\s*(.+)$')
 re_extra = re.compile(ur'^Имеет\s+экстрафлаги\s*:\s*(.+)$')
 re_ac = re.compile(ur'^защита\s*\(AC\)\s*:\s*(\d+)\s*$')
 re_armor = re.compile(ur'^броня\s*:\s*(\d+)\s*$')
-re_aff = re.compile(ur'^Накладывает\s*на\s*вас\s*аффекты\s*:\s*(.+)$')
+re_aff = re.compile(ur'^Накладывает на вас аффекты: (.+)$')
 re_wear = re.compile(ur'^Можно\s+надеть\s+на\s+(.+)\.$')
 re_add = re.compile(ur'^\s*(.+)\s+улучшает\s+на\s+(\d+)$')
 re_sub = re.compile(ur'^\s*(.+)\s+ухудшает\s+на\s+(\d+)$')
+re_wear = re.compile(ur'^Можно надеть на (\S+)\.')
+re_take = re.compile(ur'^Можно взять в (.+)\.')
+re_weapon = re.compile(ur'^Принадлежит к классу "(.+)"\.')
+re_damage = re.compile(ur'^Наносимые повреждения \'([\dD]+)\' среднее ([\d\.]+)\.')
 
 NOTHING = u'ничего'
 
@@ -37,6 +41,21 @@ class ObjCharacteristic(models.Model):
     class Meta:
         abstract = True
 
+class Weapon(ObjCharacteristic):
+    @staticmethod
+    def get_or_create(name):
+        return ObjCharacteristic.get_or_create(name, Weapon)          
+        
+class Take(ObjCharacteristic):
+    @staticmethod
+    def get_or_create(name):
+        return ObjCharacteristic.get_or_create(name, Take)        
+        
+class Wear(ObjCharacteristic):
+    @staticmethod
+    def get_or_create(name):
+        return ObjCharacteristic.get_or_create(name, Wear)
+        
 class Type(ObjCharacteristic):
     @staticmethod
     def get_or_create(name):
@@ -104,6 +123,9 @@ class Object(models.Model):
     cost_per_day_off = models.IntegerField()
     material = models.ForeignKey(Material)
     type = models.ForeignKey(Type)
+    wear = models.ManyToManyField(Wear)
+    take = models.ManyToManyField(Take)
+    weapon = models.ForeignKey(Weapon, blank = True, null = True)
     
     affects = models.ManyToManyField(Affect)
     extra = models.ManyToManyField(ExtraFlag)
@@ -140,19 +162,27 @@ class Object(models.Model):
             print u'Дополнительные свойства :'
             for p in self.prop.all():
                 print u'\033[93m\t%s\033[0m' % p
-        
+    
+    def update_from_desc(self):
+        Object.create_from_string(self.mud_desc)
+    
     @staticmethod
     def create_from_string(a):
         o = Object()
         data = re.split(ur'[\n\r]+', a)
         
-        # Описание из мада
-        o.mud_desc = a
-        
         # Имя и тип
         name = parse_data(data, re_name)
+        
+        # Смотрим есть он уже в базе, если есть - обновляем все параметры.
+        if Object.has_obj(name[0]):
+            o = Object.get_obj(name[0])
+        
         o.name = name[0]
         o.type = Type.get_or_create(name[1])
+        
+        # Описание из мада
+        o.mud_desc = a
 
         # Вес и цена
         w = parse_data(data, re_weight)
@@ -177,7 +207,15 @@ class Object(models.Model):
         if armor is not None:
             o.armor = int(armor[0])
         
+        # Урон
+        dmg = parse_data(data, re_damage)
+        if dmg is not None:
+            o.dmg_str = dmg[0]
+            o.dmg_avg = float(dmg[1])
+        
+        
         # Неудобен
+        o.no_use.clear()
         no_use = parse_data(data, re_unconv)
         if no_use is not None:
             for i in no_use[0].split(','):
@@ -185,6 +223,7 @@ class Object(models.Model):
                     o.no_use.add(NoProperty.get_or_create(i))
         
         # Недоступен
+        o.no_avail.clear()
         no_avail = parse_data(data, re_unaval)
         if no_avail is not None:
             for i in no_avail[0].split(','):
@@ -192,6 +231,7 @@ class Object(models.Model):
                     o.no_avail.add(NoProperty.get_or_create(i))
 
         # Аффекты
+        o.affects.clear()
         aff = parse_data(data, re_aff)
         if aff is not None:
             for i in aff[0].split(','):
@@ -199,13 +239,14 @@ class Object(models.Model):
                     o.affects.add(Affect.get_or_create(i))
                     
         # Экстрафлаги
+        o.extra.clear()
         ex = parse_data(data, re_extra)
         if ex is not None:
             for i in ex[0].split(','):
                 if i != NOTHING:
                     o.extra.add(ExtraFlag.get_or_create(i))
 
-                    
+        o.prop.clear()  
         # Улучшает
         add = parse_data(data, re_add)
         while add is not None:
@@ -217,6 +258,26 @@ class Object(models.Model):
         while sub is not None:
             o.prop.add(PropertyValue.get_or_create(sub[0], -int(sub[1])))
             sub = parse_data(data, re_sub)
+        
+        
+        # Куда одеть
+        o.wear.clear()
+        wear = parse_data(data, re_wear)
+        while wear is not None:
+            o.wear.add(Wear.get_or_create(wear[0]))
+            wear = parse_data(data, re_wear)
+        
+        # Куда взять
+        o.take.clear()
+        take = parse_data(data, re_take)
+        while take is not None:
+            o.take.add(Take.get_or_create(take[0]))
+            take = parse_data(data, re_take)
+        
+        # Класс оружия
+        weapon = parse_data(data, re_weapon)
+        if weapon is not None:
+            o.weapon = Weapon.get_or_create(weapon[0])
         
         # Сохраняем
         o.save()

@@ -1,5 +1,10 @@
 {% extends "objects/base.html" %}
 
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+
 {% block content %}
 <form method="post" action="">
     {% csrf_token %}
