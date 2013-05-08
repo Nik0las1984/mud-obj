@@ -1,0 +1,61 @@
+{% extends "objects/base.html" %}
+
+{% block title %}Каналы: заметить{% endblock %}
+
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+<h2>Заметить:</h2>
+
+<table>
+<tr><td>
+<div class="pagination">
+    <span class="step-links">
+        {% if messages.has_previous %}
+            <a href="?page={{ messages.previous_page_number }}"><<</a>
+        {% endif %}
+
+        <span class="current">
+            {{ messages.number }} из {{ messages.paginator.num_pages }}
+        </span>
+
+        {% if messages.has_next %}
+            <a href="?page={{ messages.next_page_number }}">>></a>
+        {% endif %}
+    </span>
+</div>
+</td></tr>
+
+{% for m in messages %}
+    <tr>
+        <td>
+            <span class="scream">
+                [{{ m.date|date:"Y-m-d H:i" }}] {{ m.user.name }} заорал(а) : {{ m.text }}
+            </span>
+        </td>
+    </tr>
+{% endfor %}
+<tr><td>
+<div class="pagination">
+    <span class="step-links">
+        {% if messages.has_previous %}
+            <a href="?page={{ messages.previous_page_number }}"><<</a>
+        {% endif %}
+
+        <span class="current">
+            {{ messages.number }} из {{ messages.paginator.num_pages }}
+        </span>
+
+        {% if messages.has_next %}
+            <a href="?page={{ messages.next_page_number }}">>></a>
+        {% endif %}
+    </span>
+</div>
+</td></tr>
+</table>
+
+{% endblock %}

@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404
 
 from channels.models import *
 
-def offtop(request):
-    o = Channel.objects.filter(type__exact = Channel.OFFTOP)
+def channel(request, type, template):
+    o = Channel.objects.filter(type__exact = type)
     
     paginator = Paginator(o.order_by('date').reverse(), 50)
     page = request.GET.get('page')
@@ -17,5 +17,14 @@ def offtop(request):
         o = paginator.page(paginator.num_pages)
 
     context = {'messages': o, }
-    return render(request, 'channels/offtop.html', context)
+    return render(request, template, context)
 
+
+def offtop(request):
+    return channel(request, Channel.OFFTOP, 'channels/offtop.html')
+
+def bolt(request):
+    return channel(request, Channel.BOLT, 'channels/bolt.html')
+
+def scream(request):
+    return channel(request, Channel.SCREAM, 'channels/scream.html')
