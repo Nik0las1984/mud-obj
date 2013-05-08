@@ -1,6 +1,6 @@
 {% extends "objects/base.html" %}
 
-{% block title %}Каналы: заметить{% endblock %}
+{% block title %}Каналы: {{ title }}{% endblock %}
 
 {% block menu %}
 {% include "objects/menu.html" %}
@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<h2>Заметить:</h2>
+<h2>{{ title }}:</h2>
 
 <table>
 <tr><td>
@@ -33,9 +33,19 @@
 {% for m in messages %}
     <tr>
         <td>
+            {% if m.type == 0 %}
+            <span class="offtop">
+                [{{ m.date|date:"Y-m-d H:i" }}] [оффтоп] {{ m.user.name }} : {{ m.text }}
+            </span>
+            {% elif m.type == '1' %}
             <span class="bolt">
                 [{{ m.date|date:"Y-m-d H:i" }}] {{ m.user.name }} заметил(а) : {{ m.text }}
             </span>
+            {% elif m.type == '2' %}
+            <span class="scream">
+                [{{ m.date|date:"Y-m-d H:i" }}] {{ m.user.name }} заорал(а) : {{ m.text }}
+            </span>
+            {% endif %}
         </td>
     </tr>
 {% endfor %}
