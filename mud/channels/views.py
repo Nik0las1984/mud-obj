@@ -7,12 +7,12 @@ from django.shortcuts import get_object_or_404
 from channels.models import *
 
 def channel(request, o, title):
-    paginator = Paginator(o.order_by('date').reverse(), 50)
+    paginator = Paginator(o.order_by('date'), 50)
     page = request.GET.get('page')
     try:
         o = paginator.page(page)
     except PageNotAnInteger:
-        o = paginator.page(1)
+        o = paginator.page(paginator.num_pages)
     except EmptyPage:
         o = paginator.page(paginator.num_pages)
 
