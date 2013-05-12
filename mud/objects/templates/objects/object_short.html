@@ -1,15 +1,12 @@
 <a class="obj_name" href="/objects/obj/{{ obj.name }}/">{{ obj.name }}</a>
 (
 <span class="obj_type">{{ obj.type }}</span>
-
 {% if obj.affects.count %}
 <span class="obj_affect">{{ obj.affects.all|join:", " }}</span>
 {% endif %}
-
 {% if obj.extra.count %}
-<span class="obj_extra">{{ obj.extra.all|join:", " }}</span>
+<span class="obj_extra">{{ obj.extra_clean|join:", " }}</span>
 {% endif %}
-
 {% if obj.prop.count %}
 <span class="obj_prop">{{ obj.prop.all|join:", " }}</span>
 {% endif %}

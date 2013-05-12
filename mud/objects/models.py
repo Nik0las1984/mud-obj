@@ -166,6 +166,10 @@ class Object(models.Model):
     def update_from_desc(self):
         Object.create_from_string(self.mud_desc)
     
+    
+    def extra_clean(self):
+        return self.extra.exclude(name = u'таймер запущен')
+    
     @staticmethod
     def create_from_string(a):
         o = Object()
