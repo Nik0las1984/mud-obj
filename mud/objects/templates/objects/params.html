@@ -1,0 +1,27 @@
+{% extends "objects/base.html" %}
+
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+<h2>Подбор по параметрам:</h2>
+
+<form method="get">
+    {{ form.as_p }}
+    <input type="submit" value="Найти" />
+</form>
+
+<h2>Найдено {{ count }}, показано {{ objs|length }}:</h2>
+
+<table>
+{% for obj in objs %}
+<tr><td>
+{% include "objects/object_short.html" %}
+</td></tr>
+{% endfor %}
+</table>
+
+{% endblock %}
