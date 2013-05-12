@@ -53,6 +53,8 @@ def params(request):
     objs = Object.objects.all()
     if f.cleaned_data['name'] != '':
         objs = objs.filter(name__icontains = f.cleaned_data['name'])
+    if f.cleaned_data['weapon']:
+        objs = objs.filter(weapon = f.cleaned_data['weapon'])
     if f.cleaned_data['wear']:
         objs = objs.filter(wear = f.cleaned_data['wear'])
     if f.cleaned_data['take']:
