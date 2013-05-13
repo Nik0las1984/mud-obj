@@ -21,3 +21,10 @@ class User(models.Model):
             u.name = name
             u.save()
         return User.get_user(name)
+
+class Counter(models.Model):
+    name = models.TextField()
+    body = models.TextField()
+    
+    def __unicode__(self):
+        return self.name

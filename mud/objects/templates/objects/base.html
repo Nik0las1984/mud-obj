@@ -71,5 +71,10 @@
 <div class="left">{% block menu %}{% endblock %}</div>
 <div class="center">{% block content %}{% endblock %}</div>
 </div>
+
+{% for c in counters %}
+{{ c.body }}
+{% endfor %}
+
 </body>
 </html>
