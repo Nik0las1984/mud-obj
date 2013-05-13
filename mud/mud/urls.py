@@ -17,3 +17,8 @@ urlpatterns = patterns('',
     url(r'^objects/', include('objects.urls')),
     url(r'^channels/', include('channels.urls')),
 )
+
+# Flatpages
+urlpatterns += patterns('django.contrib.flatpages.views',
+    url(r'^$', 'flatpage', {'url': '/index/'}, name='index'),
+)
