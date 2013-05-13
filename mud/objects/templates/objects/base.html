@@ -72,9 +72,11 @@
 <div class="center">{% block content %}{% endblock %}</div>
 </div>
 
+{% autoescape off %}
 {% for c in counters %}
 {{ c.body }}
 {% endfor %}
+{% endautoescape %}
 
 </body>
 </html>
