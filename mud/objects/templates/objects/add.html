@@ -1,0 +1,28 @@
+{% extends "objects/base.html" %}
+
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+{% block title %}Добавить новый предмет в базу.{% endblock %}
+
+{% block content %}
+
+<h2>Добавить:</h2>
+
+<p>Введите оригинальное описание из МАДа, просто скопировав вывод команды "опознать" или "характеристики".</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Добавить" />
+</form>
+
+{% if info %}
+<p class="info">{{ info }}</p>
+{% endif %}
+
+{% if obj %}
+{% include "objects/object_desc.html" %}
+{% endif %}
+
+{% endblock %}

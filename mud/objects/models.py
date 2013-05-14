@@ -141,6 +141,8 @@ class Object(models.Model):
     
     mud_desc = models.TextField()
     
+    checked = models.BooleanField(default = True)
+    
     def __unicode__(self):
         return self.name
 
@@ -292,10 +294,16 @@ class Object(models.Model):
         return Object.objects.filter(name__iexact = name).count() > 0
     
     @staticmethod
+    def get_name_from_desc(desc):
+        data = re.split(ur'[\n\r]+', desc)
+        p = parse_data(data, re_name)
+        if p:
+            return p[0]
+        return None
+    
+    @staticmethod
     def has_obj_by_desc(a):
-        data = re.split(ur'[\n\r]+', a)
-        name = parse_data(data, re_name)[0]
-        return Object.has_obj(name)
+        return Object.has_obj(Object.get_name_from_desc(a))
     
     @staticmethod
     def get_obj(name):

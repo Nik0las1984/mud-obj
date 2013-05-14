@@ -1,0 +1,60 @@
+<h2>{{ obj.name }}</h2>
+
+Предмет "<span class="obj_name">{{ obj.name }}</span>", тип : <span class="obj_type">БРОНЯ</span>
+<br />
+
+{% if obj.wear.all|length > 0 %}
+{% for w in obj.wear.all %}
+Можно надеть на <span class="yellow">{{ w }}</span>.
+<br />
+{% endfor %}
+{% endif %}
+
+{% if obj.weapon %}
+Принадлежит к классу "<span class="">{{ obj.weapon.name }}</span>".
+<br />
+{% endif %}
+
+{% if obj.take.all|length > 0 %}
+{% for t in obj.take.all %}
+Можно взять в <span class="yellow">{{ t }}</span>.
+<br />
+{% endfor %}
+{% endif %}
+
+Вес: {{ obj.weight }}, Цена: {{ obj.cost }}, Рента: {{ obj.cost_per_day_on }}({{ obj.cost_per_day_off }})
+<br />
+Материал : <span class="obj_material">{{ obj.material }}</span>
+<br />
+Неудобен : {{ obj.no_use.all|join:", " }}
+<br />
+Недоступен : {{ obj.no_avail.all|join:", " }}
+<br />
+Имеет экстрафлаги: <span class="obj_extra">{{ obj.extra.all|join:", " }}</span>
+<br />
+
+{% if obj.dmg_str %}
+Наносимые повреждения '{{ obj.dmg_str }}' среднее {{ obj.dmg_avg }}.
+<br />
+{% endif %}
+
+{% if obj.ac != None %}
+защита (AC) : <span class="obj_ac">{{ obj.ac }}</span>
+<br />
+{% endif %}
+
+{% if obj.armor != None %}
+броня&nbsp; &nbsp; &nbsp; &nbsp;: <span class="obj_armor">{{ obj.armor }}</span>
+<br />
+{% endif %}
+
+Накладывает на вас аффекты: <span class="obj_affect">{{ obj.affects.all|join:", "}}</span>
+<br />
+
+{% if obj.prop.all|length > 0 %}
+Дополнительные свойства :
+{% for p in obj.prop.all %}
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="obj_prop">{{ p }}</span>
+{% endfor %}
+{% endif %}

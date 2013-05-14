@@ -1,9 +1,43 @@
+# coding=utf-8
+
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
 
 from objects.models import *
 from objects.forms import *
+
+def add(request):
+    info = ''
+    o = None
+    clazz = CreateObjectForm
+    if request.user.is_authenticated():
+        clazz = CreateObjectFormNoCaptcha
+    
+    f = clazz()
+        
+    if request.method == 'POST':
+        f = clazz(request.POST)
+    if f.is_valid():
+        d = f.cleaned_data['text'].strip()
+        # Находим имя
+        name = Object.get_name_from_desc(d)
+        
+        # Смотрим есть ли предмет
+        if Object.has_obj(name or ''):
+            info = u'Оъект уже есть в базе данных.'
+            o = Object.get_obj(name)
+        else:
+            try:
+                o = Object.create_from_string(d)
+                o.checked = False
+                o.save()
+                info = u'Оъект успешно добавлен.'
+            except:
+                info = u'Ошибка при добавлении объекта. Невозможно распарсить данные.'
+        
+    context = {'form': f, 'info': info, 'obj': o, }
+    return render(request, 'objects/add.html', context)
 
 def index(request):
     objs = Object.objects
@@ -76,6 +110,6 @@ def params(request):
     
     c = objs.count()
     objs = objs[:30]
-    context = {'form': f, 'objs': objs, 'count': c,}
+    context = {'form': f, 'objs': objs, 'count': c}
     return render(request, 'objects/params.html', context)
     

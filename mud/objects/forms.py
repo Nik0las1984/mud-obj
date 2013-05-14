@@ -2,6 +2,7 @@
 
 from django import forms
 from objects.models import *
+from captcha.fields import *
 
 
 class ParamsForm(forms.Form):
@@ -17,3 +18,10 @@ class ParamsForm(forms.Form):
     affects = forms.ModelChoiceField(label = u'Аффекты', queryset = Affect.objects.filter().order_by('name'), required = False)
     prop = forms.ModelChoiceField(label = u'Дополнительные свойства', queryset = PropertyValue.objects.filter().order_by('prop__name'), required = False)
 
+class CreateObjectForm(forms.Form):
+    text = forms.CharField(label = u'', required = True, widget = forms.Textarea(attrs = {'cols': 90, 'rows': 15}))
+    captcha = CaptchaField(label = u'Введите символы с картинки')
+
+class CreateObjectFormNoCaptcha(forms.Form):
+    text = forms.CharField(label = u'', required = True, widget = forms.Textarea(attrs = {'cols': 90, 'rows': 15}))
+    
