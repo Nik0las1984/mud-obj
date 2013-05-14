@@ -13,10 +13,18 @@ class MudClient():
         self.lines = ''
         self.paragraphs = ''
         self.plugins = []
+        self.commands = {}
     
     def command(self, c):
-        self._out(c + '\n')
-        self.transport.write(c + '\n')
+        if c != '' and c[0] == '#':
+            com = c.split(' ')[0][1:].strip()
+            if self.commands.has_key(com):
+                self.commands[com].on_command(c)
+            else:
+                self._out('Unknown command: %s\n' % c)
+        else:
+            self._out(c + '\n')
+            self.transport.write(c + '\n')
     
     def _out(self, msg):
         for o in self.out:
@@ -67,8 +75,15 @@ class MudClient():
         self.plugins.append(l)
         l.set_client(self)
     
+    def set_command(self, c, l):
+        self.commands[c] = l
+        l.set_client(self)
+    
     def login(self, u, p):
         self.command('5')
         self.command(u)
         self.command(p)
+    
+    def exit(self):
+        self.transport.exit()
         
