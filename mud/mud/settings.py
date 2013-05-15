@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'objects',
     'core',
     'channels',
+    'boards',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
