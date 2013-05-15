@@ -1,6 +1,6 @@
 <h2>{{ obj.name }}</h2>
 
-Предмет "<span class="obj_name">{{ obj.name }}</span>", тип : <span class="obj_type">БРОНЯ</span>
+Предмет "<span class="obj_name">{{ obj.name }}</span>", тип : <span class="obj_type">{{ obj.type.name }}</span>
 <br />
 
 {% if obj.wear.all|length > 0 %}
