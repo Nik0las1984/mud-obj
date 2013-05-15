@@ -2,10 +2,14 @@
 <html>
 <head>
     <style type="text/css">
+        html, body
+        {
+            height: 100%;
+        }
         body {
             font-family: monospace;
             background: black;
-            color: white;
+            color: #c8c8c8;
         }
         a {
             color: white;
@@ -52,17 +56,27 @@
         p.info {
             color: #ffff00;
         }
+        .layout {
+        }
         .left {
             float: left;
-            /*width: 100px;*/
-            height: 700px;
+            width: 200px;
             margin: 10px;
         }
-        .right {
-            float: right;
+        .center {
+            padding-left: 220px;
         }
         .yellow {
             color: yellow;
+        }
+        .board {
+            margin-top: 20px;
+        }
+        .pagination {
+            margin-top: 10px;
+        }
+        .message-header {
+            font-weight: bold;
         }
 
     </style>
@@ -70,7 +84,7 @@
 </head>
 
 <body>
-<div>
+<div class="layout">
 <div class="left">{% block menu %}{% endblock %}</div>
 <div class="center">{% block content %}{% endblock %}</div>
 </div>

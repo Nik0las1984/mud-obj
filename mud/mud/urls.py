@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^objects/', include('objects.urls')),
     url(r'^channels/', include('channels.urls')),
+    url(r'^boards/', include('boards.urls')),
 )
 
 # Captcha

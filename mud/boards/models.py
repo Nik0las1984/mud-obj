@@ -26,7 +26,7 @@ class Board(models.Model):
     title = models.TextField()
     text = models.TextField()
     type = models.IntegerField(choices = BOARD_TYPES)
-    
+        
     @staticmethod
     def parse_file(path):
         f = codecs.open(path, "r", "utf-8")
@@ -36,7 +36,11 @@ class Board(models.Model):
         date = datetime.datetime.strptime(l, '%H:%M %d-%m-%Y')
         user = f.readline().strip()
         title = f.readline().strip()
-        message = f.read().strip()
+        message = ''
+        l = f.readline()
+        while l != '':
+            message = '%s\n%s' % (message, l)
+            l = f.readline()
         f.close()
         return (num, date, user, title, message)
     

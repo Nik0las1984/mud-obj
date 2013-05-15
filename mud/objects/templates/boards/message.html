@@ -1,0 +1,9 @@
+<div class="board">
+{% if flag %}
+[{{ m.get_type_display }}]
+{% endif %}
+<a href="/boards/message/{{ m.id }}/"><span class="message-header">{{ m }}</span></a>
+<br />
+{{ m.text|truncatewords_html:10|linebreaks }}
+<br />
+</div>
