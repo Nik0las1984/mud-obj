@@ -1,4 +1,5 @@
-﻿#!/usr/bin/env python
+﻿# coding=utf-8
+#!/usr/bin/env python
 
 
 import telnetlib
@@ -8,6 +9,8 @@ import sys
 import client
 import plugins
 import commands
+
+import config
 
 class TelnetTransport(threading.Thread):
     def __init__(self, host, port, client):
@@ -21,11 +24,8 @@ class TelnetTransport(threading.Thread):
 
     def run(self):
         while self.active:
-            try:
-                if self.t.sock_avail():
-                    self.client.on_data(self.t.read_eager())
-            except e:
-                print e
+            if self.t.sock_avail():
+                self.client.on_data(self.t.read_eager())
 
     def write(self, msg):
         self.t.write(msg)
@@ -44,12 +44,20 @@ c.add_plugin(plugins.OfftopLogger())
 c.add_plugin(plugins.ScreamLogger())
 c.add_plugin(plugins.BoltLogger())
 
+c.add_plugin(plugins.BoardsLogger())
+
 c.set_command("echo", commands.EchoCommand())
 c.set_command("exit", commands.ExitCommand())
 
 m = TelnetTransport('bylins.su', 4000, c)
 c.set_transport(m)
 m.start()
+
+print c.commands
+print c.plugins
+
+if config.auto_login:
+    c.login(config.user, config.password)
 
 while m.active:
     data = raw_input()

@@ -2,6 +2,7 @@
 
 import re
 import sys
+import time
 
 RE_STATUS = re.compile(r'\x1b\[0;32m(\d+)H\x1b\[0;37m \x1b\[0;32m(\d+)M\x1b\[0;37m (\d+)о Зауч:(\d+) (\d+)L (\d+)G Вых:(\S+)>')
 RE_STATUS_NO_GROUPS = re.compile(r'\x1b\[\d;\d\dm\d+H\x1b\[\d;\d\dm \x1b\[\d;\d\dm\d+M\x1b\[\d;\d\dm \d+о Зауч:\d+ \d+L \d+G Вых:\S+>')
@@ -80,9 +81,13 @@ class MudClient():
         l.set_client(self)
     
     def login(self, u, p):
+        time.sleep(1)
         self.command('5')
+        time.sleep(1)
         self.command(u)
+        time.sleep(1)
         self.command(p)
+        self.command('')
     
     def exit(self):
         self.transport.exit()
