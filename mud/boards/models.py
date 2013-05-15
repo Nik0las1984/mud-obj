@@ -1,6 +1,7 @@
 # coding=utf-8
 import codecs
 import datetime
+import re
 
 from django.db import models
 from django.utils import html
@@ -8,6 +9,8 @@ from django.utils import html
 from core.models import User
 
 import deansi
+
+RE_EMAIL = re.compile(ur'\b[\w.]+@+[\w.]+.+[\w.]\b')
 
 class Board(models.Model):
     NEWS  = 0
@@ -68,7 +71,7 @@ class Board(models.Model):
         b.title = msg[3]
         b.title_safe = deansi.deansi(msg[3])
         b.text = msg[4]
-        b.text_safe = deansi.deansi(msg[4])
+        b.text_safe = deansi.deansi(RE_EMAIL.sub(u'[скрыто]', msg[4]))
         b.save()
         return b
 
