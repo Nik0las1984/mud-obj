@@ -2,8 +2,8 @@
 {% if flag %}
 [{{ m.get_type_display }}]
 {% endif %}
-<a href="/boards/message/{{ m.id }}/"><span class="message-header">{{ m }}</span></a>
+<a href="/boards/message/{{ m.id }}/"><span class="message-header">{% autoescape off %}{{ m }}{% endautoescape %}</span></a>
 <br />
-{{ m.text|truncatewords_html:10|linebreaks }}
+{% autoescape off %}{{ m.text_safe|truncatewords_html:10|linebreaks }}{% endautoescape %}
 <br />
 </div>

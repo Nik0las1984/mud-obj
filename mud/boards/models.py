@@ -3,9 +3,11 @@ import codecs
 import datetime
 
 from django.db import models
+from django.utils import html
 
 from core.models import User
 
+import deansi
 
 class Board(models.Model):
     NEWS  = 0
@@ -24,7 +26,9 @@ class Board(models.Model):
     mud_num = models.IntegerField()
     user = models.ForeignKey(User)
     title = models.TextField()
+    title_safe = models.TextField(null = True)
     text = models.TextField()
+    text_safe = models.TextField(null = True)
     type = models.IntegerField(choices = BOARD_TYPES)
         
     @staticmethod
@@ -62,7 +66,9 @@ class Board(models.Model):
         b.mud_num = msg[0]
         b.mud_date = msg[1]
         b.title = msg[3]
+        b.title_safe = deansi.deansi(msg[3])
         b.text = msg[4]
+        b.text_safe = deansi.deansi(msg[4])
         b.save()
         return b
 
@@ -70,4 +76,4 @@ class Board(models.Model):
         return self.mud_date.strftime('%H:%M %d-%m-%Y')
     
     def __unicode__(self):
-        return u'%s (%s) :: %s' % (self.mdate(), self.user.name, self.title)
+        return u'%s (%s) :: %s' % (self.mdate(), self.user.name, self.title_safe)

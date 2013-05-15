@@ -1,6 +1,6 @@
 {% extends "objects/base.html" %}
 
-{% block title %}Доски: {{ m }}{% endblock %}
+{% block title %}Доски: {{ m.title }}{% endblock %}
 
 {% block menu %}
 {% include "objects/menu.html" %}
@@ -9,8 +9,9 @@
 
 {% block content %}
 
-<h2> [{{ m.get_type_display }}] {{ m }} </h2>
-
-{{ m.text|linebreaks }}
+<h2> [{{ m.get_type_display }}] {% autoescape off %}{{ m }}{% endautoescape %} </h2>
+{% autoescape off %}
+{{ m.text_safe|linebreaks }}
+{% endautoescape %}
 
 {% endblock %}
