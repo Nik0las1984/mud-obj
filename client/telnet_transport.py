@@ -49,6 +49,9 @@ c.add_plugin(plugins.BoardsLogger())
 c.set_command("echo", commands.EchoCommand())
 c.set_command("exit", commands.ExitCommand())
 
+for p in config.plugins:
+    c.add_plugin(p)
+
 m = TelnetTransport('bylins.su', 4000, c)
 c.set_transport(m)
 m.start()

@@ -195,4 +195,76 @@ class BoardsLogger():
         if self.client is None:
             self.client = c
             c.set_command('boards', self)
-   
+            
+            
+class StatisticLogger():
+    HEADER = '\x1b[1;36mСтатистика по игрокам, находящимся в игре (всего / 25 и выше / ниже 25):\x1b[0;37m'
+    RE_LINE = re.compile(r'([\S]+)\s+\x1b\[1;31m\[\x1b\[1;36m\s*(\d+)/\s*(\d+)/\s*(\d+)\s*\x1b\[1;31m\]\x1b\[0;37m\s+([\S]+)\s+\x1b\[1;31m\[\x1b\[1;36m\s*(\d+)/\s*(\d+)/\s*(\d+)\s*\x1b\[1;31m\]\x1b\[0;37m')
+    RE_REMORT = re.compile(r'Игроков с перевоплощениями\|без\s+\x1b\[1;31m\[\x1b\[1;36m\s*(\d+)\s*\x1b\[1;31m\|\x1b\[1;36m\s*(\d+)\s*\x1b\[1;31m\]\x1b\[0;37m')
+    RE_CLAN = re.compile(r'Клановых\|внеклановых игроков\s+\x1b\[1;31m\[\x1b\[1;36m\s*(\d+)\s*\x1b\[1;31m\|\x1b\[1;36m\s*(\d+)\s*\x1b\[1;31m\]\x1b\[0;37m')
+    RE_PK = re.compile(r'Игроков с флагами ПК\|без ПК\s+\x1b\[1;31m\[\x1b\[1;36m\s*(\d+)\s*\x1b\[1;31m\|\x1b\[1;36m\s*(\d+)\s*\x1b\[1;31m\]\x1b\[0;37m')
+    
+    PROFS = [
+        'Лекари',
+        'Тати',
+        'Наемники',
+        'Кудесники',
+        'Чернокнижники',
+        'Охотники',
+        'Купцы',
+        'Колдуны',
+        'Богатыри',
+        'Дружинники',
+        'Волшебники',
+        'Витязи',
+        'Кузнецы',
+        'Волхвы'
+        ]
+    
+    def __init__(self):
+        self.log_file = 'statistic.log'
+        self.log_every_hour = 12
+        self.counter = 0
+    
+    def on_line(self, l):
+        if RE_HOUR.match(l):
+            self.counter = self.counter + 1
+        if self.counter == self.log_every_hour:
+            self.client.command('статистика')
+
+    def on_paragraph(self, p):
+        if p.strip().startswith(StatisticLogger.HEADER):
+            date = datetime.datetime.now()
+            lines = {}
+            remort = None
+            clan = None
+            pk = None
+            for l in p.split('\n'):
+                ls = l.strip()
+                m = StatisticLogger.RE_LINE.match(ls)
+                if m:
+                    g = m.groups()
+                    lines[g[0]] = (g[1], g[2], g[3])
+                    lines[g[4]] = (g[5], g[6], g[7])
+                m = StatisticLogger.RE_REMORT.match(ls)
+                if m:
+                    remort = m.groups()
+                m = StatisticLogger.RE_CLAN.match(ls)
+                if m:
+                    clan = m.groups()
+                m = StatisticLogger.RE_PK.match(ls)
+                if m:
+                    pk = m.groups()
+            if remort and clan and pk and len(lines) == 7:
+                msg = '%s ' % date
+                for i in StatisticLogger.PROFS:
+                    n = lines[i]
+                    msg = '%s %s %s %s' % (msg, n[0], n[1], n[2])
+                msg = '%s %s %s %s %s %s %s\n' % (msg, remort[0], remort[1], clan[0], clan[1], pk[0], pk[1])
+                f = open(self.log_file, 'a')
+                f.write(msg)
+                f.close()
+    
+    def set_client(self, c):
+        if self.client is None:
+            self.client = c

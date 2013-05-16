@@ -7,3 +7,5 @@ try:
 except ImportError, e:
     print 'Unable to load local_config.py:', e
 
+if 'plugins' not in locals():
+    plugins = []
