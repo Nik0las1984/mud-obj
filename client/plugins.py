@@ -230,10 +230,11 @@ class StatisticLogger():
         if RE_HOUR.match(l):
             self.counter = self.counter + 1
         if self.counter == self.log_every_hour:
+            self.counter = 0
             self.client.command('статистика')
 
     def on_paragraph(self, p):
-        if p.strip().startswith(StatisticLogger.HEADER):
+        if p.count(StatisticLogger.HEADER) > 0:
             date = datetime.datetime.now()
             lines = {}
             remort = None
@@ -255,7 +256,7 @@ class StatisticLogger():
                 m = StatisticLogger.RE_PK.match(ls)
                 if m:
                     pk = m.groups()
-            if remort and clan and pk and len(lines) == 7:
+            if remort and clan and pk and len(lines) == 14:
                 msg = '%s ' % date
                 for i in StatisticLogger.PROFS:
                     n = lines[i]
@@ -266,5 +267,4 @@ class StatisticLogger():
                 f.close()
     
     def set_client(self, c):
-        if self.client is None:
-            self.client = c
+        self.client = c
