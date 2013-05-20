@@ -1,0 +1,25 @@
+{% extends "objects/base.html" %}
+{% load nvd3_tags %}
+
+{% block head %}
+    {% load_chart charttype chartdata "container" True td %}
+{% endblock %}
+
+{% block title %}Каналы: графики за {{ title }}{% endblock %}
+
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+
+{% block content %}
+<h2>Графики за
+<a href="/channels/charts/day/">сутки</a>/
+<a href="/channels/charts/week/">неделю</a>/
+<a href="/channels/charts/month/">месяц</a>.
+</h2>
+<h2>Распределение числа сообщений от времени за {{ title }} ({{ desc }}):</h2>
+<div class="chart">
+    {% include_container "container" 400 600 %}
+</div>
+{% endblock %}

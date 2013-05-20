@@ -1,6 +1,9 @@
+{% load nvd3_tags %}
+
 <!DOCTYPE html>
 <html>
 <head>
+{% include_nvd3jscss %}
     <style type="text/css">
         html, body
         {
@@ -78,6 +81,10 @@
         .message-header {
             font-weight: bold;
         }
+        .chart {
+            background: white;
+            display: inline-block;
+        }
 .ansi_terminal { white-space: pre; font-family: monospace; }
 .ansi_black { color: black; }
 .ansi_red { color: darkred; }
@@ -114,6 +121,7 @@
 
     </style>
     <title>{% block title %}Mud objects database.{% endblock %}</title>
+{% block head %}{% endblock %}
 </head>
 
 <body>

@@ -7,4 +7,7 @@ urlpatterns = patterns('',
     url(ur'^bolt/', views.bolt, name='bolt'),
     url(ur'^scream/', views.scream, name='scream'),
     url(ur'^all/', views.all, name='all'),
+    url(ur'^charts/day/', views.charts_day, name='charts_day'),
+    url(ur'^charts/week/', views.charts_week, name='charts_week'),
+    url(ur'^charts/month/', views.charts_month, name='charts_month'),
 )
