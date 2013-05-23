@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 
 class User(models.Model):
@@ -21,6 +23,9 @@ class User(models.Model):
             u.name = name
             u.save()
         return User.get_user(name)
+        
+    def offtop_count_last(self):
+        return self.channel_set.filter(type = 0).filter(date__gte = datetime.datetime.now() - datetime.timedelta(days = 7)).count()
 
 class Counter(models.Model):
     name = models.TextField()
@@ -28,3 +33,34 @@ class Counter(models.Model):
     
     def __unicode__(self):
         return self.name
+
+class Statistic(models.Model):
+    date = models.DateTimeField()
+    total = models.IntegerField()
+    pk = models.IntegerField()
+    clan = models.IntegerField()
+    remort = models.IntegerField()
+    
+    def __unicode__(self):
+        return u'%s (%s)' % (self.date, self.total)
+    
+    @staticmethod
+    def has(date):
+        return Statistic.objects.filter(date = date).count() > 0
+    
+    @staticmethod
+    def add(a):
+        s = a.split()
+        d = datetime.datetime.strptime('%s %s' % (s[0], s[1]), '%Y-%m-%d %H:%M:%S.%f')
+        if Statistic.has(d):
+            return None
+        
+        st = Statistic()
+        st.date = d
+        st.pk = int(s[-2])
+        st.clan = int(s[-4])
+        st.remort = int(s[-6])
+        st.total = int(s[-1]) + int(s[-2])
+        st.save()
+        return st
+        
