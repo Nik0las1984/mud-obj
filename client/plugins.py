@@ -222,7 +222,7 @@ class StatisticLogger():
         ]
     
     def __init__(self):
-        self.log_file = 'statistic.log'
+        self.log_file = 'statistic_%s.log'
         self.log_every_hour = 12
         self.counter = 0
     
@@ -262,9 +262,10 @@ class StatisticLogger():
                     n = lines[i]
                     msg = '%s %s %s %s' % (msg, n[0], n[1], n[2])
                 msg = '%s %s %s %s %s %s %s\n' % (msg, remort[0], remort[1], clan[0], clan[1], pk[0], pk[1])
-                f = open(self.log_file, 'a')
+                f = open(self.log_file % datetime.datetime.now().strftime('%Y%m%d'), 'a')
                 f.write(msg)
                 f.close()
     
     def set_client(self, c):
         self.client = c
+
