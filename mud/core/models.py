@@ -37,9 +37,9 @@ class Counter(models.Model):
 class Statistic(models.Model):
     date = models.DateTimeField()
     total = models.IntegerField()
-    pk = models.IntegerField()
-    clan = models.IntegerField()
-    remort = models.IntegerField()
+    total_pk = models.IntegerField(default = 0)
+    total_clan = models.IntegerField(default = 0)
+    total_remort = models.IntegerField(default = 0)
     
     def __unicode__(self):
         return u'%s (%s)' % (self.date, self.total)
@@ -57,9 +57,9 @@ class Statistic(models.Model):
         
         st = Statistic()
         st.date = d
-        st.pk = int(s[-2])
-        st.clan = int(s[-4])
-        st.remort = int(s[-6])
+        st.total_pk = int(s[-2])
+        st.total_clan = int(s[-4])
+        st.total_remort = int(s[-6])
         st.total = int(s[-1]) + int(s[-2])
         st.save()
         return st
