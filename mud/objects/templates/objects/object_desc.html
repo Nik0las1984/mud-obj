@@ -15,12 +15,19 @@
 <br />
 {% endif %}
 
-{% if obj.take.all|length > 0 %}
-{% for t in obj.take.all %}
-Можно взять в <span class="yellow">{{ t }}</span>.
+{% if obj.take_left > -1 %}
+Можно взять в <span class="yellow">левую руку{% if obj.take_left > 0 %} (требуется {{ obj.take_left }} силы){% endif %}</span>.
 <br />
-{% endfor %}
 {% endif %}
+{% if obj.take_right > -1 %}
+Можно взять в <span class="yellow">правую{% if obj.take_right > 0 %} (требуется {{ obj.take_right }} силы){% endif %}</span>.
+<br />
+{% endif %}
+{% if obj.take_both > -1 %}
+Можно взять в <span class="yellow">обе руки{% if obj.take_both > 0 %} (требуется {{ obj.take_both }} силы){% endif %}</span>.
+<br />
+{% endif %}
+
 
 Вес: {{ obj.weight }}, Цена: {{ obj.cost }}, Рента: {{ obj.cost_per_day_on }}({{ obj.cost_per_day_off }})
 <br />

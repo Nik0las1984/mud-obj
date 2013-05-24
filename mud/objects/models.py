@@ -17,6 +17,7 @@ re_add = re.compile(ur'^\s*(.+)\s+улучшает\s+на\s+(\d+)$')
 re_sub = re.compile(ur'^\s*(.+)\s+ухудшает\s+на\s+(\d+)$')
 re_wear = re.compile(ur'^Можно надеть на (\S+)\.')
 re_take = re.compile(ur'^Можно взять в (.+)\.')
+re_take_strength = re.compile(ur'^Можно взять в (.+)\s\(требуется\s(\d+)\sсилы\)\.')
 re_weapon = re.compile(ur'^Принадлежит к классу "(.+)"\.')
 re_damage = re.compile(ur'^Наносимые повреждения \'([\dD]+)\' среднее ([\d\.]+)\.')
 
@@ -46,11 +47,7 @@ class Weapon(ObjCharacteristic):
     def get_or_create(name):
         return ObjCharacteristic.get_or_create(name, Weapon)          
         
-class Take(ObjCharacteristic):
-    @staticmethod
-    def get_or_create(name):
-        return ObjCharacteristic.get_or_create(name, Take)        
-        
+      
 class Wear(ObjCharacteristic):
     @staticmethod
     def get_or_create(name):
@@ -107,6 +104,7 @@ class PropertyValue(models.Model):
         p.save()
         return PropertyValue.get_or_create(name, value)
 
+        
 def parse_data(d, r):
     for l in d:
         m = r.match(l.strip())
@@ -124,8 +122,11 @@ class Object(models.Model):
     material = models.ForeignKey(Material)
     type = models.ForeignKey(Type)
     wear = models.ManyToManyField(Wear)
-    take = models.ManyToManyField(Take)
     weapon = models.ForeignKey(Weapon, blank = True, null = True)
+    
+    take_left = models.IntegerField(default = -1)
+    take_right = models.IntegerField(default = -1)
+    take_both = models.IntegerField(default = -1)
     
     affects = models.ManyToManyField(Affect)
     extra = models.ManyToManyField(ExtraFlag)
@@ -275,11 +276,27 @@ class Object(models.Model):
             wear = parse_data(data, re_wear)
         
         # Куда взять
-        o.take.clear()
+        o.take_both = o.take_left = o.take_right = -1
+        take = parse_data(data, re_take_strength)
+        while take is not None:
+            if take[0] == u'правую руку':
+                o.take_right = int(take[1])
+            if take[0] == u'левую руку':
+                o.take_left = int(take[1])
+            if take[0] == u'обе руки':
+                o.take_both = int(take[1])
+            take = parse_data(data, re_take_strength)
+        
         take = parse_data(data, re_take)
         while take is not None:
-            o.take.add(Take.get_or_create(take[0]))
+            if take[0] == u'правую руку':
+                o.take_right = 0
+            if take[0] == u'левую руку':
+                o.take_left = 0
+            if take[0] == u'обе руки':
+                o.take_both = 0
             take = parse_data(data, re_take)
+        
         
         # Класс оружия
         weapon = parse_data(data, re_weapon)
@@ -316,7 +333,7 @@ class Object(models.Model):
     
     @staticmethod
     def get_obj(name, type):
-        return Object.objects.filter(type = type).filter(name__iexact = name).all[0]
+        return Object.objects.filter(type = type).filter(name__iexact = name).all()[0]
     
     @staticmethod
     def create_or_get_from_string(a):

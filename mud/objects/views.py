@@ -20,7 +20,8 @@ def add(request):
         f = clazz(request.POST)
     if f.is_valid():
         d = f.cleaned_data['text'].strip()
-        try:
+        #try:
+        if True:
             # Находим имя
             name = Object.get_name_from_desc(d)
             t = Object.get_type_from_desc(d)
@@ -34,8 +35,8 @@ def add(request):
                 o.checked = False
                 o.save()
                 info = u'Оъект успешно добавлен.'
-        except:
-            info = u'Ошибка при добавлении объекта. Невозможно распарсить данные.'
+        #except:
+        #    info = u'Ошибка при добавлении объекта. Невозможно распарсить данные.'
         
     context = {'form': f, 'info': info, 'obj': o, }
     return render(request, 'objects/add.html', context)
@@ -92,8 +93,6 @@ def params(request):
         objs = objs.filter(weapon = f.cleaned_data['weapon'])
     if f.cleaned_data['wear']:
         objs = objs.filter(wear = f.cleaned_data['wear'])
-    if f.cleaned_data['take']:
-        objs = objs.filter(take = f.cleaned_data['take'])
     if f.cleaned_data['type']:
         objs = objs.filter(type = f.cleaned_data['type'])
     if f.cleaned_data['material']:

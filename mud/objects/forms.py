@@ -9,7 +9,6 @@ class ParamsForm(forms.Form):
     name = forms.CharField(label = u'Название', required = False)
     weapon = forms.ModelChoiceField(label = u'Принадлежит классу', queryset = Weapon.objects.filter().order_by('name'), required = False)
     wear = forms.ModelChoiceField(label = u'Можно надеть на', queryset = Wear.objects.filter().order_by('name'), required = False)
-    take = forms.ModelChoiceField(label = u'Можно взять в', queryset = Take.objects.filter().order_by('name'), required = False)
     type = forms.ModelChoiceField(label = u'Тип', queryset = Type.objects.filter().order_by('name'), required = False)
     material = forms.ModelChoiceField(label = u'Материал', queryset = Material.objects.filter().order_by('name'), required = False)
     no_use = forms.ModelChoiceField(label = u'Не удобен', queryset = NoProperty.objects.filter().order_by('name'), required = False)
