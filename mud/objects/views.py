@@ -20,21 +20,22 @@ def add(request):
         f = clazz(request.POST)
     if f.is_valid():
         d = f.cleaned_data['text'].strip()
-        # Находим имя
-        name = Object.get_name_from_desc(d)
-        
-        # Смотрим есть ли предмет
-        if Object.has_obj(name or ''):
-            info = u'Оъект уже есть в базе данных.'
-            o = Object.get_obj(name)
-        else:
-            try:
+        try:
+            # Находим имя
+            name = Object.get_name_from_desc(d)
+            t = Object.get_type_from_desc(d)
+            
+            # Смотрим есть ли предмет
+            if Object.has_obj(name or '', t):
+                info = u'Оъект уже есть в базе данных.'
+                o = Object.get_obj(name, t)
+            else:
                 o = Object.create_from_string(d)
                 o.checked = False
                 o.save()
                 info = u'Оъект успешно добавлен.'
-            except:
-                info = u'Ошибка при добавлении объекта. Невозможно распарсить данные.'
+        except:
+            info = u'Ошибка при добавлении объекта. Невозможно распарсить данные.'
         
     context = {'form': f, 'info': info, 'obj': o, }
     return render(request, 'objects/add.html', context)
@@ -44,7 +45,7 @@ def index(request):
     
     name = request.GET.get('name')
     if name:
-        objs = objs.filter(name__contains = name)
+        objs = objs.filter(name__icontains = name)
     else:
         name = ''
     
@@ -60,8 +61,8 @@ def index(request):
     context = {'objects': o, 'name': name, }
     return render(request, 'objects/index.html', context)
 
-def obj(request, name):
-    o = get_object_or_404(Object, name = name)
+def obj(request, id):
+    o = get_object_or_404(Object, pk = id)
     return render(request, 'objects/object.html', {'obj': o})
 
 def shop(request):

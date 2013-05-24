@@ -116,7 +116,7 @@ def parse_data(d, r):
     return None
         
 class Object(models.Model):
-    name = models.CharField(max_length = 250, unique = True)
+    name = models.CharField(max_length = 250, unique = False)
     weight = models.IntegerField()
     cost = models.IntegerField()
     cost_per_day_on = models.IntegerField()
@@ -179,10 +179,11 @@ class Object(models.Model):
         
         # Имя и тип
         name = parse_data(data, re_name)
+        t = Type.get_or_create(name[1])
         
         # Смотрим есть он уже в базе, если есть - обновляем все параметры.
-        if Object.has_obj(name[0]):
-            o = Object.get_obj(name[0])
+        if Object.has_obj(name[0], t):
+            o = Object.get_obj(name[0], t)
         
         o.name = name[0]
         o.type = Type.get_or_create(name[1])
@@ -290,8 +291,8 @@ class Object(models.Model):
         return o
     
     @staticmethod
-    def has_obj(name):
-        return Object.objects.filter(name__iexact = name).count() > 0
+    def has_obj(name, type):
+        return Object.objects.filter(name__iexact = name).filter(type = type).count() > 0
     
     @staticmethod
     def get_name_from_desc(desc):
@@ -302,20 +303,28 @@ class Object(models.Model):
         return None
     
     @staticmethod
-    def has_obj_by_desc(a):
-        return Object.has_obj(Object.get_name_from_desc(a))
+    def get_type_from_desc(desc):
+        data = re.split(ur'[\n\r]+', desc)
+        p = parse_data(data, re_name)
+        if p:
+            return Type.get_or_create(p[1])
+        return None
     
     @staticmethod
-    def get_obj(name):
-        return Object.objects.get(name__iexact = name)
+    def has_obj_by_desc(a):
+        return Object.has_obj(Object.get_name_from_desc(a), Object.get_type_from_desc(a))
+    
+    @staticmethod
+    def get_obj(name, type):
+        return Object.objects.filter(type = type).filter(name__iexact = name).all[0]
     
     @staticmethod
     def create_or_get_from_string(a):
-        #print "PARSE:", a
-        data = re.split(ur'[\n\r]+', a)
-        name = parse_data(data, re_name)[0]
-        if Object.has_obj(name) > 0:
-            return Object.get_obj(name)
+        name = Object.get_name_from_desc(a)
+        t = Object.get_type_from_desc(a)
+        
+        if Object.has_obj(name, t) > 0:
+            return Object.get_obj(name, t)
         return Object.create_from_string(a)
 
     @staticmethod
@@ -334,8 +343,10 @@ class Object(models.Model):
                 if parsed.count(l) > 0:
                     continue
                 parsed.append(l)
-                if Object.has_obj(l):
-                    good.append(Object.get_obj(l))
+                q = Object.objects.filter(name__iexact = l)
+                if q.count() > 0:
+                    for i in q.all():
+                        good.append(i)
                 else:
                     bad.append(l)
         return { 'good': good, 'bad': bad, }
@@ -356,8 +367,10 @@ class Object(models.Model):
                 if parsed.count(l) > 0:
                     continue
                 parsed.append(l)
-                if Object.has_obj(l):
-                    good.append(Object.get_obj(l))
+                q = Object.objects.filter(name__iexact = l)
+                if q.count() > 0:
+                    for i in q.all():
+                        good.append(i)
                 else:
                     bad.append(l)
         return { 'good': good, 'bad': bad, }
@@ -376,8 +389,10 @@ class Object(models.Model):
                 if parsed.count(l) > 0:
                     continue
                 parsed.append(l)
-                if Object.has_obj(l):
-                    good.append(Object.get_obj(l))
+                q = Object.objects.filter(name__iexact = l)
+                if q.count() > 0:
+                    for i in q.all():
+                        good.append(i)
                 else:
                     bad.append(l)
         return { 'good': good, 'bad': bad, }
