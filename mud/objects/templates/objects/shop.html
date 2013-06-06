@@ -25,6 +25,11 @@
 </table>
 
 <h2>Не найдено: {{ objs.bad|length }}</h2>
+{% if user.is_superuser %}
+<br />
+Команда: objs.command
+<br />
+{% endif %}
 
 <table>
 {% for obj in objs.bad %}

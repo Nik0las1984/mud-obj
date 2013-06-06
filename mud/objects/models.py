@@ -373,12 +373,14 @@ class Object(models.Model):
         good = []
         bad = []
         parsed = []
+        command = u''
         data = re.split(ur'[\n\r]+', a)
         for l in data:
             l = l.strip()
             if l == '':
                 continue
             if l[3] == ')' or l[2] == ')' or l[1] == ')':
+                st = l[:l.find(')')]
                 l = l[17:]
                 l = l[:l.rfind(' ')].strip()
                 if parsed.count(l) > 0:
@@ -390,7 +392,8 @@ class Object(models.Model):
                         good.append(i)
                 else:
                     bad.append(l)
-        return { 'good': good, 'bad': bad, }
+                    command = u'%s; хар %s' % (command, st)
+        return { 'good': good, 'bad': bad, 'command': command, }
     @staticmethod
     def parse_inv(a):
         good = []
