@@ -1,5 +1,7 @@
 # coding=utf-8
 
+import re
+
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
@@ -9,6 +11,8 @@ from objects.forms import *
 
 def add(request):
     info = ''
+    added = []
+    exists = []
     o = None
     clazz = CreateObjectForm
     if request.user.is_authenticated():
@@ -19,26 +23,24 @@ def add(request):
     if request.method == 'POST':
         f = clazz(request.POST)
     if f.is_valid():
-        d = f.cleaned_data['text'].strip()
-        #try:
-        if True:
-            # Находим имя
-            name = Object.get_name_from_desc(d)
-            t = Object.get_type_from_desc(d)
-            
-            # Смотрим есть ли предмет
-            if Object.has_obj(name or '', t):
-                info = u'Оъект уже есть в базе данных.'
-                o = Object.get_obj(name, t)
-            else:
-                o = Object.create_from_string(d)
-                o.checked = False
-                o.save()
-                info = u'Оъект успешно добавлен.'
-        #except:
-        #    info = u'Ошибка при добавлении объекта. Невозможно распарсить данные.'
+        d = re.split(ur'\n\s*\n', f.cleaned_data['text'].strip().replace('\r', ''))
+        print len(d)
+        for i in d:
+            try:
+                name = Object.get_name_from_desc(i)
+                t = Object.get_type_from_desc(i)
+                if Object.has_obj(name or '', t):
+                    o = Object.get_obj(name, t)
+                    exists.append(o)
+                else:
+                    o = Object.create_from_string(i)
+                    o.checked = False
+                    o.save()
+                    added.append(o)
+            except:
+                pass
         
-    context = {'form': f, 'info': info, 'obj': o, }
+    context = {'form': f, 'added': added, 'exists': exists, }
     return render(request, 'objects/add.html', context)
 
 def index(request):

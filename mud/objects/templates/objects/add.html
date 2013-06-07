@@ -17,8 +17,21 @@
     <input type="submit" value="Добавить" />
 </form>
 
-{% if info %}
-<p class="info">{{ info }}</p>
+{% if added %}
+<p class="info">Добавлено:</p>
+{% for obj in added %}
+<br />
+{% include "objects/object_short.html" %}
+{% endfor %}
+{% endif %}
+
+<br />
+{% if exists %}
+<p class="info">Уже есть в базе:</p>
+{% for obj in exists %}
+<br />
+{% include "objects/object_short.html" %}
+{% endfor %}
 {% endif %}
 
 {% if obj %}
