@@ -349,12 +349,14 @@ class Object(models.Model):
         good = []
         bad = []
         parsed = []
+        command = u''
         data = re.split(ur'[\n\r]+', a)
         for l in data:
             l = l.strip()
             if l == '':
                 continue
             if l[0] == '[':
+                st = l[1:5]
                 l = l[9:][:64]
                 l = l[:l.rfind(' ')].strip()
                 if parsed.count(l) > 0:
@@ -366,7 +368,8 @@ class Object(models.Model):
                         good.append(i)
                 else:
                     bad.append(l)
-        return { 'good': good, 'bad': bad, }
+                    command = u'%s б х %s; ' % (command, st)
+        return { 'good': good, 'bad': bad, 'command': command}
         
     @staticmethod
     def parse_shop(a):
