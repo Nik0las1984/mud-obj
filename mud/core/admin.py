@@ -6,3 +6,7 @@ class CounterAdmin(admin.ModelAdmin):
 
 admin.site.register(Counter, CounterAdmin)
 
+class StatisticAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Statistic, StatisticAdmin)
