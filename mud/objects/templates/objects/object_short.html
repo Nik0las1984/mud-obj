@@ -7,6 +7,9 @@
 {% if obj.extra.count %}
 <span class="obj_extra">{{ obj.extra_clean|join:", " }}</span>
 {% endif %}
+{% if obj.ac > 0 %}
+<span class="obj_ac">AC: {{ obj.ac }}</span>
+{% endif %}
 {% if obj.prop.count %}
 <span class="obj_prop">{{ obj.prop.all|join:", " }}</span>
 {% endif %}
