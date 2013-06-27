@@ -21,6 +21,7 @@ re_take = re.compile(ur'^Можно взять в (.+)\.')
 re_take_strength = re.compile(ur'^Можно взять в (.+)\s\(требуется\s(\d+)\sсилы\)\.')
 re_weapon = re.compile(ur'^Принадлежит к классу "(.+)"\.')
 re_damage = re.compile(ur'^Наносимые повреждения \'([\dD]+)\' среднее ([\d\.]+)\.')
+re_spell = re.compile(ur'^содержит заклинание\s*:\s*"(.+)"$')
 
 NOTHING = u'ничего'
 
@@ -43,6 +44,11 @@ class ObjCharacteristic(models.Model):
     class Meta:
         abstract = True
 
+class Spell(ObjCharacteristic):
+    @staticmethod
+    def get_or_create(name):
+        return ObjCharacteristic.get_or_create(name, Spell)           
+        
 class Weapon(ObjCharacteristic):
     @staticmethod
     def get_or_create(name):
@@ -140,6 +146,8 @@ class Object(models.Model):
     
     dmg_str = models.CharField(max_length = 250, blank = True, null = True)
     dmg_avg = models.FloatField(blank = True, null = True)
+    
+    spell = models.ForeignKey(Spell, blank = True, null = True)
     
     mud_desc = models.TextField()
     
@@ -311,6 +319,11 @@ class Object(models.Model):
         weapon = parse_data(data, re_weapon)
         if weapon is not None:
             o.weapon = Weapon.get_or_create(weapon[0])
+        
+        # Заклинание
+        spell = parse_data(data, re_spell)
+        if spell is not None:
+            o.spell = Spell.get_or_create(spell[0])
         
         # Сохраняем
         o.save()

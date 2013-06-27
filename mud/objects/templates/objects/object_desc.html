@@ -55,6 +55,11 @@
 <br />
 {% endif %}
 
+{% if obj.spell != None %}
+содержит заклинание&nbsp;: "<span class="obj_spell">{{ obj.spell }}</span>"
+<br />
+{% endif %}
+
 Накладывает на вас аффекты: <span class="obj_affect">{{ obj.affects.all|join:", "}}</span>
 <br />
 
