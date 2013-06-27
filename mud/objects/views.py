@@ -5,6 +5,7 @@ import re
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
+from django.http import Http404
 
 from objects.models import *
 from objects.forms import *
@@ -65,6 +66,15 @@ def index(request):
 def obj(request, id):
     o = get_object_or_404(Object, pk = id)
     return render(request, 'objects/object.html', {'obj': o})
+
+def obj_by_name(request, name):
+    f = Object.objects.filter(name__iexact = name)
+    if f.count() == 1:
+        return render(request, 'objects/object.html', {'obj': f[0]})
+    if f.count() > 1:
+        context = {'objects': o, 'name': name, }
+        return render(request, 'objects/index.html', context)
+    raise Http404
 
 def shop(request):
     data = request.POST.get('data')
