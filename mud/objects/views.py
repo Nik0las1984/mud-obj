@@ -26,19 +26,17 @@ def add(request):
         d = re.split(ur'\n\s*\n', f.cleaned_data['text'].strip().replace('\r', ''))
         print len(d)
         for i in d:
-            try:
-                name = Object.get_name_from_desc(i)
-                t = Object.get_type_from_desc(i)
-                if Object.has_obj(name or '', t):
-                    o = Object.get_obj(name, t)
+            #try:
+                if Object.has_obj_by_desc(i):
+                    o = Object.get_obj_by_desc(i)
                     exists.append(o)
                 else:
                     o = Object.create_from_string(i)
                     o.checked = False
                     o.save()
                     added.append(o)
-            except:
-                pass
+            #except:
+            #    pass
         
     context = {'form': f, 'added': added, 'exists': exists, }
     return render(request, 'objects/add.html', context)

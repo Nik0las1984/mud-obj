@@ -192,8 +192,8 @@ class Object(models.Model):
         t = Type.get_or_create(name[1])
         
         # Смотрим есть он уже в базе, если есть - обновляем все параметры.
-        if Object.has_obj(name[0], t):
-            o = Object.get_obj(name[0], t)
+        if Object.has_obj_by_desc(ca):
+            o = Object.get_obj_by_desc(ca)
         
         o.name = name[0]
         o.type = Type.get_or_create(name[1])
@@ -316,10 +316,7 @@ class Object(models.Model):
         o.save()
         return o
     
-    @staticmethod
-    def has_obj(name, type):
-        return Object.objects.filter(name__iexact = name).filter(type = type).count() > 0
-    
+ 
     @staticmethod
     def get_name_from_desc(desc):
         data = re.split(ur'[\n\r]+', desc)
@@ -337,20 +334,29 @@ class Object(models.Model):
         return None
     
     @staticmethod
-    def has_obj_by_desc(a):
-        return Object.has_obj(Object.get_name_from_desc(a), Object.get_type_from_desc(a))
+    def get_cost_from_desc(desc):
+        data = re.split(ur'[\n\r]+', desc)
+        p = parse_data(data, re_weight)
+        if p:
+            return int(p[1])
+        return None
     
     @staticmethod
-    def get_obj(name, type):
-        return Object.objects.filter(type = type).filter(name__iexact = name).all()[0]
+    def has_obj_by_desc(a):
+        f = Object.objects.filter(name__iexact = Object.get_name_from_desc(a))
+        f = f.filter(type = Object.get_type_from_desc(a))
+        f = f.filter(cost = Object.get_cost_from_desc(a))
+        return f.count() > 0
     
+    @staticmethod
+    def get_obj_by_desc(a):
+        return Object.objects.filter(name__iexact = Object.get_name_from_desc(a)).filter(type = Object.get_type_from_desc(a)).filter(cost = Object.get_cost_from_desc(a))[0]
+    
+   
     @staticmethod
     def create_or_get_from_string(a):
-        name = Object.get_name_from_desc(a)
-        t = Object.get_type_from_desc(a)
-        
-        if Object.has_obj(name, t) > 0:
-            return Object.get_obj(name, t)
+        if Object.has_obj_by_desc(a) > 0:
+            return Object.get_obj_by_desc(a)
         return Object.create_from_string(a)
 
     @staticmethod
