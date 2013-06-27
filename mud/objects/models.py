@@ -236,7 +236,7 @@ class Object(models.Model):
         dmg = parse_data(data, re_damage)
         if dmg is not None:
             o.dmg_str = dmg[0]
-            o.dmg_avg = float(dmg[1].replace(u',', u'.')
+            o.dmg_avg = float(dmg[1].replace(u',', u'.'))
         
         
         # Неудобен
