@@ -20,7 +20,7 @@ re_wear = re.compile(ur'^Можно надеть на (\S+)\.')
 re_take = re.compile(ur'^Можно взять в (.+)\.')
 re_take_strength = re.compile(ur'^Можно взять в (.+)\s\(требуется\s(\d+)\sсилы\)\.')
 re_weapon = re.compile(ur'^Принадлежит к классу "(.+)"\.')
-re_damage = re.compile(ur'^Наносимые повреждения \'([\dD]+)\' среднее ([\d\.]+)\.')
+re_damage = re.compile(ur'^Наносимые повреждения \'([\dD]+)\' среднее ([\d\.,]+)\.')
 re_spell = re.compile(ur'^содержит заклинание\s*:\s*"(.+)"$')
 
 NOTHING = u'ничего'
