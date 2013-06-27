@@ -15,6 +15,8 @@ reparse.short_description = u'Обновить описание'
 class ObjectAdmin(admin.ModelAdmin):
     list_filter = ['checked', 'type', 'affects', 'prop', 'extra']
     search_fields = ['name']
+    list_display = ('name', 'checked', 'type', 'cost', 'added')
+    fields = ['name', 'mud_desc']
     actions = [make_checked, reparse]
 
 admin.site.register(Object, ObjectAdmin)

@@ -2,6 +2,7 @@
 from django.db import models
 
 import re
+import datetime
 
 re_name = re.compile(ur'^Предмет\s*"(.+)",\s*тип\s*:\s*(.+)\s*$')
 re_weight = re.compile(ur'^Вес\s*:\s*(\d+)\s*,\s*Цена\s*:\s*(\d+)\s*,\s*Рента\s*:\s*(\d+)\s*\((\d*)\)\s*$')
@@ -143,6 +144,7 @@ class Object(models.Model):
     mud_desc = models.TextField()
     
     checked = models.BooleanField(default = True)
+    added = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
     
     def __unicode__(self):
         return self.name
