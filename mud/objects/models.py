@@ -176,9 +176,16 @@ class Object(models.Model):
         return self.extra.exclude(name = u'таймер запущен')
     
     @staticmethod
+    def clear_string(a):
+        b = a.replace(u' одеть ', u' надеть ')
+        b = b.replace(u'z', u'я')
+        return b
+    
+    @staticmethod
     def create_from_string(a):
+        ca = Object.clear_string(a)
         o = Object()
-        data = re.split(ur'[\n\r]+', a)
+        data = re.split(ur'[\n\r]+', ca)
         
         # Имя и тип
         name = parse_data(data, re_name)
@@ -192,7 +199,7 @@ class Object(models.Model):
         o.type = Type.get_or_create(name[1])
         
         # Описание из мада
-        o.mud_desc = a
+        o.mud_desc = ca
 
         # Вес и цена
         w = parse_data(data, re_weight)
