@@ -188,6 +188,7 @@ class Object(models.Model):
         b = a.replace(u' одеть ', u' надеть ')
         b = b.replace(u'z', u'я')
         b = b.replace(u'Можно обуть.', u'Можно надеть на ступни.')
+        b = b.replace(u'Можно использовать как щит.', u'Можно надеть на щит.')
         return b
     
     @staticmethod
