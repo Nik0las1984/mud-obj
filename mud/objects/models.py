@@ -187,6 +187,7 @@ class Object(models.Model):
     def clear_string(a):
         b = a.replace(u' одеть ', u' надеть ')
         b = b.replace(u'z', u'я')
+        b = b.replace(u'Можно обуть.', u'Можно надеть на ступни.')
         return b
     
     @staticmethod
