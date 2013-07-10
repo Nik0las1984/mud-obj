@@ -14,7 +14,22 @@
     <input type="submit" value="Найти" />
 </form>
 
-<h2>Найдено {{ count }}, показано {{ objs|length }}:</h2>
+<h2>Найдено {{ count }}:</h2>
+<div class="pagination">
+    <span class="step-links">
+        {% if objs.has_previous %}
+            <a href="?{{queries.urlencode}}&amp;page={{ objs.previous_page_number }}"><<</a>
+        {% endif %}
+
+        <span class="current">
+            {{ objs.number }} из {{ objs.paginator.num_pages }}
+        </span>
+
+        {% if objs.has_next %}
+            <a href="?{{queries.urlencode}}&amp;page={{ objs.next_page_number }}">>></a>
+        {% endif %}
+    </span>
+</div>
 
 <table>
 {% for obj in objs %}
@@ -23,5 +38,22 @@
 </td></tr>
 {% endfor %}
 </table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if objs.has_previous %}
+            <a href="?{{queries.urlencode}}&amp;page={{ objs.previous_page_number }}"><<</a>
+        {% endif %}
+
+        <span class="current">
+            {{ objs.number }} из {{ objs.paginator.num_pages }}
+        </span>
+
+        {% if objs.has_next %}
+            <a href="?{{queries.urlencode}}&amp;page={{ objs.next_page_number }}">>></a>
+        {% endif %}
+    </span>
+</div>
+
 
 {% endblock %}

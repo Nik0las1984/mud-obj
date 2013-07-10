@@ -91,6 +91,10 @@ def shop(request):
     return render(request, 'objects/shop.html', context)
 
 def params(request):
+    queries_without_page = request.GET.copy()
+    if queries_without_page.has_key('page'):
+        del queries_without_page['page']
+
     f = ParamsForm()
     if request.method == 'GET':
         f = ParamsForm(request.GET)
@@ -119,7 +123,15 @@ def params(request):
         objs = objs.filter(prop = f.cleaned_data['prop'])
     
     c = objs.count()
-    objs = objs[:30]
-    context = {'form': f, 'objs': objs, 'count': c}
+    paginator = Paginator(objs.order_by('name'), 25)
+    page = request.GET.get('page')
+    try:
+        o = paginator.page(page)
+    except PageNotAnInteger:
+        o = paginator.page(1)
+    except EmptyPage:
+        o = paginator.page(paginator.num_pages)
+        
+    context = {'form': f, 'objs': o, 'count': c, 'queries': queries_without_page}
     return render(request, 'objects/params.html', context)
     
