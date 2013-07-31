@@ -61,3 +61,16 @@ def charts_month(request):
         'desc': u'показано среднее за сутки'
         }
     return online(request, data)
+    
+def charts_3month(request):
+    data = {
+        'query': Statistic.objects.all(),
+        'date1': datetime.datetime.now() - datetime.timedelta(days = 90),
+        'date2': datetime.datetime.now(),
+        'interval': 'days',
+        'td': "%d %b",
+        'title': u'за последние 90 дней',
+        'desc': u'показано среднее за сутки'
+        }
+    return online(request, data)
+    
