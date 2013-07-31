@@ -109,3 +109,12 @@ def charts_month(request):
         "%d %b",
         u'месяц',
         u'показано среднее за сутки')
+        
+def charts_3month(request):
+    return charts(request,
+        datetime.datetime.now() - datetime.timedelta(days = 90),
+        datetime.datetime.now(),
+        'days',
+        "%d %b",
+        u'3 месяца',
+        u'показано среднее за сутки')
