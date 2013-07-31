@@ -50,13 +50,13 @@
             color: red;
             font-weight: bold;
         }
-        span.offtop {
+        .offtop {
             color: #00aaaa;
         }
-        span.bolt {
+        .bolt {
             color: #cdcd00;
         }
-        span.scream {
+        .scream {
             color: #ffff00;
         }
         p.info {
@@ -125,6 +125,10 @@
     </style>
     <title>{% block title %}МПМ Былины: база данных по предметам{% endblock %}</title>
 {% block head %}{% endblock %}
+
+<meta name="description" content="{% block meta_description %} {% endblock %}" />
+<meta name="keywords" content="{% block meta_keywords %} {% endblock %}" />
+
 </head>
 
 <body>

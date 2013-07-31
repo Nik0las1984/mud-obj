@@ -25,6 +25,10 @@ def channel(request, o, title):
     return render(request, 'channels/index.html', context)
 
 
+def by_user(request, user):
+    q = Channel.objects.filter(user__name__iexact = user)
+    return channel(request, q, u'Каналы пользователя %s (%s)' % (user, q.count()))
+    
 def offtop(request):
     return channel(request, Channel.objects.filter(type__exact = Channel.OFFTOP), u'Оффтоп')
 
@@ -35,7 +39,8 @@ def scream(request):
     return channel(request, Channel.objects.filter(type__exact = Channel.SCREAM), u'Орать')
 
 def all(request):
-    return channel(request, Channel.objects.all(), u'Все')
+    q = Channel.objects.all()
+    return channel(request, q, u'Все (%s)' % q.count())
 
 def charts(request, d1, d2, interval, td, title, desc):
     q = Channel.objects.filter(type = Channel.OFFTOP)
