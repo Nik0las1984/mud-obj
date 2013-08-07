@@ -72,7 +72,7 @@ def obj_by_name(request, name):
     if f.count() == 1:
         return render(request, 'objects/object.html', {'obj': f[0]})
     if f.count() > 1:
-        context = {'objects': o, 'name': name, }
+        context = {'objects': f, 'name': name, }
         return render(request, 'objects/index.html', context)
     raise Http404
 
