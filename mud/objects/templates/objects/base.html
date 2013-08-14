@@ -133,15 +133,15 @@
 
 <body>
 <div class="layout">
-<div class="left">{% block menu %}{% endblock %}</div>
-<div class="center">{% block content %}{% endblock %}</div>
-</div>
-
+<div class="left">{% block menu %}{% endblock %}
 {% autoescape off %}
 {% for c in counters %}
 {{ c.body }}
 {% endfor %}
 {% endautoescape %}
+</div>
+<div class="center">{% block content %}{% endblock %}</div>
+</div>
 
 </body>
 </html>
