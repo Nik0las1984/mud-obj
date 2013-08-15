@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 import datetime
 
 from django.db import models
@@ -63,4 +65,37 @@ class Statistic(models.Model):
         st.total = int(s[-1]) + int(s[-2])
         st.save()
         return st
-        
+
+class Log(models.Model):
+    ADD_OBJ = 0
+    SEARCH_OBJ = 1
+    LOG_TYPES = (
+        (ADD_OBJ, u'Добавлен объект'),
+        (SEARCH_OBJ, u'Поиск объектов'),
+    )
+    date = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
+    value = models.TextField(null = True)
+    type = models.IntegerField(choices = LOG_TYPES)
+    ua = models.TextField(null = True)
+    path = models.TextField(null = True)
+
+    def __unicode__(self):
+        return u'%s: %s' % (self.type, self.value)
+    
+    @staticmethod
+    def object_added(name, request):
+        l = Log()
+        l.value = name
+        l.type = Log.ADD_OBJ
+        l.ua = request.META['HTTP_USER_AGENT']
+        l.path = request.get_full_path()
+        l.save()
+    
+    @staticmethod
+    def object_search(name, request):
+        l = Log()
+        l.value = name
+        l.type = Log.SEARCH_OBJ
+        l.ua = request.META['HTTP_USER_AGENT']
+        l.path = request.get_full_path()
+        l.save()

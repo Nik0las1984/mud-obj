@@ -9,6 +9,7 @@ from django.http import Http404
 
 from objects.models import *
 from objects.forms import *
+from core.models import Log
 
 def add(request):
     info = ''
@@ -36,6 +37,9 @@ def add(request):
                     o.checked = False
                     o.save()
                     added.append(o)
+                    
+                    # Logging
+                    Log.object_added(o.name, request)
             except:
                 pass
         
@@ -48,6 +52,9 @@ def index(request):
     name = request.GET.get('name')
     if name:
         objs = objs.filter(name__icontains = name)
+        
+        # Logging
+        Log.object_search(name, request)
     else:
         name = ''
     
@@ -131,6 +138,9 @@ def params(request):
         o = paginator.page(1)
     except EmptyPage:
         o = paginator.page(paginator.num_pages)
+        
+    # Logging
+    Log.object_search(u'%s' % c, request)
         
     context = {'form': f, 'objs': o, 'count': c, 'queries': queries_without_page}
     return render(request, 'objects/params.html', context)
