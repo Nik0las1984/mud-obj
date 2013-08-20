@@ -153,6 +153,7 @@ class Object(models.Model):
     
     checked = models.BooleanField(default = True)
     added = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
+    bad = models.BooleanField(default = False)
     
     def __unicode__(self):
         return self.name
@@ -361,11 +362,12 @@ class Object(models.Model):
         f = Object.objects.filter(name__iexact = Object.get_name_from_desc(a))
         f = f.filter(type = Object.get_type_from_desc(a))
         f = f.filter(cost = Object.get_cost_from_desc(a))
+        f = f.filter(bad = False)
         return f.count() > 0
     
     @staticmethod
     def get_obj_by_desc(a):
-        return Object.objects.filter(name__iexact = Object.get_name_from_desc(a)).filter(type = Object.get_type_from_desc(a)).filter(cost = Object.get_cost_from_desc(a))[0]
+        return Object.objects.filter(name__iexact = Object.get_name_from_desc(a)).filter(type = Object.get_type_from_desc(a)).filter(cost = Object.get_cost_from_desc(a)).filter(bad = False)[0]
     
    
     @staticmethod

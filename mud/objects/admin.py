@@ -13,9 +13,9 @@ def reparse(modeladmin, request, queryset):
 reparse.short_description = u'Обновить описание'
 
 class ObjectAdmin(admin.ModelAdmin):
-    list_filter = ['checked', 'type', 'affects', 'prop', 'extra']
+    list_filter = ['checked', 'bad', 'type', 'affects', 'prop', 'extra']
     search_fields = ['name']
-    list_display = ('name', 'checked', 'type', 'cost', 'added')
+    list_display = ('name', 'checked', 'bad', 'type', 'cost', 'added')
     fields = ['name', 'mud_desc']
     actions = [make_checked, reparse]
 

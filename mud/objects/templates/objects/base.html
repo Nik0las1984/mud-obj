@@ -21,6 +21,9 @@
             color: #90EE90;
             font-weight: bold;
         }
+        a.error {
+            color: red;
+        }
         span.obj_type {
             color: yellow;
         }
@@ -123,6 +126,16 @@
 .ansi_strike { text-decoration: line-through; }
 
     </style>
+<script>
+function toggle(id) {
+    var e = document.getElementById(id);
+    if(e.style.display == 'block')
+        e.style.display = 'none';
+    else
+        e.style.display = 'block';
+}
+</script>
+
     <title>{% block title %}МПМ Былины: база данных по предметам{% endblock %}</title>
 {% block head %}{% endblock %}
 

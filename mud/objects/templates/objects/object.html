@@ -11,6 +11,19 @@
 
 {% include "objects/object_desc.html" %}
 
+<br />
+<br />
+<a href="#" onclick=toggle("correct_form") class="error">Ошибка в описании? Нажмите сюда.</a>
+
+<div id="correct_form" style="display:none;">
+<p>Введите оригинальное описание из МАДа, просто скопировав вывод команды "опознать" или "характеристики". Правильный предмет будет добавлен в базу.</p>
+<form method="post" action="/objects/add/">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Исправить" />
+</form>
+</div>
+
 {% if user.is_superuser %}
 <br />
 <br />

@@ -24,7 +24,19 @@ def add(request):
         
     if request.method == 'POST':
         f = clazz(request.POST)
+        
+   
     if f.is_valid():
+        # Set bad object
+        try:
+            bad = f.cleaned_data['bad']
+            bo = Object.objects.filter(pk = bad)
+            for b in bo:
+                b.bad = True
+                b.save()
+        except:
+            pass
+        
         d = re.split(ur'\n\s*\n', f.cleaned_data['text'].strip().replace('\r', ''))
         print len(d)
         for i in d:
@@ -72,12 +84,22 @@ def index(request):
 
 def obj(request, id):
     o = get_object_or_404(Object, pk = id)
-    return render(request, 'objects/object.html', {'obj': o})
+    clazz = CreateObjectForm
+    if request.user.is_authenticated():
+        clazz = CreateObjectFormNoCaptcha
+    
+    f = clazz(initial = {'bad': o.id})
+    return render(request, 'objects/object.html', {'obj': o, 'form': f})
 
 def obj_by_name(request, name):
     f = Object.objects.filter(name__iexact = name)
     if f.count() == 1:
-        return render(request, 'objects/object.html', {'obj': f[0]})
+        clazz = CreateObjectForm
+        if request.user.is_authenticated():
+            clazz = CreateObjectFormNoCaptcha
+        
+        f = clazz(initial = {'bad': f[0].id})
+        return render(request, 'objects/object.html', {'obj': f[0], 'form' : f})
     if f.count() > 1:
         context = {'objects': f, 'name': name, }
         return render(request, 'objects/index.html', context)

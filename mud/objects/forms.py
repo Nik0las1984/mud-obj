@@ -19,8 +19,10 @@ class ParamsForm(forms.Form):
 
 class CreateObjectForm(forms.Form):
     text = forms.CharField(label = u'', required = True, widget = forms.Textarea(attrs = {'cols': 90, 'rows': 15}))
+    bad = forms.CharField(label = u'', required = False, widget = forms.HiddenInput())
     #captcha = CaptchaField(label = u'Введите символы с картинки')
 
 class CreateObjectFormNoCaptcha(forms.Form):
     text = forms.CharField(label = u'', required = True, widget = forms.Textarea(attrs = {'cols': 90, 'rows': 15}))
+    bad = forms.CharField(label = u'', required = False, widget = forms.HiddenInput())
     
