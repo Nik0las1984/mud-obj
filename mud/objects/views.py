@@ -98,8 +98,8 @@ def obj_by_name(request, name):
         if request.user.is_authenticated():
             clazz = CreateObjectFormNoCaptcha
         
-        f = clazz(initial = {'bad': f[0].id})
-        return render(request, 'objects/object.html', {'obj': f[0], 'form' : f})
+        form = clazz(initial = {'bad': f[0].id})
+        return render(request, 'objects/object.html', {'obj': f[0], 'form' : form})
     if f.count() > 1:
         context = {'objects': f, 'name': name, }
         return render(request, 'objects/index.html', context)
