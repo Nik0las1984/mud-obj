@@ -6,4 +6,4 @@ class ChannelAdmin(admin.ModelAdmin):
     list_filter = ['type',]
     list_display = ['user', 'text', 'date', 'type']
 
-admin.site.register(Channel, CounterAdmin)
+admin.site.register(Channel, ChannelAdmin)
