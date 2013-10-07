@@ -287,7 +287,7 @@ class SquadLogger():
     def set_client(self, c):
         self.client = c
     def on_paragraph(self, p):
-        if p.count(StatisticLogger.HEADER) > 0:
+        if p.count(SquadLogger.HEADER) > 0:
             date = datetime.datetime.now()
             f = open(self.log_file % datetime.datetime.now().strftime('%Y%m%d'), 'a')
             f.write('%s\n' % date)
