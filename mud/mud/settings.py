@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'core',
     'channels',
     'boards',
+    'squad',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
