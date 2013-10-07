@@ -269,3 +269,28 @@ class StatisticLogger():
     def set_client(self, c):
         self.client = c
 
+
+class SquadLogger():
+    HEADER = 'В игре зарегистрированы следующие дружины:'
+    def __init__(self):
+        self.log_file = 'squad_%s.log'
+        self.log_every_hour = 25
+        self.counter = 0
+    
+    def on_line(self, l):
+        if RE_HOUR.match(l):
+            self.counter = self.counter + 1
+        if self.counter == self.log_every_hour:
+            self.counter = 0
+            self.client.command('др')
+    
+    def set_client(self, c):
+        self.client = c
+    def on_paragraph(self, p):
+        if p.count(StatisticLogger.HEADER) > 0:
+            date = datetime.datetime.now()
+            f = open(self.log_file % datetime.datetime.now().strftime('%Y%m%d'), 'a')
+            f.write('%s\n' % date)
+            f.write('%s\n\n' % p)
+            f.close()
+            
