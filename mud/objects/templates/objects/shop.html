@@ -30,8 +30,10 @@
 
 <h2>Не найдено: {{ objs.bad|length }}</h2>
 <br />
+{% if objs.bad %}
 <h2>Команда для опознования: {{ objs.command }}</h2>
 <br />
+{% endif %}
 
 <table>
 {% for obj in objs.bad %}
