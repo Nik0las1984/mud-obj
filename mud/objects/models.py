@@ -190,6 +190,9 @@ class Object(models.Model):
         b = b.replace(u'z', u'я')
         b = b.replace(u'Можно обуть.', u'Можно надеть на ступни.')
         b = b.replace(u'Можно использовать как щит.', u'Можно надеть на щит.')
+        
+        # Strip html tags. http://stackoverflow.com/questions/753052/strip-html-from-strings-in-python
+        b = re.sub(u'<[^<]+?>', '', b)
         return b
     
     @staticmethod
