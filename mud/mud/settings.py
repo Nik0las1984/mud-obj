@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'channels',
     'boards',
     'squad',
+    'picklefield',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

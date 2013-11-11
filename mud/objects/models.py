@@ -1,5 +1,7 @@
 # encoding: utf-8
 from django.db import models
+from django.contrib.auth.models import User
+from picklefield.fields import PickledObjectField
 
 import re
 import datetime
@@ -454,3 +456,16 @@ class Object(models.Model):
                 else:
                     bad.append(l)
         return { 'good': good, 'bad': bad, }
+
+
+class ObjectsList(models.Model):
+    name = models.TextField()
+    user = models.ForeignKey(User)
+    created = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
+    text = models.TextField(default = '')
+
+class ObjectsListValue(models.Model):
+    obj = models.ForeignKey(Object)
+    olist = models.ForeignKey(ObjectsList, null = True, blank = True)
+    data = PickledObjectField()
+    

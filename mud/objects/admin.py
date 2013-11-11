@@ -20,3 +20,8 @@ class ObjectAdmin(admin.ModelAdmin):
     actions = [make_checked, reparse]
 
 admin.site.register(Object, ObjectAdmin)
+
+class ObjectsListAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    
+admin.site.register(ObjectsList, ObjectsListAdmin)

@@ -114,8 +114,22 @@ def shop(request):
         if len(objs['bad']) < 1 and len(objs['good']) < 1:
             objs = Object.parse_inv(data)
     else:
-        objs = []
+        objs = {'good': [], 'bad': []}
         data = ''
+        
+    if request.POST.has_key('list') and request.user.is_superuser and len(objs['good']) > 0:
+        l = ObjectsList()
+        l.name = request.POST.get('list')
+        l.user = request.user
+        l.text = data
+        l.save()
+        for o in objs['good']:
+            print o
+            v = ObjectsListValue()
+            v.obj = o
+            v.olist = l
+            v.save()
+        
     context = {'objs': objs, 'data': data, }
     return render(request, 'objects/shop.html', context)
 

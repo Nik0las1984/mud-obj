@@ -13,6 +13,11 @@
 <form method="post" action="">
     {% csrf_token %}
     <h2>Поиск по списку:</h2>
+
+{% if user.is_superuser %}
+<p>Сформировать список: <input type="text" name="list"></input></p>
+{% endif %}
+
     <p>Чтобы найти по списку просто вставьте вывод из базара, магазина или инвентаря.</p>
     <p><textarea cols="100" rows="10" name="data">{{ data }}</textarea></p>
     <p><input type="submit" value="найти"></input></p>
