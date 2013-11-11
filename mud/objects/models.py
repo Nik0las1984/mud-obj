@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from picklefield.fields import PickledObjectField
+import reversion
 
 import re
 import datetime
@@ -156,6 +157,8 @@ class Object(models.Model):
     checked = models.BooleanField(default = True)
     added = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
     bad = models.BooleanField(default = False)
+    
+    comment = models.TextField(default = '')
     
     def __unicode__(self):
         return self.name
@@ -456,6 +459,9 @@ class Object(models.Model):
                 else:
                     bad.append(l)
         return { 'good': good, 'bad': bad, }
+
+reversion.register(Object)
+
 
 
 class ObjectsList(models.Model):

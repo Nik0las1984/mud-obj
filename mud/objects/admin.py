@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from django.contrib import admin
+import reversion
 from objects.models import *
 
 def make_checked(modeladmin, request, queryset):
@@ -12,11 +13,11 @@ def reparse(modeladmin, request, queryset):
         Object.create_from_string(o.mud_desc)
 reparse.short_description = u'Обновить описание'
 
-class ObjectAdmin(admin.ModelAdmin):
+class ObjectAdmin(reversion.VersionAdmin):
     list_filter = ['checked', 'bad', 'type', 'affects', 'prop', 'extra']
     search_fields = ['name']
     list_display = ('name', 'checked', 'bad', 'type', 'cost', 'added')
-    fields = ['name', 'mud_desc']
+    fields = ['name', 'mud_desc', 'comment']
     actions = [make_checked, reparse]
 
 admin.site.register(Object, ObjectAdmin)
