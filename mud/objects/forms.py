@@ -25,4 +25,7 @@ class CreateObjectForm(forms.Form):
 class CreateObjectFormNoCaptcha(forms.Form):
     text = forms.CharField(label = u'', required = True, widget = forms.Textarea(attrs = {'cols': 90, 'rows': 15}))
     bad = forms.CharField(label = u'', required = False, widget = forms.HiddenInput())
-    
+
+class ObjectCommentForm(forms.Form):
+	text = forms.CharField(label = u'', required = False, widget = forms.Textarea(attrs = {'cols': 60, 'rows': 15}))
+	oid = forms.ModelChoiceField(label = u'', queryset = Object.objects, widget = forms.HiddenInput())

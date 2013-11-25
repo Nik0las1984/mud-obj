@@ -10,6 +10,18 @@ from django.http import Http404
 from objects.models import *
 from objects.forms import *
 from core.models import Log
+import reversion
+
+def comment(request):
+    if request.method == 'POST':
+        f = ObjectCommentForm(request.POST)
+    if f.is_valid():
+        o = f.cleaned_data['oid']
+        o.comment = f.cleaned_data['text']
+        with reversion.create_revision():
+            o.save()
+            reversion.set_comment(o.comment)
+    return obj(request, o.pk)
 
 def add(request):
     info = ''
@@ -89,7 +101,8 @@ def obj(request, id):
         clazz = CreateObjectFormNoCaptcha
     
     f = clazz(initial = {'bad': o.id})
-    return render(request, 'objects/object.html', {'obj': o, 'form': f})
+    fc = ObjectCommentForm(initial = {'text': o.comment, 'oid': o})
+    return render(request, 'objects/object.html', {'obj': o, 'form': f, 'comment_form': fc, })
 
 def obj_by_name(request, name):
     f = Object.objects.filter(name__iexact = name)

@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'squad',
     'picklefield',
     'reversion',
+    'django.contrib.markup',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

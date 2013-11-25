@@ -8,5 +8,6 @@ urlpatterns = patterns('',
     url(r'^shop/', views.shop, name='shop'),
     url(r'^params/', views.params, name='params'),
     url(r'^add/', views.add, name='add'),
+    url(r'^comment/', views.comment, name='comment'),
     url(r'^$', views.index, name='index')
 )

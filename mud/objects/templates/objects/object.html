@@ -1,4 +1,5 @@
 {% extends "objects/base.html" %}
+{% load markup %}
 
 {% block title %}МПМ Былины. Предмет: {{ obj.name }}{% endblock %}
 
@@ -9,6 +10,9 @@
 
 {% block content %}
 
+<div class="ocontainer">
+<div class="oleft">
+<h2>Предмет:</h2>
 {% include "objects/object_desc.html" %}
 
 <br />
@@ -30,6 +34,22 @@
 <h2>Оригинальное описание:</h2>
 <br />
 {{ obj.mud_desc|linebreaksbr }}
+</div>
+<div class="oright">
+<h2>Комментарий:</h2>
+<a href="#" onclick=toggle("comment_form") class="error">Редактировать.</a>
+<span>{{obj.comment|markdown}}</span>
+<br />
+<div id="comment_form" style="display:none;width:auto;">
+<p>Исправьте описание предмета. Можно использовать язык разметки <a href="http://ru.wikipedia.org/wiki/Markdown">Markdown</a>.</p>
+<form method="post" action="/objects/comment/">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" value="Сохранить" />
+</form>
+
+</div>
+
 {% endif %}
 
 {% endblock %}

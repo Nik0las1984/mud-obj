@@ -161,6 +161,9 @@ class Object(models.Model):
     comment = models.TextField(default = '')
     last_modified = models.DateTimeField(auto_now = True, default = datetime.datetime.now())
     
+    class Meta:
+        ordering = ['-last_modified', ]
+    
     def __unicode__(self):
         return self.name
 
