@@ -16,7 +16,7 @@ reparse.short_description = u'Обновить описание'
 class ObjectAdmin(reversion.VersionAdmin):
     list_filter = ['checked', 'bad', 'type', 'affects', 'prop', 'extra']
     search_fields = ['name']
-    list_display = ('name', 'checked', 'bad', 'type', 'cost', 'added')
+    list_display = ('name', 'checked', 'bad', 'type', 'cost', 'last_modified')
     fields = ['name', 'mud_desc', 'comment']
     actions = [make_checked, reparse]
 

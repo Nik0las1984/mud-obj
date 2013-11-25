@@ -159,6 +159,7 @@ class Object(models.Model):
     bad = models.BooleanField(default = False)
     
     comment = models.TextField(default = '')
+    last_modified = models.DateTimeField(auto_now = True, default = datetime.datetime.now())
     
     def __unicode__(self):
         return self.name
