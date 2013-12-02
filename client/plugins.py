@@ -102,13 +102,14 @@ class BoardsLogger():
             'news': ('Новости', 'новости %s'),
             'ideas': ('Идеи', 'идеи %s'),
             'anons': ('Анонсы', 'анонс %s'),
+            'coder': ('Кодер', 'кодер %s'),
             }
     
     def update_boards(self):
         b = self._update_boards()
-        if len(b.keys()) != 4:
+        if len(b.keys()) != 5:
             b = self._update_boards()
-        if len(b.keys()) != 4:
+        if len(b.keys()) != 5:
             b = None
         return b
     
@@ -131,13 +132,13 @@ class BoardsLogger():
     def on_command(self, c):
         c = c.split()
         if len(c) < 3:
-            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas] num'
+            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas|coder] num'
             return None
         if c[1] not in ['all', 'new', 'single']:
-            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas] num'
+            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas|coder] num'
             return None
         if c[2] not in self.bnames.keys():
-            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas] num'
+            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas|coder] num'
             return None
             
         if c[1] == 'single':
