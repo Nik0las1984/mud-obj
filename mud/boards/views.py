@@ -34,6 +34,9 @@ def anons(request):
     
 def ideas(request):
     return boards_list(request, Board.objects.filter(type = Board.IDEAS), u'Идеи', False)
+
+def coder(request):
+    return boards_list(request, Board.objects.filter(type = Board.CODER), u'Кодер', False)
     
 def message(request, id):
     o = get_object_or_404(Board, pk = id)

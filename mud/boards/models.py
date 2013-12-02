@@ -22,6 +22,7 @@ class Board(models.Model):
         (VECHE, u'Вече'),
         (ANONS, u'Анонсы'),
         (IDEAS, u'Идеи'),
+        (CODER, u'Кодер'),
     )
     
     date = models.DateTimeField(default = datetime.datetime.now())

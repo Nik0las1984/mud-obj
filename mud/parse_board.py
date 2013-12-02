@@ -23,6 +23,8 @@ if p.startswith('anons_'):
     type = Board.ANONS
 if p.startswith('ideas_'):
     type = Board.IDEAS
+if p.startswith('coder_'):
+    type = Board.CODER
     
 if type == -1:
     print "Error"
