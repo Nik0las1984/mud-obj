@@ -17,6 +17,7 @@ class Board(models.Model):
     VECHE = 1
     ANONS = 2
     IDEAS = 3
+    CODER = 4
     BOARD_TYPES = (
         (NEWS,  u'Новости'),
         (VECHE, u'Вече'),
