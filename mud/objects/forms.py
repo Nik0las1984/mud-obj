@@ -7,6 +7,7 @@ from captcha.fields import *
 
 class ParamsForm(forms.Form):
     name = forms.CharField(label = u'Название', required = False)
+    list = forms.ModelChoiceField(label = u'Предметы из списка', required = False, queryset = ObjectsList.objects.all())
     weapon = forms.ModelChoiceField(label = u'Принадлежит классу', queryset = Weapon.objects.filter().order_by('name'), required = False)
     wear = forms.ModelChoiceField(label = u'Можно надеть на', queryset = Wear.objects.filter().order_by('name'), required = False)
     type = forms.ModelChoiceField(label = u'Тип', queryset = Type.objects.filter().order_by('name'), required = False)
@@ -15,7 +16,16 @@ class ParamsForm(forms.Form):
     no_avail = forms.ModelChoiceField(label = u'Не доступен', queryset = NoProperty.objects.filter().order_by('name'), required = False)
     extra = forms.ModelChoiceField(label = u'Экстрафлаги', queryset = ExtraFlag.objects.filter().order_by('name'), required = False)
     affects = forms.ModelChoiceField(label = u'Аффекты', queryset = Affect.objects.filter().order_by('name'), required = False)
-    prop = forms.ModelChoiceField(label = u'Дополнительные свойства', queryset = PropertyValue.objects.filter().order_by('prop__name'), required = False)
+    prop = forms.ModelChoiceField(label = u'Дополнительные свойства', queryset = ExtraProperty.objects.filter().order_by('name'), required = False)
+    
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(ParamsForm, self).__init__(*args, **kwargs)
+        if self.user.is_superuser:
+            self.fields['list'].queryset = ObjectsList.objects.filter(user = self.user)
+        else:
+            self.fields['list'].queryset = ObjectsList.objects.none()
+
 
 class CreateObjectForm(forms.Form):
     text = forms.CharField(label = u'', required = True, widget = forms.Textarea(attrs = {'cols': 90, 'rows': 15}))

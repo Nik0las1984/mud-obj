@@ -473,9 +473,8 @@ class ObjectsList(models.Model):
     user = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
     text = models.TextField(default = '')
-
-class ObjectsListValue(models.Model):
-    obj = models.ForeignKey(Object)
-    olist = models.ForeignKey(ObjectsList, null = True, blank = True)
-    data = PickledObjectField()
+    objs = models.ManyToManyField(Object)
+    
+    def __unicode__(self):
+        return '%s (%s)' % (self.name, self.created)
     

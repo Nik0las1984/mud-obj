@@ -131,17 +131,15 @@ def shop(request):
         data = ''
         
     if request.POST.has_key('list') and request.user.is_superuser and len(objs['good']) > 0:
-        l = ObjectsList()
-        l.name = request.POST.get('list')
-        l.user = request.user
-        l.text = data
-        l.save()
-        for o in objs['good']:
-            print o
-            v = ObjectsListValue()
-            v.obj = o
-            v.olist = l
-            v.save()
+        if request.POST.get('list').strip() != '':
+            l = ObjectsList()
+            l.name = request.POST.get('list')
+            l.user = request.user
+            l.text = data
+            l.save()
+            for o in objs['good']:
+                l.objs.add(o)
+            l.save()
         
     context = {'objs': objs, 'data': data, }
     return render(request, 'objects/shop.html', context)
@@ -151,12 +149,16 @@ def params(request):
     if queries_without_page.has_key('page'):
         del queries_without_page['page']
 
-    f = ParamsForm()
+    f = ParamsForm(request.user)
     if request.method == 'GET':
-        f = ParamsForm(request.GET)
+        f = ParamsForm(request.user, request.GET)
     f.is_valid()
     
     objs = Object.objects.all()
+    
+    if f.cleaned_data['list'] != None:
+        objs = f.cleaned_data['list'].objs
+    
     if f.cleaned_data['name'] != '':
         objs = objs.filter(name__icontains = f.cleaned_data['name'])
     if f.cleaned_data['weapon']:
@@ -176,7 +178,7 @@ def params(request):
     if f.cleaned_data['affects']:
         objs = objs.filter(affects = f.cleaned_data['affects'])
     if f.cleaned_data['prop']:
-        objs = objs.filter(prop = f.cleaned_data['prop'])
+        objs = objs.filter(prop__prop = f.cleaned_data['prop'])
     
     c = objs.count()
     paginator = Paginator(objs.order_by('name'), 25)

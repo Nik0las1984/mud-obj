@@ -23,6 +23,7 @@ class ObjectAdmin(reversion.VersionAdmin):
 admin.site.register(Object, ObjectAdmin)
 
 class ObjectsListAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'user',  'created']
+    fields = ['name', 'text', ]
     
 admin.site.register(ObjectsList, ObjectsListAdmin)
