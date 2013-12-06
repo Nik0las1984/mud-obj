@@ -27,3 +27,8 @@ class ObjectsListAdmin(admin.ModelAdmin):
     fields = ['name', 'text', ]
     
 admin.site.register(ObjectsList, ObjectsListAdmin)
+
+class ExtraPropertyAdmin(admin.ModelAdmin):
+    list_display = ['name', ]
+    
+admin.site.register(ExtraProperty, ExtraPropertyAdmin)
