@@ -42,7 +42,7 @@
 <span>{{obj.comment|markdown}}</span>
 <br />
 <div id="comment_form" style="display:none;width:auto;">
-<p>Исправьте описание предмета. Можно использовать язык разметки <a href="http://ru.wikipedia.org/wiki/Markdown">Markdown</a>.</p>
+<p>Описание предмета. Где он попится, для чего лучше использовать и т.д., например как <a href="http://mudportal.ru/objects/obj/748/">тут</a>. По возможности использовать ссылки на <a href="http://mudportal.ru/w/">MUDWiki</a>. Можно использовать язык разметки <a href="http://ru.wikipedia.org/wiki/Markdown">Markdown</a>.</p>
 <form method="post" action="/objects/comment/">
     {% csrf_token %}
     {{ comment_form.as_p }}
