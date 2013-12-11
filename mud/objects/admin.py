@@ -32,3 +32,13 @@ class ExtraPropertyAdmin(admin.ModelAdmin):
     list_display = ['name', ]
     
 admin.site.register(ExtraProperty, ExtraPropertyAdmin)
+
+class AffectAdmin(admin.ModelAdmin):
+    list_display = ['name', ]
+    
+admin.site.register(Affect, AffectAdmin)
+
+class MaterialAdmin(admin.ModelAdmin):
+    list_display = ['name', ]
+    
+admin.site.register(Material, MaterialAdmin)
