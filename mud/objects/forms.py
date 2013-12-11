@@ -22,7 +22,7 @@ class ParamsForm(forms.Form):
         self.user = user
         super(ParamsForm, self).__init__(*args, **kwargs)
         if self.user.is_superuser:
-            self.fields['list'].queryset = ObjectsList.objects.filter(user = self.user)
+            self.fields['list'].queryset = ObjectsList.objects.filter(user = self.user).order_by("-created")
         else:
             self.fields['list'].queryset = ObjectsList.objects.none()
 
