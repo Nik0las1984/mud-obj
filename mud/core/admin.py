@@ -16,3 +16,8 @@ class LogAdmin(admin.ModelAdmin):
     list_display = ['type', 'value', 'date', 'ua', 'path']
 
 admin.site.register(Log, LogAdmin)
+
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ['title', 'user', 'date', ]
+
+admin.site.register(News, NewsAdmin)

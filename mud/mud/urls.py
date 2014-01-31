@@ -17,16 +17,11 @@ urlpatterns = patterns('',
     url(r'^objects/', include('objects.urls')),
     url(r'^channels/', include('channels.urls')),
     url(r'^boards/', include('boards.urls')),
-    url(r'^core/', include('core.urls')),
+    url(r'^$', include('core.urls')),
 )
 
 # Captcha
 urlpatterns += patterns('',
     url(r'^captcha/', include('captcha.urls')),
-)
-
-# Flatpages
-urlpatterns += patterns('django.contrib.flatpages.views',
-    url(r'^$', 'flatpage', {'url': '/index/'}, name='index'),
 )
 

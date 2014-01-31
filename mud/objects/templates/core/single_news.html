@@ -1,0 +1,5 @@
+<div class="news">
+<h3 class="news_date">{{ n.date|date:'Y/M/d' }}</h3>
+<h2 class="news_title">{{ n.title }}</h2>
+{% autoescape off %}<div class="news_text">{{ n.text }}</div>{% endautoescape %}
+</div>

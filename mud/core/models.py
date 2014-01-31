@@ -3,6 +3,7 @@
 import datetime
 
 from django.db import models
+from django.contrib.auth.models import User as DjangoUser
 
 class User(models.Model):
     name = models.TextField()
@@ -99,3 +100,13 @@ class Log(models.Model):
         l.ua = request.META['HTTP_USER_AGENT']
         l.path = request.get_full_path()
         l.save()
+
+class News(models.Model):
+    user = models.ForeignKey(DjangoUser)
+    title = models.TextField()
+    text = models.TextField()
+    date = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
+    
+    def __unicode__(self):
+        return u'%s (%s)' % (self.title, self.date)
+    

@@ -1,0 +1,67 @@
+{% extends "objects/base.html" %}
+
+{% block title %}Сайт посвященный МПМ "Былины"{% endblock %}
+
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+<h2>МПМ Былины</h2>
+
+<p>Сайт посвященный игре <a href="http://www.mud.ru/"> МПМ "Былины"</a>.</p>
+
+<p>Содержит в себе некую игровую информацию. Прежде всего <a href="/objects/">база данных по предметам</a>.</p>
+
+<p>Также имеется <a href="/objects/params/">подбор предметов по параметрам</a> и <a href="/objects/shop/">по списку из магазина</a>. </p>
+
+<p>О всех замечаниях можно писать сюда: <a href="http://www.mud.ru/vbb/showthread.php?t=4305">http://www.mud.ru/vbb/showthread.php?t=4305</a>.</p>
+
+<h1>Новости:</h1>
+
+{%if news.paginator.num_pages > 1 %}
+<div class="pagination">
+    <span class="step-links">
+        {% if news.has_previous %}
+            <a href="?page={{ news.previous_page_number }}"><<</a>
+        {% endif %}
+
+        <span class="current">
+            {{ news.number }} из {{ news.paginator.num_pages }}
+        </span>
+
+        {% if news.has_next %}
+            <a href="?page={{ news.next_page_number }}">>></a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
+
+<hr/>
+{% for n in news %}
+{% include "core/single_news.html" %}
+<hr/>
+{% endfor %}
+
+
+{%if news.paginator.num_pages > 1 %}
+<div class="pagination">
+    <span class="step-links">
+        {% if news.has_previous %}
+            <a href="?page={{ news.previous_page_number }}"><<</a>
+        {% endif %}
+
+        <span class="current">
+            {{ news.number }} из {{ news.paginator.num_pages }}
+        </span>
+
+        {% if objects.has_next %}
+            <a href="?page={{ news.next_page_number }}">>></a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
+
+{% endblock %}

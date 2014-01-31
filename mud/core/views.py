@@ -73,4 +73,17 @@ def charts_3month(request):
         'desc': u'показано среднее за сутки'
         }
     return online(request, data)
-    
+
+def news(request):
+    q = News.objects
+    paginator = Paginator(q.order_by('-date'), 25)
+    page = request.GET.get('page')
+    try:
+        o = paginator.page(page)
+    except PageNotAnInteger:
+        o = paginator.page(1)
+    except EmptyPage:
+        o = paginator.page(paginator.num_pages)
+
+    context = {'news': o, }
+    return render(request, 'core/news.html', context)
