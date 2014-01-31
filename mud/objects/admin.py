@@ -14,7 +14,7 @@ def reparse(modeladmin, request, queryset):
 reparse.short_description = u'Обновить описание'
 
 class ObjectAdmin(reversion.VersionAdmin):
-    list_filter = ['checked', 'bad', 'type', 'affects', 'prop', 'extra']
+    list_filter = ['checked', 'bad', ]
     search_fields = ['name']
     list_display = ('name', 'checked', 'bad', 'type', 'cost', 'last_modified')
     fields = ['name', 'mud_desc', 'comment']
