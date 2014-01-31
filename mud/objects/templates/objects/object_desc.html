@@ -60,6 +60,12 @@
 <br />
 {% endif %}
 
+{% if obj.recipe != None %}
+содержит рецепт отвара&nbsp;: "<span class="obj_spell">{{ obj.recipe }}</span>"
+<br />
+{% endif %}
+
+
 Накладывает на вас аффекты: <span class="obj_affect">{{ obj.affects.all|join:", "}}</span>
 <br />
 

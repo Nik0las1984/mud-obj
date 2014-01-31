@@ -25,6 +25,7 @@ re_take_strength = re.compile(ur'^Можно взять в (.+)\s\(требуе�
 re_weapon = re.compile(ur'^Принадлежит к классу "(.+)"\.')
 re_damage = re.compile(ur'^Наносимые повреждения \'([\dD]+)\' среднее ([\d\.,]+)\.')
 re_spell = re.compile(ur'^содержит заклинание\s*:\s*"(.+)"$')
+re_recipe = re.compile(ur'^содержит\s+рецепт\s+отвара\s*:\s*"(.+)"$')
 
 NOTHING = u'ничего'
 
@@ -46,6 +47,11 @@ class ObjCharacteristic(models.Model):
 
     class Meta:
         abstract = True
+        
+class Recipe(ObjCharacteristic):
+    @staticmethod
+    def get_or_create(name):
+        return ObjCharacteristic.get_or_create(name, Recipe)
 
 class Spell(ObjCharacteristic):
     @staticmethod
@@ -151,6 +157,7 @@ class Object(models.Model):
     dmg_avg = models.FloatField(blank = True, null = True)
     
     spell = models.ForeignKey(Spell, blank = True, null = True)
+    recipe = models.ForeignKey(Recipe, blank = True, null = True)
     
     mud_desc = models.TextField()
     
@@ -339,6 +346,11 @@ class Object(models.Model):
         spell = parse_data(data, re_spell)
         if spell is not None:
             o.spell = Spell.get_or_create(spell[0])
+        
+        # Рецепт
+        recipe = parse_data(data, re_recipe)
+        if recipe is not None:
+            o.recipe = Recipe.get_or_create(recipe[0])
         
         # Сохраняем
         o.save()
