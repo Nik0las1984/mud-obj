@@ -28,4 +28,7 @@ class ZoneLink(models.Model):
     z2 = models.ForeignKey(Zone)
     type = models.IntegerField(choices = TYPES, default = WALK)
     value = models.TextField(blank = True)
+    
+    def __unicode__(self):
+        return u'%s -> %s' % (z1.name, z2.name)
 
