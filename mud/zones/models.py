@@ -30,5 +30,5 @@ class ZoneLink(models.Model):
     value = models.TextField(blank = True)
     
     def __unicode__(self):
-        return u'%s -> %s' % (z1.name, z2.name)
+        return u'%s -> %s' % (self.z1.name, self.z2.name)
 
