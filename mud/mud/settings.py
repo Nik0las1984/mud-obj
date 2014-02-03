@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     'picklefield',
     'reversion',
     'django.contrib.markup',
+    'zones'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
