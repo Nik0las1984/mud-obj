@@ -1,0 +1,39 @@
+{% extends "objects/base.html" %}
+
+{% block title %}МПМ Былины. Зоны.{% endblock %}
+
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+<h2>Список зон:</h2>
+
+<table class="zones">
+<tr>
+<th>Название</th>
+<th>Альретнативное название</th>
+<th>Средник уровень</th>
+<th>Выходы</th>
+</tr>
+{% for z in zones %}
+<tr>
+<td>{{ z.name }}</td>
+<td>
+{% if z.alter_name %}
+{{ z.alter_name }}
+{% endif %}
+</td>
+<td>
+{% if z.level > 0 %}
+{{ z.level }}
+{% endif %}
+</td>
+<td>{% include "zones/links_short.html" %}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

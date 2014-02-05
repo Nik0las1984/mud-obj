@@ -12,3 +12,7 @@ from zones.models import *
 def zones_graph(request):
     context = {'links': ZoneLink.objects.all(), }
     return render(request, 'zones/graph.html', context)
+
+def index(request):
+    context = {'zones': Zone.objects.order_by('name').all(), }
+    return render(request, 'zones/index.html', context)

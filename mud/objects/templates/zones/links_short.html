@@ -1,0 +1,8 @@
+{% for l in z.connected_zones.all %}
+<div class="zone_link">
+{{ l.z2.name }} -> <span class="ansi_yellow">{{ l.get_type_display }}</span>
+{% if l.value %}
+<span class="ansi_bright ansi_green">({{ l.value }})</span>
+{% endif %}
+</div>
+{% endfor %}
