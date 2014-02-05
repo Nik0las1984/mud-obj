@@ -9,7 +9,7 @@ class Zone(models.Model):
     level = models.IntegerField()
     
     def __unicode__(self):
-        return self.name
+        return u'%s (%s)' % (self.name, self.level)
 
 class ZoneLink(models.Model):
     WALK             = 0
@@ -30,5 +30,5 @@ class ZoneLink(models.Model):
     value = models.TextField(blank = True)
     
     def __unicode__(self):
-        return u'%s -> %s' % (self.z1.name, self.z2.name)
+        return u'%s -> %s' % (self.z1, self.z2)
 
