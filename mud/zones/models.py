@@ -10,6 +10,9 @@ class Zone(models.Model):
     
     def __unicode__(self):
         return u'%s (%s)' % (self.name, self.level)
+    
+    class Meta:
+        ordering = ['name', 'level']
 
 class ZoneLink(models.Model):
     WALK             = 0
