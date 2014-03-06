@@ -3,9 +3,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from picklefield.fields import PickledObjectField
 import reversion
-
 import re
 import datetime
+from zones.models import Zone
 
 re_name = re.compile(ur'^Предмет\s*"(.+)",\s*тип\s*:\s*(.+)\s*$')
 re_weight = re.compile(ur'^Вес\s*:\s*(\d+)\s*,\s*Цена\s*:\s*(\d+)\s*,\s*Рента\s*:\s*(\d+)\s*\((\d*)\)\s*$')
@@ -160,6 +160,7 @@ class Object(models.Model):
     recipe = models.ForeignKey(Recipe, blank = True, null = True)
     
     mud_desc = models.TextField()
+    html_desc = models.TextField(default = u'')
     
     checked = models.BooleanField(default = True)
     added = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
@@ -167,6 +168,8 @@ class Object(models.Model):
     
     comment = models.TextField(default = '')
     last_modified = models.DateTimeField(auto_now = True, default = datetime.datetime.now())
+    
+    zone = models.ForeignKey(Zone, default = None, null = True)
     
     class Meta:
         ordering = ['-last_modified', ]
@@ -199,6 +202,14 @@ class Object(models.Model):
     
     def extra_clean(self):
         return self.extra.exclude(name = u'таймер запущен')
+    
+    def update_html_desc(self):
+        h = self.mud_desc
+        h = re.sub(ur'(?<=Предмет ")(.+)(?="),\s*тип\s*:\s*(.+)\s*$', lambda m: 'sdfdsfsd %s' % m.group(1), h)
+        h = re.sub('\n', '<br />\n', h)
+        print h
+        self.html_desc = h
+        self.save()
     
     @staticmethod
     def clear_string(a):

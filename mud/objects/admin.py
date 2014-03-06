@@ -13,12 +13,18 @@ def reparse(modeladmin, request, queryset):
         Object.create_from_string(o.mud_desc)
 reparse.short_description = u'Обновить описание'
 
+def update_html(modeladmin, request, queryset):
+    for o in queryset.all():
+        o.update_html_desc()
+update_html.short_description = u'Обновить HTML код'
+
+
 class ObjectAdmin(reversion.VersionAdmin):
     list_filter = ['checked', 'bad', ]
     search_fields = ['name']
     list_display = ('name', 'checked', 'bad', 'type', 'cost', 'last_modified')
-    fields = ['name', 'mud_desc', 'comment']
-    actions = [make_checked, reparse]
+    fields = ['name', 'mud_desc', 'comment', 'html_desc']
+    actions = [make_checked, reparse, update_html]
 
 admin.site.register(Object, ObjectAdmin)
 
