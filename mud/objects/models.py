@@ -166,10 +166,10 @@ class Object(models.Model):
     added = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
     bad = models.BooleanField(default = False)
     
-    comment = models.TextField(default = '')
+    comment = models.TextField(default = '', blank = True)
     last_modified = models.DateTimeField(auto_now = True, default = datetime.datetime.now())
     
-    zones = models.ManyToManyField(Zone, default = None, null = True)
+    zones = models.ManyToManyField(Zone, default = None, null = True, blank = True)
     
     class Meta:
         ordering = ['-last_modified', ]

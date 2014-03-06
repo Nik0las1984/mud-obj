@@ -23,8 +23,9 @@ class ObjectAdmin(reversion.VersionAdmin):
     list_filter = ['checked', 'bad', ]
     search_fields = ['name']
     list_display = ('name', 'checked', 'bad', 'type', 'cost', 'last_modified')
-    fields = ['name', 'mud_desc', 'comment', 'html_desc']
+    fields = ['name', 'mud_desc', 'comment', 'html_desc', 'zones']
     actions = [make_checked, reparse, update_html]
+    filter_horizontal = ['zones',]
 
 admin.site.register(Object, ObjectAdmin)
 
