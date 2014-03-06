@@ -169,7 +169,7 @@ class Object(models.Model):
     comment = models.TextField(default = '')
     last_modified = models.DateTimeField(auto_now = True, default = datetime.datetime.now())
     
-    zone = models.ForeignKey(Zone, default = None, null = True)
+    zones = models.ManyToManyField(Zone, default = None, null = True)
     
     class Meta:
         ordering = ['-last_modified', ]
