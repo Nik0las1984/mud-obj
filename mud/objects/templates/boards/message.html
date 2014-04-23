@@ -4,6 +4,6 @@
 {% endif %}
 <a href="/boards/message/{{ m.id }}/"><span class="message-header">{% autoescape off %}{{ m }}{% endautoescape %}</span></a>
 <br />
-{% autoescape off %}{{ m.text_safe|truncatewords_html:10|linebreaks }}{% endautoescape %}
+{% autoescape off %}{{ m.text_safe|linebreaks }}{% endautoescape %}
 <br />
 </div>
