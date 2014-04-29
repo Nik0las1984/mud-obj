@@ -24,7 +24,7 @@ class lineWithFocusChart(NVD3Chart):
     Python example::
 
         from nvd3 import lineWithFocusChart
-        chart = lineWithFocusChart(name='lineWithFocusChart', date=True, x_axis_date_format="%d %b %Y")
+        chart = lineWithFocusChart(name='lineWithFocusChart', x_is_date=True, x_axis_format="%d %b %Y")
         xdata = [1365026400000000, 1365026500000000, 1365026600000000]
         ydata = [-6, 5, -1]
 
@@ -77,19 +77,22 @@ class lineWithFocusChart(NVD3Chart):
             return chart;
         });
     """
-    def __init__(self, height=450, width=None, date=False, x_axis_date_format="%d %b %Y %H %S", **kwargs):
+    def __init__(self, **kwargs):
         NVD3Chart.__init__(self, **kwargs)
-        if date:
+        height = kwargs.get('height', 450)
+        width = kwargs.get('width', None)
+
+        if kwargs.get('x_is_date', False):
             self.set_date_flag(True)
-            self.create_x_axis('xAxis', format=x_axis_date_format, date=True)
-            self.create_x_axis('x2Axis', format=x_axis_date_format, date=True)
+            self.create_x_axis('xAxis', format=kwargs.get('x_axis_format', '%d %b %Y %H %S'), date=True)
+            self.create_x_axis('x2Axis', format=kwargs.get('x_axis_format', '%d %b %Y %H %S'), date=True)
             self.set_custom_tooltip_flag(True)
         else:
-            self.create_x_axis('xAxis', format=".2f")
-            self.create_x_axis('x2Axis', format=".2f")
+            self.create_x_axis('xAxis', format=kwargs.get('x_axis_format', '.2f'))
+            self.create_x_axis('x2Axis', format=kwargs.get('x_axis_format', '.2f'))
 
-        self.create_y_axis('yAxis', format=".2f")
-        self.create_y_axis('y2Axis', format=".2f")
+        self.create_y_axis('yAxis', format=kwargs.get('y_axis_format', '.2f'))
+        self.create_y_axis('y2Axis', format=kwargs.get('y_axis_format', '.2f'))
 
         # must have a specified height, otherwise it superimposes both chars
         if height:

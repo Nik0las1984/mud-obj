@@ -5,11 +5,11 @@ from nvd3.NVD3Chart import NVD3Chart
 from nvd3 import lineWithFocusChart, lineChart, \
     multiBarChart, pieChart, stackedAreaChart, \
     multiBarHorizontalChart, linePlusBarChart, \
-    cumulativeLineChart, discreteBarChart, scatterChart
+    cumulativeLineChart, discreteBarChart, scatterChart, linePlusBarWithFocusChart
 
 
-@register.simple_tag(name='load_chart')
-def load_chart(chart_type, series, container, x_is_date=False, x_axis_date_format="%d %b %Y", tag_script_js=True, color_category='category20'):
+@register.simple_tag
+def load_chart(chart_type, series, container, kw_extra, *args, **kwargs):
     """Loads the Chart objects in the container.
 
     **usage**:
@@ -21,19 +21,38 @@ def load_chart(chart_type, series, container, x_is_date=False, x_axis_date_forma
         * ``chart_type`` - Give chart type name eg. lineWithFocusChart/pieChart
         * ``series`` - Data set which are going to be plotted in chart.
         * ``container`` - Chart holder in html page.
-        * ``x_is_date`` - if x-axis is in date format
-        * ``x_axis_date_format`` - display x-axis date in various format ie "%d %b %Y"
-        * ``tag_script_js`` - if show the javascript tag <script>
+
+    **kw_extra settings**::
+        * ``x_is_date`` - if enabled the x-axis will be display as date format
+        * ``x_axis_format`` - set the x-axis date format, ie. "%d %b %Y"
+        * ``tag_script_js`` - if enabled it will add the javascript tag '<script>'
+        * ``jquery_on_ready`` - if enabled it will load the javascript only when page is loaded
+            this will use jquery library, so make sure to add jquery to the template.
         * ``color_category`` - Define color category (eg. category10, category20, category20c)
+        * ``chart_attr`` - Custom chart attributes
     """
     if not chart_type:
         return False
-    chart = eval(chart_type)(name=container, date=x_is_date, x_axis_date_format=x_axis_date_format, color_category=color_category)
-    #don't show the javascript tag <script>
-    if not tag_script_js:
-        chart.tag_script_js = False
+
+    if not 'x_is_date' in kw_extra:
+        kw_extra['x_is_date'] = False
+    if not 'x_axis_format' in kw_extra:
+        kw_extra['x_axis_format'] = "%d %b %Y"
+    if not 'color_category' in kw_extra:
+        kw_extra['color_category'] = "category20"
+    if not 'tag_script_js' in kw_extra:
+        kw_extra['tag_script_js'] = True
+    if not 'chart_attr' in kw_extra:
+        kw_extra['chart_attr'] = {}
+    # set the container name
+    kw_extra['name'] = unicode(container)
+
+    # Build chart
+    chart = eval(chart_type)(**kw_extra)
+
     xdata = series['x']
     y_axis_list = [d for d in series.keys() if 'y' in d]
+    y_axis_list.sort()
 
     for key in y_axis_list:
         ydata = series[key]
@@ -41,9 +60,8 @@ def load_chart(chart_type, series, container, x_is_date=False, x_axis_date_forma
 
         name = series['name' + axis_no] if series.get('name' + axis_no) else None
         extra = series['extra' + axis_no] if series.get('extra' + axis_no) else {}
-        kwargs = series['kwargs' + axis_no] if series.get('kwargs' + axis_no) else {}
 
-        if chart_type == 'linePlusBarChart':
+        if chart_type == 'linePlusBarChart' or chart_type == 'linePlusBarWithFocusChart':
             if key == 'y1':
                 kwargs = series['kwargs1']
                 chart.add_serie(name=name, y=ydata, x=xdata, extra=extra, **kwargs)
@@ -56,7 +74,7 @@ def load_chart(chart_type, series, container, x_is_date=False, x_axis_date_forma
         elif chart_type == 'pieChart':
             chart.add_serie(y=ydata, x=xdata, extra=extra)
         else:
-            chart.add_serie(name=name, y=ydata, x=xdata, extra=extra, **kwargs)
+            chart.add_serie(name=name, y=ydata, x=xdata, extra=extra)
 
     chart.buildhtml()
 
@@ -64,33 +82,7 @@ def load_chart(chart_type, series, container, x_is_date=False, x_axis_date_forma
     return mark_safe(html_string)
 
 
-@register.simple_tag(name='include_nvd3jscss')
-def include_nvd3jscss(use_cdn=True):
-    """
-    Include the javascript and css for nvd3
-    This will include something similar as :
-        <link media="all" href="http://nvd3.org/src/nv.d3.css" type="text/css" rel="stylesheet" />
-        <script src="http://nvd3.org/lib/d3.v2.js" type="text/javascript"></script>
-        <script src="http://nvd3.org/nv.d3.js" type="text/javascript"></script>
-
-    **usage**:
-
-        {% include_nvd3jscss True %}
-
-    **Arguments**:
-
-        * ``use_cdn`` - option to use the public cdn or link to static folder
-    """
-    chart = NVD3Chart()
-    if not use_cdn:
-        chart.header_css = [settings.STATIC_URL + 'nvd3/css/nv.d3.css']
-        chart.header_js = [settings.STATIC_URL + 'nvd3/js/d3.v2.js',
-                           settings.STATIC_URL + 'nvd3/js/nv.d3.js']
-    chart.buildhtmlheader()
-    return mark_safe(chart.htmlheader + '\n')
-
-
-@register.simple_tag(name='include_container')
+@register.simple_tag
 def include_container(include_container, height=400, width=600):
     """
     Include the html for the chart container and css for nvd3
@@ -107,9 +99,50 @@ def include_container(include_container, height=400, width=600):
         * ``height`` - Chart height
         * ``width`` - Chart width
     """
-    chart = NVD3Chart(include_container)
+    chart = NVD3Chart()
+    chart.name = unicode(include_container)
     chart.set_graph_height(height)
     chart.set_graph_width(width)
     chart.buildcontainer()
 
     return mark_safe(chart.container + '\n')
+
+
+@register.simple_tag
+def include_chart_jscss(static_dir=''):
+    """
+    Include the html for the chart container and css for nvd3
+    This will include something similar as :
+
+        <link media="all" href="/static/nvd3/src/nv.d3.css" type="text/css" rel="stylesheet" />
+        <script src="/static/d3/d3.min.js" type="text/javascript"></script>
+        <script src="/static/nvd3/nv.d3.min.js" type="text/javascript"></script>
+
+    **usage**:
+
+        {% include_chart_jscss 'newfies' %}
+
+    **Arguments**:
+
+        * ``static_dir`` -
+    """
+    if static_dir:
+        static_dir += '/'
+
+    chart = NVD3Chart()
+    chart.header_css = [
+        '<link media="all" href="%s" type="text/css" rel="stylesheet" />\n' % h for h in
+        (
+            "%s%snvd3/src/nv.d3.css" % (settings.STATIC_URL, static_dir),
+        )
+    ]
+
+    chart.header_js = [
+        '<script src="%s" type="text/javascript"></script>\n' % h for h in
+        (
+            "%s%sd3/d3.min.js" % (settings.STATIC_URL, static_dir),
+            "%s%snvd3/nv.d3.min.js" % (settings.STATIC_URL, static_dir)
+        )
+    ]
+    chart.buildhtmlheader()
+    return mark_safe(chart.htmlheader + '\n')

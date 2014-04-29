@@ -61,7 +61,7 @@ class pieChart(NVD3Chart):
 
             chart.tooltipContent(function(key, y, e, graph) {
                 var x = String(key);
-                var y =  String(e.point.y)  + ' cal';
+                var y =  String(y)  + ' cal';
                 tooltip_str = '<center><b>'+x+'</b></center>' + y;
                 return tooltip_str;
             });
@@ -75,8 +75,11 @@ class pieChart(NVD3Chart):
           return chart;
         });
     """
-    def __init__(self, height=None, width=None, **kwargs):
+    def __init__(self, **kwargs):
         NVD3Chart.__init__(self, **kwargs)
+        height = kwargs.get('height', 450)
+        width = kwargs.get('width', None)
+
         self.create_x_axis('xAxis', format=None)
         self.create_y_axis('yAxis', format=None)
         # must have a specified height, otherwise it superimposes both chars
@@ -88,13 +91,32 @@ class pieChart(NVD3Chart):
     def buildjschart(self):
         NVD3Chart.buildjschart(self)
 
-        pie_jschart = '\n' + stab(2) + 'chart.x(function(d) { return d.x })\n' + \
-            stab(3) + '.y(function(d) { return d.y })\n' + \
-            stab(3) + '.values(function(d) { return d });\n'
+        color_js = ''
+        if self.color_list:
+            color_js += "var mycolor = new Array();\n"
+            color_count = 0
+            for i in self.color_list:
+                color_js += stab(2) + "mycolor[" + str(color_count) + "] = '" + i + "';\n"
+                color_count = int(color_count) + 1
+
+        # add mycolor var in js before nv.addGraph starts
+        if self.color_list:
+            start_js = self.jschart.find('nv.addGraph')
+            #start_js_len = len('nv.addGraph')
+            replace_index = start_js
+            if start_js > 0:
+                self.jschart = self.jschart[:replace_index] + color_js + self.jschart[replace_index:]
+
+        pie_jschart = '\n' + stab(2) + 'chart.x(function(d) { return d.label })\n' + \
+            stab(3) + '.y(function(d) { return d.value });\n'
         if self.width:
             pie_jschart += stab(2) + 'chart.width(%s);\n' % self.width
         if self.height:
             pie_jschart += stab(2) + 'chart.height(%s);\n' % self.height
+
+        # add custom colors for pieChart
+        if self.color_list and color_js:
+            pie_jschart += stab(2) + 'chart.color(mycolor);\n'
 
         start_index = self.jschart.find('.pieChart();')
         string_len = len('.pieChart();')

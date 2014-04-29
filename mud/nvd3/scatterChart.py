@@ -30,8 +30,8 @@ class scatterChart(NVD3Chart):
         ydata = [-1, 2, 3, 3, 15, 2]
         ydata = [1, -2, 4, 7, -5, 3]
 
-        kwargs1 = {'shape': 'circle'}
-        kwargs2 = {'shape': 'cross'}
+        kwargs1 = {'shape': 'circle', 'size': '1'}
+        kwargs2 = {'shape': 'cross', 'size': '10'}
 
         extra_serie = {"tooltip": {"y_start": "", "y_end": " call"}}
         chart.add_serie(name="series 1", y=ydata, x=xdata, extra=extra_serie, **kwargs1)
@@ -110,10 +110,13 @@ class scatterChart(NVD3Chart):
             return chart;
         });
     """
-    def __init__(self, height=450, width=None, **kwargs):
+    def __init__(self, **kwargs):
         NVD3Chart.__init__(self, **kwargs)
-        self.create_x_axis('xAxis', format=".02f")
-        self.create_y_axis('yAxis', format=".02f")
+        height = kwargs.get('height', 450)
+        width = kwargs.get('width', None)
+
+        self.create_x_axis('xAxis', format=kwargs.get('x_axis_format', '.02f'))
+        self.create_y_axis('yAxis', format=kwargs.get('y_axis_format', '.02f'))
         # must have a specified height, otherwise it superimposes both chars
         if height:
             self.set_graph_height(height)
