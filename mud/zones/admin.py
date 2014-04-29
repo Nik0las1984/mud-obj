@@ -8,6 +8,7 @@ from zones.models import *
 class ZoneLinkInline(admin.TabularInline):
     model = ZoneLink
     fk_name = "z1"
+    list_filter = ['z1', ]
     formfield_overrides = {
         models.TextField: {'widget': TextInput},
     }

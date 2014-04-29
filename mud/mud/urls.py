@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^channels/', include('channels.urls')),
     url(r'^boards/', include('boards.urls')),
     url(r'^zones/', include('zones.urls')),
+    url(r'^squads/', include('squad.urls')),
     url(r'^core/', include('core.urls')),
     url(r'^$', include('core.urls')),
 )

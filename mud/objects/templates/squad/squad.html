@@ -1,0 +1,49 @@
+{% extends "objects/base.html" %}
+
+{% block title %}МПМ Былины. Дружина "{{ squad.name }}".{% endblock %}
+
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+<h2>Дружина "{{ squad.name }}":</h2>
+
+<h3>Сокращенное название: {{ squad.short_name }}</h3>
+<h3>Всего опыта: {{ squad.get_exp_total }}</h3>
+<h3>Опыта за 30 дней: {{ squad.get_exp_30 }}</h3>
+<h3>Людей: {{ squad.get_population }}</h3>
+{% if squad.active %}
+<h3>Активна: <span class="ansi_bright ansi_green">Да</span></h3>
+{% else %}
+<h3>Активна: <span class="ansi_bright ansi_red">Нет</span></h3>
+{% endif %}
+
+
+<br />
+{% if squad.activity_log.count %}
+<h2>Активность:</h2>
+<table class="zones">
+<tr>
+<th>Дата</th>
+<th>Изменение активности</th>
+</tr>
+{% for a in squad.activity_log.all %}
+<tr>
+<td>{{ a.date }}</td>
+<td>
+{% if a.active %}
+<span class="ansi_bright ansi_green"><b>Активна</b></span>
+{% else %}
+<span class="ansi_bright ansi_red"><b>Не активна</b></span>
+{% endif %}
+</td>
+
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}

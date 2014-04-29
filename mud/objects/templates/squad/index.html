@@ -1,0 +1,41 @@
+{% extends "objects/base.html" %}
+
+{% block title %}МПМ Былины. Дружины.{% endblock %}
+
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+<h2>Список дружин:</h2>
+
+<table class="zones">
+<tr>
+<th>Название</th>
+<th>Краткое название</th>
+<th>Всего опыта</th>
+<th>За 30 дней</th>
+<th>Человек</th>
+<th>Активна</th>
+</tr>
+{% for s in squads %}
+<tr>
+<td><a href="/squads/squad/{{ s.short_name }}/"><b>{{ s.name }}</b></a></td>
+<td>{{ s.short_name }}</td>
+<td>{{ s.get_exp_total }}</td>
+<td>{{ s.get_exp_30 }}</td>
+<td>{{ s.get_population }}</td>
+<td>
+{% if s.active %}
+<span class="ansi_bright ansi_green"><b>Да</b></span>
+{% else %}
+<span class="ansi_bright ansi_red"><b>Нет</b></span>
+{% endif %}
+</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}
