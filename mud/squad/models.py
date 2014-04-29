@@ -96,8 +96,8 @@ class SquadInfo(models.Model):
     squad = models.ForeignKey(Squad, related_name = 'info')
     date = models.DateTimeField()
     population = models.IntegerField()
-    exp_total = models.IntegerField()
-    exp_30 = models.IntegerField()
+    exp_total = models.BigIntegerField()
+    exp_30 = models.BigIntegerField()
     
     def __unicode__(self):
         return u'%s' % (self.squad)
