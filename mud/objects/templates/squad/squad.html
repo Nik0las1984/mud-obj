@@ -1,5 +1,13 @@
 {% extends "objects/base.html" %}
 
+{% load nvd3_tags %}
+
+{% block head %}
+    {% load_chart charttype cd_exp_30 "exp_30_container" extra %}
+    {% load_chart charttype cd_exp_total "exp_total_container" extra %}
+    {% load_chart charttype cd_population "population_container" extra %}
+{% endblock %}
+
 {% block title %}МПМ Былины. Дружина "{{ squad.name }}".{% endblock %}
 
 {% block menu %}
@@ -45,5 +53,22 @@
 {% endfor %}
 </table>
 {% endif %}
+
+<h2>Статистика.</h2>
+
+<h3>Опыта за 30 дней:</h3>
+<div class="chart">
+    {% include_container "exp_30_container" 400 700 %}
+</div>
+
+<h3>Всего опыта:</h3>
+<div class="chart">
+    {% include_container "exp_total_container" 400 700 %}
+</div>
+
+<h3>Людей:</h3>
+<div class="chart">
+    {% include_container "population_container" 400 700 %}
+</div>
 
 {% endblock %}
