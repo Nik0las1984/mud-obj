@@ -60,26 +60,33 @@ def charts(request, d1, d2, interval, td, title, desc):
         xdata.append(int(time.mktime(i[0].timetuple()) * 1000))
     
     tooltip_date = td
-    extra = {"tooltip": {"y_start": "", "y_end": ""},
-                   "date_format": tooltip_date,}
-    kw1 = {"color": "#00aaaa",}
-    kw2 = {"color": "#cdcd00",}
-    kw3 = {"color": "#ffff00",}
+    extra1 = {"tooltip": {"y_start": "", "y_end": ""},
+                   "date_format": tooltip_date, "color": "#00aaaa",}
+    extra2 = {"tooltip": {"y_start": "", "y_end": ""},
+                   "date_format": tooltip_date, "color": "#cdcd00",}
+    extra3 = {"tooltip": {"y_start": "", "y_end": ""},
+                   "date_format": tooltip_date, "color": "#ffff00",}
     
     chartdata = {
         'x': xdata,
-        'name1': u'Оффтоп', 'y1': map(lambda x: x[1], offtop), 'extra1': extra, "kwargs1": kw1,
-        'name2': u'Болтать', 'y2': map(lambda x: x[1], bolt), 'extra2': extra, "kwargs2": kw2,
-        'name3': u'Орать', 'y3': map(lambda x: x[1], scream), 'extra3': extra, "kwargs3": kw3,
+        'name1': u'Оффтоп', 'y1': map(lambda x: x[1], offtop), 'extra1': extra1,
+        'name2': u'Болтать', 'y2': map(lambda x: x[1], bolt), 'extra2': extra2,
+        'name3': u'Орать', 'y3': map(lambda x: x[1], scream), 'extra3': extra3,
     }
     
     charttype = "stackedAreaChart"
     data = {
         'charttype': charttype,
         'chartdata': chartdata,
-        'td': td,
+        #'td': td,
         'title': title,
         'desc': desc,
+        'extra': {
+            'x_is_date': True,
+            'x_axis_format': td,
+            'tag_script_js': True,
+            'jquery_on_ready': True,
+        },
     }
     return render(request, 'channels/charts.html', data)
 

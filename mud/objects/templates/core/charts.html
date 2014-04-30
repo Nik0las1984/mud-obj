@@ -2,7 +2,7 @@
 {% load nvd3_tags %}
 
 {% block head %}
-    {% load_chart charttype chartdata "container" True td %}
+    {% load_chart charttype chartdata "stackedareachart_container" extra %}
 {% endblock %}
 
 {% block title %}МПМ Былины. Статистика онлайн: {{ title }}{% endblock %}
@@ -21,6 +21,6 @@
 </h2>
 <h2>Онлайн {{ title }} ({{ desc }}):</h2>
 <div class="chart">
-    {% include_container "container" 400 600 %}
+    {% include_container "stackedareachart_container" 400 600 %}
 </div>
 {% endblock %}

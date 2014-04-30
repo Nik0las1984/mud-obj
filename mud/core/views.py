@@ -31,9 +31,15 @@ def online(request, data):
     req = {
         'charttype': charttype,
         'chartdata': chartdata,
-        'td': data['td'],
+        #'td': data['td'],
         'title': data['title'],
         'desc': data['desc'],
+        'extra': {
+            'x_is_date': True,
+            'x_axis_format': data['td'],
+            'tag_script_js': True,
+            'jquery_on_ready': True,
+        },
     }
     return render(request, 'core/charts.html', req)
  
