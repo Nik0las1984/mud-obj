@@ -7,6 +7,8 @@ class Zone(models.Model):
     name = models.TextField()
     alter_name = models.TextField(blank = True, null = True)
     level = models.IntegerField()
+    vnum = models.IntegerField(blank = True, null = True)
+    author = models.TextField(blank = True, null = True)
     
     def __unicode__(self):
         return u'%s (%s)' % (self.name, self.level)

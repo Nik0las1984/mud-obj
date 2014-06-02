@@ -14,7 +14,7 @@ class ZoneLinkInline(admin.TabularInline):
     }
 
 class ZoneAdmin(admin.ModelAdmin):
-    list_display = ['name', 'alter_name', 'level', ]
+    list_display = ['name', 'alter_name', 'level', 'vnum' ]
     inlines = [
         ZoneLinkInline,
     ]
