@@ -26,6 +26,7 @@ re_weapon = re.compile(ur'^Принадлежит к классу "(.+)"\.')
 re_damage = re.compile(ur'^Наносимые повреждения \'([\dD]+)\' среднее ([\d\.,]+)\.')
 re_spell = re.compile(ur'^содержит заклинание\s*:\s*"(.+)"$')
 re_recipe = re.compile(ur'^содержит\s+рецепт\s+отвара\s*:\s*"(.+)"$')
+re_capacity = re.compile(ur'^Максимально вместимый вес:\s*(.+).')
 
 NOTHING = u'ничего'
 
@@ -170,6 +171,8 @@ class Object(models.Model):
     last_modified = models.DateTimeField(auto_now = True, default = datetime.datetime.now())
     
     zones = models.ManyToManyField(Zone, default = None, null = True, blank = True)
+    
+    capacity = models.IntegerField(default = -1)
     
     class Meta:
         ordering = ['-last_modified', ]
@@ -362,6 +365,12 @@ class Object(models.Model):
         recipe = parse_data(data, re_recipe)
         if recipe is not None:
             o.recipe = Recipe.get_or_create(recipe[0])
+        
+        
+        # Вместимый вес
+        capacity = parse_data(data, re_capacity)
+        if capacity is not None:
+            o.capacity = int(capacity[0])
         
         # Сохраняем
         o.save()

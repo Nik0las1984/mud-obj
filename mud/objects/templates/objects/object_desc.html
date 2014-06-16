@@ -40,6 +40,11 @@
 Имеет экстрафлаги: <span class="obj_extra">{{ obj.extra.all|join:", " }}</span>
 <br />
 
+{% if obj.capacity > -1 %}
+Максимально вместимый вес: {{ obj.capacity }}.
+<br />
+{% endif %}
+
 {% if obj.dmg_str %}
 Наносимые повреждения '{{ obj.dmg_str }}' среднее {{ obj.dmg_avg }}.
 <br />

@@ -3,7 +3,13 @@
 {% endif %}
 <a class="obj_name" href="/objects/obj/{{ obj.pk }}/">{{ obj.name }}</a>
 (
-<span class="obj_type">{{ obj.type }}</span>
+<span class="obj_type">{{ obj.type }}, вес: {{ obj.weight }}</span>
+{% if obj.weapon %}
+"<span class="obj_type">{{ obj.weapon.name }}</span>"
+{% endif %}
+{% if obj.dmg_str %}
+<span class="obj_ac">{{ obj.dmg_str }} ({{ obj.dmg_avg }})</span>
+{% endif %}
 {% if obj.affects.count %}
 <span class="obj_affect">{{ obj.affects.all|join:", " }}</span>
 {% endif %}
