@@ -134,7 +134,7 @@ INSTALLED_APPS = (
     'squad',
     'picklefield',
     'reversion',
-    'django.contrib.markup',
+    #'django.contrib.markup',
     'zones'
 )
 

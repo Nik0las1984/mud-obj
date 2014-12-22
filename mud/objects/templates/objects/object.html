@@ -1,5 +1,4 @@
 {% extends "objects/base.html" %}
-{% load markup %}
 
 {% block title %}МПМ Былины. Предмет: {{ obj.name }}{% endblock %}
 
@@ -44,6 +43,7 @@
 <li>{{z.name}}</li>
 {% endfor %}
 </ul>
+{% comment %}
 <br />
 <h2>Комментарий:</h2>
 <a href="#" onclick=toggle("comment_form") class="error">Редактировать.</a>
@@ -58,6 +58,6 @@
 </form>
 
 </div>
-
+{% endcomment %}
 
 {% endblock %}
