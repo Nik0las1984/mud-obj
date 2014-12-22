@@ -3,6 +3,6 @@
 <span class="ansi_yellow">{{ l.get_type_display }}</span>
 {% if l.value %}
 <span class="ansi_bright ansi_green">({{ l.value }})</span>
-{% endif %} -> <a href="#z{{ l.z2.pk }}">{{ l.z2.name }}</a>
+{% endif %} -> <a href="/zones/zone/{{ l.z2.pk }}/">{{ l.z2.name }}</a>
 </div>
 {% endfor %}

@@ -20,7 +20,7 @@
 </tr>
 {% for z in zones %}
 <tr>
-<td><a name="/zones/zone/{{ z.pk }}/">{{ z.name }}</a></td>
+<td><a href="/zones/zone/{{ z.pk }}/">{{ z.name }}</a></td>
 <td>
 {% if z.alter_name %}
 {{ z.alter_name }}
