@@ -40,7 +40,7 @@
 <h2>Возможные зоны где попится:</h2>
 <ul>
 {% for z in obj.zones.all %}
-<li>{{z.name}}</li>
+<li><a href="/zones/zone/{{z.pk}}/">{{z.name}}</a></li>
 {% endfor %}
 </ul>
 {% comment %}

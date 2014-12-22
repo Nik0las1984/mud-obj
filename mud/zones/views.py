@@ -16,3 +16,7 @@ def zones_graph(request):
 def index(request):
     context = {'zones': Zone.objects.order_by('name').all(), }
     return render(request, 'zones/index.html', context)
+
+def zone(request, id):
+    z = get_object_or_404(Zone, pk = id)
+    return render(request, 'zones/zone.html', {'z': z,})

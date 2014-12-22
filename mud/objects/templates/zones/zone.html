@@ -1,0 +1,30 @@
+{% extends "objects/base.html" %}
+
+{% block title %}МПМ Былины. Зона "{{ z.name }}".{% endblock %}
+
+{% block menu %}
+{% include "objects/menu.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+<h2>Зона "{{ z.name }}"</h2>
+<br />
+<h3>Средний уровень: {% if z.level > 0 %}
+{{ z.level }}
+{% endif %}
+</h3>
+
+<h3>Выходы</h3>
+{% include "zones/links_short.html" %}
+
+<h2>Список предметов</h2>
+
+{% for obj in z.object_set.all %}
+{% include "objects/object_short.html" %}
+<br />
+{% endfor %}
+
+
+{% endblock %}
