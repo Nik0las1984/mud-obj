@@ -29,3 +29,9 @@
 <span class="obj_prop">{{ obj.prop.all|join:", " }}</span>
 {% endif %}
 )
+{% if obj.zones.count %}
+(
+<span class="obj_ac">{{ obj.zones.all|join:", " }}</span>
+)
+{% endif %}
+

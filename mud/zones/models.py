@@ -11,7 +11,7 @@ class Zone(models.Model):
     author = models.TextField(blank = True, null = True)
     
     def __unicode__(self):
-        return u'%s (%s)' % (self.name, self.level)
+        return u'%s' % (self.name)
     
     class Meta:
         ordering = ['name', 'level']

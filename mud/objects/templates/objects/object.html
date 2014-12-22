@@ -37,6 +37,14 @@
 {% endif %}
 </div>
 <div class="oright">
+
+<h2>Возможные зоны где попится:</h2>
+<ul>
+{% for z in obj.zones.all %}
+<li>{{z.name}}</li>
+{% endfor %}
+</ul>
+<br />
 <h2>Комментарий:</h2>
 <a href="#" onclick=toggle("comment_form") class="error">Редактировать.</a>
 <span>{{obj.comment|markdown}}</span>
