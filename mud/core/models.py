@@ -74,7 +74,7 @@ class Log(models.Model):
         (ADD_OBJ, u'Добавлен объект'),
         (SEARCH_OBJ, u'Поиск объектов'),
     )
-    date = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
+    date = models.DateTimeField(auto_now_add = True)
     value = models.TextField(null = True)
     type = models.IntegerField(choices = LOG_TYPES)
     ua = models.TextField(null = True)
@@ -105,7 +105,7 @@ class News(models.Model):
     user = models.ForeignKey(DjangoUser)
     title = models.TextField()
     text = models.TextField()
-    date = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
+    date = models.DateTimeField(auto_now_add = True)
     
     def __unicode__(self):
         return u'%s (%s)' % (self.title, self.date)

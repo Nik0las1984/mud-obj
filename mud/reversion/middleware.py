@@ -1,43 +1,41 @@
-"""Middleware used by Reversion."""
-
-from __future__ import unicode_literals
-
-from django.core.exceptions import ImproperlyConfigured
-
-from reversion.revisions import revision_context_manager
-
-
-REVISION_MIDDLEWARE_FLAG = "reversion.revision_middleware_active"
+import sys
+from reversion.revisions import create_revision as create_revision_base
+from reversion.views import _request_creates_revision, _set_user_from_request, create_revision
 
 
 class RevisionMiddleware(object):
-    
+
     """Wraps the entire request in a revision."""
-    
+
+    manage_manually = False
+
+    using = None
+
+    def __init__(self, get_response=None):
+        super(RevisionMiddleware, self).__init__()
+        # Support Django 1.10 middleware.
+        if get_response is not None:
+            self.get_response = create_revision(manage_manually=self.manage_manually, using=self.using)(get_response)
+
     def process_request(self, request):
-        """Starts a new revision."""
-        if request.META.get(REVISION_MIDDLEWARE_FLAG, False):
-            raise ImproperlyConfigured("RevisionMiddleware can only be included in MIDDLEWARE_CLASSES once.")
-        request.META[REVISION_MIDDLEWARE_FLAG] = True
-        revision_context_manager.start()
-    
-    def _close_revision(self, request):
-        """Closes the revision."""
-        if request.META.get(REVISION_MIDDLEWARE_FLAG, False):
-            del request.META[REVISION_MIDDLEWARE_FLAG]
-            revision_context_manager.end()
-    
+        if _request_creates_revision(request):
+            context = create_revision_base(manage_manually=self.manage_manually, using=self.using)
+            context.__enter__()
+            _set_user_from_request(request)
+            if not hasattr(request, "_revision_middleware"):
+                setattr(request, "_revision_middleware", {})
+            request._revision_middleware[self] = context
+
+    def _close_revision(self, request, is_exception):
+        if self in getattr(request, "_revision_middleware", {}):
+            request._revision_middleware.pop(self).__exit__(*sys.exc_info() if is_exception else (None, None, None))
+
     def process_response(self, request, response):
-        """Closes the revision."""
-        # look to see if the session has been accessed before looking for user to stop Vary: Cookie
-        if hasattr(request, 'session') and request.session.accessed \
-                and hasattr(request, "user") and request.user.is_authenticated() \
-                and revision_context_manager.is_active():
-            revision_context_manager.set_user(request.user)
-        self._close_revision(request)
+        self._close_revision(request, False)
         return response
-        
+
     def process_exception(self, request, exception):
-        """Closes the revision."""
-        revision_context_manager.invalidate()    
-        self._close_revision(request)
+        self._close_revision(request, True)
+
+    def __call__(self, request):
+        return self.get_response(request)

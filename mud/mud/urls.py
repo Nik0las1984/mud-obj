@@ -1,10 +1,10 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import *
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Examples:
     # url(r'^$', 'mud.views.home', name='home'),
     # url(r'^mud/', include('mud.foo.urls')),
@@ -20,11 +20,11 @@ urlpatterns = patterns('',
     url(r'^zones/', include('zones.urls')),
     url(r'^squads/', include('squad.urls')),
     url(r'^core/', include('core.urls')),
-    url(r'^$', include('core.urls')),
-)
+    url(r'^', include('core.urls')),
+]
 
 # Captcha
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^captcha/', include('captcha.urls')),
-)
+]
 

@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import *
 
 from channels import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(ur'^offtop/', views.offtop, name='offtop'),
     url(ur'^bolt/', views.bolt, name='bolt'),
     url(ur'^scream/', views.scream, name='scream'),
@@ -12,4 +12,4 @@ urlpatterns = patterns('',
     url(ur'^charts/month/', views.charts_month, name='charts_month'),
     url(ur'^charts/3month/', views.charts_3month, name='charts_3month'),
     url(ur'^user/(?P<user>.+)/', views.by_user, name='by_user'),
-)
+]

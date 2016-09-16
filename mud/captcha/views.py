@@ -2,13 +2,13 @@ from captcha.conf import settings
 from captcha.helpers import captcha_image_url
 from captcha.models import CaptchaStore
 from django.http import HttpResponse, Http404
-from django.shortcuts import get_object_or_404
-from django.utils import simplejson as json
+from django.core.exceptions import ImproperlyConfigured
 import random
 import re
 import tempfile
 import os
 import subprocess
+import six
 
 try:
     from cStringIO import StringIO
@@ -22,21 +22,59 @@ except ImportError:
     import ImageDraw
     import ImageFont
 
+try:
+    import json
+except ImportError:
+    from django.utils import simplejson as json
+
 NON_DIGITS_RX = re.compile('[^\d]')
+# Distance of the drawn text from the top of the captcha image
+from_top = 4
 
 
-def captcha_image(request, key):
-    store = get_object_or_404(CaptchaStore, hashkey=key)
+def getsize(font, text):
+    if hasattr(font, 'getoffset'):
+        return [x + y for x, y in zip(font.getsize(text), font.getoffset(text))]
+    else:
+        return font.getsize(text)
+
+
+def makeimg(size):
+    if settings.CAPTCHA_BACKGROUND_COLOR == "transparent":
+        image = Image.new('RGBA', size)
+    else:
+        image = Image.new('RGB', size, settings.CAPTCHA_BACKGROUND_COLOR)
+    return image
+
+
+def captcha_image(request, key, scale=1):
+    try:
+        store = CaptchaStore.objects.get(hashkey=key)
+    except CaptchaStore.DoesNotExist:
+        # HTTP 410 Gone status so that crawlers don't index these expired urls.
+        return HttpResponse(status=410)
+
     text = store.challenge
 
-    if settings.CAPTCHA_FONT_PATH.lower().strip().endswith('ttf'):
-        font = ImageFont.truetype(settings.CAPTCHA_FONT_PATH, settings.CAPTCHA_FONT_SIZE)
+    if isinstance(settings.CAPTCHA_FONT_PATH, six.string_types):
+        fontpath = settings.CAPTCHA_FONT_PATH
+    elif isinstance(settings.CAPTCHA_FONT_PATH, (list, tuple)):
+        fontpath = random.choice(settings.CAPTCHA_FONT_PATH)
     else:
-        font = ImageFont.load(settings.CAPTCHA_FONT_PATH)
+        raise ImproperlyConfigured('settings.CAPTCHA_FONT_PATH needs to be a path to a font or list of paths to fonts')
 
-    size = font.getsize(text)
-    size = (size[0] * 2, int(size[1] * 1.2))
-    image = Image.new('RGB', size, settings.CAPTCHA_BACKGROUND_COLOR)
+    if fontpath.lower().strip().endswith('ttf'):
+        font = ImageFont.truetype(fontpath, settings.CAPTCHA_FONT_SIZE * scale)
+    else:
+        font = ImageFont.load(fontpath)
+
+    if settings.CAPTCHA_IMAGE_SIZE:
+        size = settings.CAPTCHA_IMAGE_SIZE
+    else:
+        size = getsize(font, text)
+        size = (size[0] * 2, int(size[1] * 1.4))
+
+    image = makeimg(size)
 
     try:
         PIL_VERSION = int(NON_DIGITS_RX.sub('', Image.VERSION))
@@ -52,7 +90,7 @@ def captcha_image(request, key):
             charlist.append(char)
     for char in charlist:
         fgimage = Image.new('RGB', size, settings.CAPTCHA_FOREGROUND_COLOR)
-        charimage = Image.new('L', font.getsize(' %s ' % char), '#000000')
+        charimage = Image.new('L', getsize(font, ' %s ' % char), '#000000')
         chardraw = ImageDraw.Draw(charimage)
         chardraw.text((0, 0), ' %s ' % char, font=font, fill='#ffffff')
         if settings.CAPTCHA_LETTER_ROTATION:
@@ -63,12 +101,18 @@ def captcha_image(request, key):
         charimage = charimage.crop(charimage.getbbox())
         maskimage = Image.new('L', size)
 
-        maskimage.paste(charimage, (xpos, 4, xpos + charimage.size[0], 4 + charimage.size[1]))
+        maskimage.paste(charimage, (xpos, from_top, xpos + charimage.size[0], from_top + charimage.size[1]))
         size = maskimage.size
         image = Image.composite(fgimage, image, maskimage)
         xpos = xpos + 2 + charimage.size[0]
 
-    image = image.crop((0, 0, xpos + 1, size[1]))
+    if settings.CAPTCHA_IMAGE_SIZE:
+        # centering captcha on the image
+        tmpimg = makeimg(size)
+        tmpimg.paste(image, (int((size[0] - xpos) / 2), int((size[1] - charimage.size[1]) / 2 - from_top)))
+        image = tmpimg.crop((0, 0, size[0], size[1]))
+    else:
+        image = image.crop((0, 0, xpos + 1, size[1]))
     draw = ImageDraw.Draw(image)
 
     for f in settings.noise_functions():
@@ -89,7 +133,12 @@ def captcha_image(request, key):
 
 def captcha_audio(request, key):
     if settings.CAPTCHA_FLITE_PATH:
-        store = get_object_or_404(CaptchaStore, hashkey=key)
+        try:
+            store = CaptchaStore.objects.get(hashkey=key)
+        except CaptchaStore.DoesNotExist:
+            # HTTP 410 Gone status so that crawlers don't index these expired urls.
+            return HttpResponse(status=410)
+
         text = store.challenge
         if 'captcha.helpers.math_challenge' == settings.CAPTCHA_CHALLENGE_FUNCT:
             text = text.replace('*', 'times').replace('-', 'minus')
@@ -110,12 +159,12 @@ def captcha_audio(request, key):
 
 def captcha_refresh(request):
     """  Return json with new captcha for ajax refresh request """
-    if request.is_ajax():
-        to_json_responce = dict()
+    if not request.is_ajax():
+        raise Http404
 
-        new_key = CaptchaStore.generate_key()
-        to_json_responce['key'] = new_key
-        to_json_responce['image_url'] = captcha_image_url(new_key)
-
-        return HttpResponse(json.dumps(to_json_responce), content_type='application/json')
-    raise Http404
+    new_key = CaptchaStore.generate_key()
+    to_json_response = {
+        'key': new_key,
+        'image_url': captcha_image_url(new_key),
+    }
+    return HttpResponse(json.dumps(to_json_response), content_type='application/json')

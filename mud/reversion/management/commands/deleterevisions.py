@@ -1,206 +1,95 @@
-from __future__ import unicode_literals, print_function
-
-import datetime, operator, sys
-from optparse import make_option
-
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
-from django.db.models import Q, Count
-from django.contrib.contenttypes.models import ContentType
-
+from __future__ import unicode_literals
+from datetime import timedelta
+from django.db import transaction, models, router
+from django.utils import timezone
 from reversion.models import Revision, Version
-from django.db.utils import DatabaseError
+from reversion.management.commands import BaseRevisionCommand
 
 
-class Command(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option("--date", "-t",
-            dest="date",
-            help="Delete only revisions older then the specify date. The date should be a valid date given in the ISO format (YYYY-MM-DD)"),
-        make_option("--days", "-d",
-            dest="days",
+class Command(BaseRevisionCommand):
+
+    help = "Deletes revisions for a given app [and model]."
+
+    def add_arguments(self, parser):
+        super(Command, self).add_arguments(parser)
+        parser.add_argument(
+            "--days",
             default=0,
-            type="int",
-            help="Delete only revisions older then the specify number of days."),
-        make_option("--keep-revision", "-k",
-            dest="keep",
-            default=0,
-            type="int",
-            help="Keep the specified number of revisions (most recent) for each object."),
-        make_option("--force", "-f",
-            action="store_true",
-            dest="force",
-            default=False,
-            help="Force the deletion of revisions even if an other app/model is involved"),
-        make_option("--no-confirmation", "-c",
-            action="store_false",
-            dest="confirmation",
-            default=True,
-            help="Disable the confirmation before deleting revisions"),
+            type=int,
+            help="Delete only revisions older than the specified number of days.",
         )
-    args = "[appname, appname.ModelName, ...] [--date=YYYY-MM-DD | days=0] [--keep=0] [--force] [--no-confirmation]"
-    help = """Deletes revisions for a given app [and model] and/or before a specified delay or date.
-    
-If an app or a model is specified, revisions that have an other app/model involved will not be deleted. Use --force to avoid that.
-
-You can specify only apps/models or only delay or date or only a nuber of revision to keep or use all possible combinations of these options.
-
-Examples:
-
-        deleterevisions myapp
-    
-    That will delete every revisions of myapp (except if there's an other app involved in the revision)
-    
-        deleterevisions --date=2010-11-01
-    
-    That will delete every revision created before November 1, 2010 for all apps.
-    
-        deleterevisions myapp.mymodel --days=365 --force
-        
-    That will delete every revision of myapp.model that are older then 365 days, even if there's revisions involving other apps and/or models.
-    
-        deleterevisions myapp.mymodel --keep=10
-        
-    That will delete only revisions of myapp.model if there's more then 10 revisions for an object, keeping the 10 most recent revisons.
-"""
+        parser.add_argument(
+            "--keep",
+            default=0,
+            type=int,
+            help="Keep the specified number of revisions (most recent) for each object.",
+        )
 
     def handle(self, *app_labels, **options):
+        verbosity = options["verbosity"]
+        using = options["using"]
+        model_db = options["model_db"]
         days = options["days"]
         keep = options["keep"]
-        force = options["force"]
-        confirmation = options["confirmation"]
-        # I don't know why verbosity is not already an int in Django?
-        try:
-            verbosity = int(options["verbosity"])
-        except ValueError:
-            raise CommandError("option -v: invalid choice: '%s' (choose from '0', '1', '2')" % options["verbosity"])
-
-        date = None
-
-        # Validating arguments
-        if options["date"]:
-            if days:
-                raise CommandError("You cannot use --date and --days at the same time. They are exclusive.")
-
-            try:
-                date = datetime.datetime.strptime(options["date"], "%Y-%m-%d").date()
-            except ValueError:
-                raise CommandError("The date you give (%s) is not a valid date. The date should be in the ISO format (YYYY-MM-DD)." % options["date"])
-
-        # Find the date from the days arguments.        
-        elif days:
-            date = datetime.datetime.now() - datetime.timedelta(days)
-
-        # Build the queries
-        revision_query = Revision.objects.all()
-
-        if date:
-            revision_query = revision_query.filter(date_created__lt=date)
-
-        if app_labels:
-            app_list = set()
-            mod_list = set()
-            for label in app_labels:
-                try:
-                    app_label, model_label = label.split(".")
-                    mod_list.add((app_label, model_label))
-                except ValueError:
-                    # This is just an app, no model qualifier.
-                    app_list.add(label)
-
-            # Remove models that their app is already in app_list            
-            for app, model in mod_list.copy():
-                if app in app_list:
-                    mod_list.remove((app, model))
-
-            # Build apps/models subqueries
-            subqueries = []
-            if app_list:
-                subqueries.append(Q(app_label__in=app_list))
-            if mod_list:
-                subqueries.extend([Q(app_label=app, model=model) for app, model in mod_list])
-            subqueries = reduce(operator.or_, subqueries)
-
-            if force:
-                models = ContentType.objects.filter(subqueries)
-                revision_query = revision_query.filter(version__content_type__in=models)
-            else:
-                models = ContentType.objects.exclude(subqueries)
-                revision_query = revision_query.exclude(version__content_type__in=models)
-
-        if keep:
-            objs = Version.objects.all()
-
-            # If app is specified, to speed up the loop on theses objects,
-            # get only the specified subset.
-            if app_labels:
-                if force:
-                    objs = objs.filter(content_type__in=models)
-                else:
-                    objs = objs.exclude(content_type__in=models)
-
-            # Get all the objects that have more then the maximum revisions
-            objs = objs.values("object_id", "content_type_id").annotate(total_ver=Count("object_id")).filter(total_ver__gt=keep)
-
-            revisions_not_keeped = set()
-
-            # Get all ids of the oldest revisions minus the max allowed
-            # revisions for all objects.
-            # Was not able to avoid this loop...
-            for obj in objs:
-                revisions_not_keeped.update(list(Version.objects.filter(content_type__id=obj["content_type_id"], object_id=obj["object_id"]).order_by("-revision__date_created").values_list("revision_id", flat=True)[keep:]))
-
-            revision_query = revision_query.filter(pk__in=revisions_not_keeped)
-
-
-        # Prepare message if verbose
-        if verbosity > 0:
-            if not date and not app_labels and not keep:
-                print("All revisions will be deleted for all models.")
-            else:
-                date_msg = ""
-                if date:
-                    date_msg = " older than %s" % date.isoformat()
-                models_msg = " "
-                if app_labels:
-                    force_msg = ""
-                    if not force:
-                        force_msg = " only"
-                    models_msg = " having%s theses apps and models:\n- %s\n" % (force_msg, "\n- ".join(sorted(app_list.union(["%s.%s" % (app, model) for app, model in mod_list])),))
-                    if date:
-                        models_msg = " and" + models_msg
-                keep_msg = ""
+        # Delete revisions.
+        using = using or router.db_for_write(Revision)
+        with transaction.atomic(using=using):
+            revision_query = models.Q()
+            keep_revision_ids = set()
+            # By default, delete nothing.
+            can_delete = False
+            # Get all revisions for the given revision manager and model.
+            for model in self.get_models(options):
+                if verbosity >= 1:
+                    self.stdout.write("Finding stale revisions for {name}".format(
+                        name=model._meta.verbose_name,
+                    ))
+                # Find all matching revision IDs.
+                model_query = Version.objects.using(using).get_for_model(
+                    model,
+                    model_db=model_db,
+                )
                 if keep:
-                    keep_msg = " keeping the %s most recent revisions of each object" % keep
-
-                revision_count = revision_query.count()
-                if revision_count:
-                    version_query = Version.objects.all()
-                    if date or app_labels or keep:
-                        version_query = version_query.filter(revision__in=revision_query)
-                    print("%s revision(s)%s%swill be deleted%s.\n%s model version(s) will be deleted." % (revision_count, date_msg, models_msg, keep_msg, version_query.count()))
-                else:
-                    print("No revision%s%sto delete%s.\nDone" % (date_msg, models_msg, keep_msg))
-                    sys.exit()
-
-
-        # Ask confirmation
-        if confirmation:
-            choice = raw_input("Are you sure you want to delete theses revisions? [y|N] ")
-            if choice.lower() != "y":
-                print("Aborting revision deletion.")
-                sys.exit()
-
-
-        # Delete versions and revisions
-        print("Deleting revisions...")
-        
-        try:
-            revision_query.delete()
-        except DatabaseError:
-            # may fail on sqlite if the query is too long
-            print("Delete failed. Trying again with slower method.")
-            for item in revision_query:
-                item.delete()
-                
-        print("Done")
+                    overflow_object_ids = list(Version.objects.using(using).get_for_model(
+                        model,
+                        model_db=model_db,
+                    ).order_by().values_list("object_id").annotate(
+                        count=models.Count("object_id"),
+                    ).filter(
+                        count__gt=keep,
+                    ).values_list("object_id", flat=True).iterator())
+                    # Only delete overflow revisions.
+                    model_query = model_query.filter(object_id__in=overflow_object_ids)
+                    for object_id in overflow_object_ids:
+                        if verbosity >= 2:
+                            self.stdout.write("- Finding stale revisions for {name} #{object_id}".format(
+                                name=model._meta.verbose_name,
+                                object_id=object_id,
+                            ))
+                        # But keep the underflow revisions.
+                        keep_revision_ids.update(Version.objects.using(using).get_for_object_reference(
+                            model,
+                            object_id,
+                            model_db=model_db,
+                        ).values_list("revision_id", flat=True)[:keep].iterator())
+                # Add to revision query.
+                revision_query |= models.Q(
+                    pk__in=model_query.order_by().values_list("revision_id", flat=True)
+                )
+                # If we have at least one model, then we can delete.
+                can_delete = True
+            if can_delete:
+                revisions_to_delete = Revision.objects.using(using).filter(
+                    revision_query,
+                    date_created__lt=timezone.now() - timedelta(days=days),
+                ).exclude(
+                    pk__in=keep_revision_ids
+                ).order_by()
+            else:
+                revisions_to_delete = Revision.objects.using(using).none()
+            # Print out a message, if feeling verbose.
+            if verbosity >= 1:
+                self.stdout.write("Deleting {total} revisions...".format(
+                    total=revisions_to_delete.count(),
+                ))
+            revisions_to_delete.delete()

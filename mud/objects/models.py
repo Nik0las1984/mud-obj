@@ -164,11 +164,11 @@ class Object(models.Model):
     html_desc = models.TextField(default = u'')
     
     checked = models.BooleanField(default = True)
-    added = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
+    added = models.DateTimeField(auto_now_add = True)
     bad = models.BooleanField(default = False)
     
     comment = models.TextField(default = '', blank = True)
-    last_modified = models.DateTimeField(auto_now = True, default = datetime.datetime.now())
+    last_modified = models.DateTimeField(auto_now = True)
     
     zones = models.ManyToManyField(Zone, default = None, null = True, blank = True)
     
@@ -503,7 +503,7 @@ reversion.register(Object)
 class ObjectsList(models.Model):
     name = models.TextField()
     user = models.ForeignKey(User)
-    created = models.DateTimeField(auto_now_add = True, default = datetime.datetime.now())
+    created = models.DateTimeField(auto_now_add = True)
     text = models.TextField(default = '')
     objs = models.ManyToManyField(Object)
     

@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from django.contrib import admin
-import reversion
+from reversion.admin import VersionAdmin
 from objects.models import *
 
 def make_checked(modeladmin, request, queryset):
@@ -19,7 +19,7 @@ def update_html(modeladmin, request, queryset):
 update_html.short_description = u'Обновить HTML код'
 
 
-class ObjectAdmin(reversion.VersionAdmin):
+class ObjectAdmin(VersionAdmin):
     list_filter = ['checked', 'bad', ]
     search_fields = ['name']
     list_display = ('name', 'checked', 'bad', 'type', 'cost', 'last_modified')

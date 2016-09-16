@@ -1,13 +1,28 @@
-VERSION = (0, 3, 7)
+import re
+
+VERSION = (0, 5, 2)
 
 
 def get_version(svn=False):
     "Returns the version as a human-format string."
-    v = '.'.join([str(i) for i in VERSION])
-    if svn:
-        from django.utils.version import get_svn_revision
-        import os
-        svn_rev = get_svn_revision(os.path.dirname(__file__))
-        if svn_rev:
-            v = '%s-%s' % (v, svn_rev)
-    return v
+    return '.'.join([str(i) for i in VERSION])
+
+
+def pillow_required():
+    def pil_version(version):
+        try:
+            return int(re.compile('[^\d]').sub('', version))
+        except:
+            return 116
+
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        try:
+            import Image
+            import ImageDraw  # NOQA
+            import ImageFont  # NOQA
+        except ImportError:
+            return True
+
+    return pil_version(Image.VERSION) < 116

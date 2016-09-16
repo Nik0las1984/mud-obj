@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import *
 
 from boards import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(ur'^all/', views.all, name='all'),
     url(ur'^news/', views.news, name='news'),
     url(ur'^veche/', views.veche, name='veche'),
@@ -10,4 +10,4 @@ urlpatterns = patterns('',
     url(ur'^ideas/', views.ideas, name='ideas'),
     url(ur'^coder/', views.coder, name='coder'),
     url(ur'^message/(?P<id>[\d]+)/$', views.message, name='message'),
-)
+]

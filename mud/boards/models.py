@@ -5,6 +5,7 @@ import re
 
 from django.db import models
 from django.utils import html
+import django
 
 from core.models import User
 
@@ -26,7 +27,7 @@ class Board(models.Model):
         (CODER, u'Кодер'),
     )
     
-    date = models.DateTimeField(default = datetime.datetime.now())
+    date = models.DateTimeField(default = django.utils.timezone.now())
     mud_date = models.DateTimeField()
     mud_num = models.IntegerField()
     user = models.ForeignKey(User)
