@@ -4,10 +4,10 @@
 import codecs
 import sys
 
-from django.core.management import setup_environ
-from mud import settings
-
-setup_environ(settings)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mud.settings")
+from django.conf import settings
+import django
+django.setup()
 
 from boards.models import *
 

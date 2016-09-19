@@ -102,14 +102,15 @@ class BoardsLogger():
             'news': ('Новости', 'новости %s'),
             'ideas': ('Идеи', 'идеи %s'),
             'anons': ('Анонсы', 'анонс %s'),
-            'coder': ('Кодер', 'кодер %s'),
+            #'coder': ('Кодер', 'кодер %s'),
             }
     
     def update_boards(self):
         b = self._update_boards()
-        if len(b.keys()) != 5:
+        print b.keys()
+        if len(b.keys()) != 4:
             b = self._update_boards()
-        if len(b.keys()) != 5:
+        if len(b.keys()) != 4:
             b = None
         return b
     
