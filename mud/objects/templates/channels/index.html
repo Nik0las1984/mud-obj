@@ -7,32 +7,61 @@
 {% endblock %}
 
 
+
+
+{% block page_title %} {{ title }}: {% endblock %}
+
+{% block tab_menu %}
+    {% with tab_selected as selected %}
+        <li class="pull-right{% if selected == "scream" %} active{% endif %}">
+        <a href="/channels/scream/">
+            <span class="hidden-xs">Орать</span>
+        </a>
+        </li>
+
+        <li class="pull-right{% if selected == "bolt" %} active{% endif %}">
+        <a href="/channels/bolt/">
+            <span class="hidden-xs">Болтать</span>
+        </a>
+        </li>
+
+        <li class="pull-right{% if selected == "offtop" %} active{% endif %}">
+        <a href="/channels/offtop/">
+            <span class="hidden-xs">Оффтоп</span>
+        </a>
+        </li>
+
+        <li class="pull-right {% if selected == "all" %} active{% endif %}">
+        <a href="/channels/all/">
+            <span class="hidden-xs">Все</span>
+        </a>
+        </li>
+    {% endwith %}
+{% endblock %}
+
 {% block content %}
-
-<h2>{{ title }}:</h2>
-
 <table>
-<tr><td>
+<tr><td class="channels">
 <div class="pagination">
     <span class="step-links">
-        {% if messages.has_previous %}
-            <a href="?page={{ messages.previous_page_number }}"><<</a>
+        {% if mud_messages.has_previous %}
+            <a href="?page={{ mud_messages.previous_page_number }}"><<</a>
         {% endif %}
 
         <span class="current">
-            {{ messages.number }} из {{ messages.paginator.num_pages }}
+            {{ mud_messages.number }} из {{ mud_messages.paginator.num_pages }}
         </span>
 
-        {% if messages.has_next %}
-            <a href="?page={{ messages.next_page_number }}">>></a>
+        {% if mud_messages.has_next %}
+            <a href="?page={{ mud_messages.next_page_number }}">>></a>
         {% endif %}
     </span>
 </div>
 </td></tr>
 
-{% for m in messages %}
+{% for m in mud_messages %}
     <tr>
-        <td>
+        <td class="channels">
             {% if m.type == 0 %}
             <span class="offtop">
                 [{{ m.date|date:"Y-m-d H:i" }}] [оффтоп] <a href="/channels/user/{{m.user.name}}/" class="offtop">{{ m.user.name }}</a> : {{ m.text }}
@@ -52,16 +81,16 @@
 <tr><td>
 <div class="pagination">
     <span class="step-links">
-        {% if messages.has_previous %}
-            <a href="?page={{ messages.previous_page_number }}"><<</a>
+        {% if mud_messages.has_previous %}
+            <a href="?page={{ mud_messages.previous_page_number }}"><<</a>
         {% endif %}
 
         <span class="current">
-            {{ messages.number }} из {{ messages.paginator.num_pages }}
+            {{ mud_messages.number }} из {{ mud_messages.paginator.num_pages }}
         </span>
 
-        {% if messages.has_next %}
-            <a href="?page={{ messages.next_page_number }}">>></a>
+        {% if mud_messages.has_next %}
+            <a href="?page={{ mud_messages.next_page_number }}">>></a>
         {% endif %}
     </span>
 </div>

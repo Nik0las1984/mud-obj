@@ -3,6 +3,7 @@
 
 import codecs
 import sys
+import os
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mud.settings")
 from django.conf import settings

@@ -117,6 +117,12 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.counters',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                "sekizai.context_processors.sekizai",
+
             ],
         },
     },
@@ -151,11 +157,24 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'django.contrib.flatpages',
+
+    'django.contrib.humanize',
+    'django_nyt',
+    'mptt',
+    'sekizai',
+    'sorl.thumbnail',
+    'wiki',
+    'wiki.plugins.attachments',
+    'wiki.plugins.notifications',
+    'wiki.plugins.images',
+    'wiki.plugins.macros',
+
+
     'captcha',
     'django_nvd3',
     'objects',
     'core',
-    'channels',
+    'mud_channels',
     'boards',
     'squad',
     'picklefield',
@@ -193,6 +212,8 @@ LOGGING = {
     }
 }
 
+NYT_CHANNELS_DISABLE = True
+WIKI_ACCOUNT_SIGNUP_ALLOWED = False
 
 try:
     from local_settings import *

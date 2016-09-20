@@ -1,18 +1,15 @@
-{% extends "objects/base.html" %}
+{% extends "objects/index.html" %}
 
 {% block title %}
 МПМ Былины. Поиск предметов по списку
 {% endblock %}
 
-{% block menu %}
-{% include "objects/menu.html" %}
-{% endblock %}
 
+{% block page_title %} Поиск по списку {% endblock %}
 
 {% block content %}
 <form method="post" action="">
     {% csrf_token %}
-    <h2>Поиск по списку:</h2>
 
 {% if user.is_superuser %}
 <p>Сформировать список: <input type="text" name="list"></input></p>

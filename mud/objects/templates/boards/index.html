@@ -2,51 +2,86 @@
 
 {% block title %}МПМ Былины. Доски: {{ title }}{% endblock %}
 
-{% block menu %}
-{% include "objects/menu.html" %}
+{% block wiki_breadcrumbs %}
 {% endblock %}
 
 
+{% block page_title %} Доски -- {{ title }}: {% endblock %}
+
+    {% block tab_menu %}
+    {% with tab_selected as selected %}
+
+    <li class="pull-right{% if selected == "ideas" %} active{% endif %}">
+    <a href="/boards/ideas/">
+        <span class="hidden-xs">Идеи</span>
+    </a>
+    </li>
+
+    <li class="pull-right{% if selected == "anons" %} active{% endif %}">
+    <a href="/boards/anons/">
+        <span class="hidden-xs">Анонсы</span>
+    </a>
+    </li>
+
+    <li class="pull-right{% if selected == "veche" %} active{% endif %}">
+    <a href="/boards/veche/">
+        <span class="hidden-xs">Вече</span>
+    </a>
+    </li>
+
+    <li class="pull-right{% if selected == "news" %} active{% endif %}">
+    <a href="/boards/news/">
+        <span class="hidden-xs">Новости</span>
+    </a>
+    </li>
+
+    <li class="pull-right {% if selected == "boards" %} active{% endif %}">
+    <a href="/boards/all/">
+        <span class="hidden-xs">Все доски</span>
+    </a>
+    </li>
+    {% endwith %}
+    {% endblock %}
+
+
 {% block content %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if mud_messages.has_previous %}
+                    <a href="?page={{ mud_messages.previous_page_number }}"><<</a>
+                {% endif %}
 
-<h2>Доски -- {{ title }}:</h2>
+                <span class="current">
+                    {{ mud_messages.number }} из {{ mud_messages.paginator.num_pages }}
+                </span>
 
-<div class="pagination">
-    <span class="step-links">
-        {% if messages.has_previous %}
-            <a href="?page={{ messages.previous_page_number }}"><<</a>
-        {% endif %}
+                {% if mud_messages.has_next %}
+                    <a href="?page={{ mud_messages.next_page_number }}">>></a>
+                {% endif %}
+            </span>
+        </div>
+        <hr/>
+        {% for m in mud_messages %}
+            {% include "boards/message.html" %}
+            <hr/>
+        {% endfor %}
+           
+        <div class="pagination">
+            <span class="step-links">
+                {% if mud_messages.has_previous %}
+                    <a href="?page={{ mud_messages.previous_page_number }}"><<</a>
+                {% endif %}
 
-        <span class="current">
-            {{ messages.number }} из {{ messages.paginator.num_pages }}
-        </span>
+                <span class="current">
+                    {{ mud_messages.number }} из {{ mud_messages.paginator.num_pages }}
+                </span>
 
-        {% if messages.has_next %}
-            <a href="?page={{ messages.next_page_number }}">>></a>
-        {% endif %}
-    </span>
-</div>
+                {% if mud_messages.has_next %}
+                    <a href="?page={{ mud_messages.next_page_number }}">>></a>
+                {% endif %}
+            </span>
+        </div>
 
-<hr/>
-{% for m in messages %}
-{% include "boards/message.html" %}
-<hr/>
-{% endfor %}
-
-<div class="pagination">
-    <span class="step-links">
-        {% if messages.has_previous %}
-            <a href="?page={{ messages.previous_page_number }}"><<</a>
-        {% endif %}
-
-        <span class="current">
-            {{ messages.number }} из {{ messages.paginator.num_pages }}
-        </span>
-
-        {% if messages.has_next %}
-            <a href="?page={{ messages.next_page_number }}">>></a>
-        {% endif %}
-    </span>
-</div>
-
+        </div>
+    </div>
 {% endblock %}

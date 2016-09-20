@@ -1,27 +1,4 @@
-<p><a href="/"><h3>Главная</h3></a></p>
-
-
-{# <p><a href="/w/"><h3>Вики</h3></a></p> #}
-
-<p><a href="/boards/all/"><h3>Доски</h3></a></p>
-<p>&nbsp;<a href="/boards/news/">Новости</a></p>
-<p>&nbsp;<a href="/boards/anons/">Анонсы</a></p>
-<p>&nbsp;<a href="/boards/veche/">Вече</a></p>
-<p>&nbsp;<a href="/boards/ideas/">Идеи</a></p>
-
-
-<p><a href="/channels/all/"><h3>Каналы</h3></a></p>
-<p>&nbsp;<a href="/channels/offtop/">Оффтоп</a></p>
-<p>&nbsp;<a href="/channels/bolt/">Болтать</a></p>
-<p>&nbsp;<a href="/channels/scream/">Орать</a></p>
-<p>&nbsp;<a href="/channels/charts/day/">Статистика</a></p>
-
-<p><a href="/objects/"><h3>Вещи</h3></a></p>
-<p>&nbsp;<a href="/objects/add/">Добавить</a></p>
-<p>&nbsp;<a href="/objects/shop/">Поиск по списку</a></p>
-<p>&nbsp;<a href="/objects/params/">Подбор по параметрам</a></p>
-
-<p><a href="/zones/index/"><h3>Список зон</h3></a></p>
-<p><a href="/squads/index/"><h3>Список дружин</h3></a></p>
-
-{# <p><a href="/core/charts/day/"><h3>Статистика Online</h3></a></p> #}
+<li class="{% if menu_selected == "boards" %}active{% endif %}"><a href="/boards/all/">Доски</a></li>
+<li class="{% if menu_selected == "channels" %}active{% endif %}"><a href="/channels/all/">Каналы</a></li>
+<li class="{% if menu_selected == "objects" %}active{% endif %}"><a href="/objects/">База вещей</a></li>
+<li><a href="/wiki/about/">О сайте</a></li>

@@ -1,199 +1,57 @@
+{% extends "wiki/base.html" %}
+{% load wiki_tags i18n sekizai_tags %}
 {% load nvd3_tags %}
 
-<!DOCTYPE html>
-<html>
-<head>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-{% include_chart_jscss %}
-    <style type="text/css">
-        html, body
-        {
-            height: 100%;
-        }
-        body {
-            font-family: monospace;
-            background: black;
-            color: #c8c8c8;
-        }
-        a {
-            color: white;
-        }
-        a.obj_name, span.obj_name {
-            color: #90EE90;
-            font-weight: bold;
-        }
-        a.error {
-            color: red;
-        }
-        span.obj_type {
-            color: yellow;
-        }
-        span.obj_spell {
-            color: yellow;
-        }
-        span.obj_material {
-            color: yellow;
-        }
-        span.obj_affect {
-            color: green;
-        }
-        span.obj_extra {
-            color: green;
-        }
-        span.obj_prop {
-            color: cyan;
-            /*font-weight:bold;*/
-        }
-        span.obj_ac {
-            color: red;
-        }
-        span.obj_armor {
-            color: red;
-        }
-        span.obj_bad {
-            color: red;
-            font-weight: bold;
-        }
-        .offtop {
-            color: #00aaaa;
-        }
-        .bolt {
-            color: #cdcd00;
-        }
-        .scream {
-            color: #ffff00;
-        }
-        p.info {
-            color: #ffff00;
-        }
-        .layout {
-        }
-        .left {
-            float: left;
-            width: 200px;
-            margin: 10px;
-        }
-        .center {
-            padding-left: 220px;
-        }
-        .yellow {
-            color: yellow;
-        }
-        .board {
-            margin-top: 20px;
-        }
-        .pagination {
-            margin-top: 10px;
-        }
-        .message-header {
-            font-weight: bold;
-        }
-        .chart {
-            background: white;
-            display: inline-block;
-        }
-        
-        .zones {
-            border: 1px solid #c8c8c8;
-            border-collapse: collapse;
-        }
-        
-        .zones th {
-            color: white;
-            border: 1px solid #c8c8c8;
-            padding: 6px;
-        }
-        .zones td {
-            border: 1px solid #c8c8c8;
-            padding: 6px;
-        }
-        .zone_link {
-            padding: 3px;
-        }
-        
-.ansi_terminal { white-space: pre; font-family: monospace; }
-.ansi_black { color: black; }
-.ansi_red { color: darkred; }
-.ansi_green { color: darkgreen; }
-.ansi_yellow { color: orange; }
-.ansi_blue { color: darkblue; }
-.ansi_magenta { color: purple; }
-.ansi_cyan { color: darkcyan; }
-.ansi_white { color: lightgray; }
-.ansi_bright.ansi_black { color: gray; }
-.ansi_bright.ansi_red { color: red; }
-.ansi_bright.ansi_green { color: green; }
-.ansi_bright.ansi_yellow { color: yellow; }
-.ansi_bright.ansi_blue { color: blue; }
-.ansi_bright.ansi_magenta { color: magenta; }
-.ansi_bright.ansi_cyan { color: cyan; }
-.ansi_bright.ansi_white { color: white; }
-.ansi_bgblack { background-color: black; }
-.ansi_bgred { background-color: red; }
-.ansi_bggreen { background-color: green; }
-.ansi_bgyellow { background-color: yellow; }
-.ansi_bgblue { background-color: blue; }
-.ansi_bgmagenta { background-color: magenta; }
-.ansi_bgcyan { background-color: cyan; }
-.ansi_bgwhite { background-color: white; }
-.ansi_bright { font-weight: bold; }
-.ansi_faint { opacity: .5; }
-.ansi_italic { font-style: italic; }
-.ansi_underscore { text-decoration: underline; }
-.ansi_blink { text-decoration: blink; }
-.ansi_reverse { border: 1pt solid; }
-.ansi_hide { opacity: 0; }
-.ansi_strike { text-decoration: line-through; }
+{% block wiki_pagetitle %}{% block title %}МПМ Былины: база данных по предметам{% endblock %}{% endblock %}{% block wiki_site_title %}{% endblock %}
 
-	div.ocontainer {
-		margin: 15px;  
-	}
-	div.oleft, div.oright {
-		float: left;
-		padding: 10px;
-		width: 45%;
-	}
-	div.oright {
-		width: 45%;
-	}
-	
-	.news_date {
-        color: orange;
-	}
-	.news_title {
-        color: white;
+
+{% block head %}
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    {% include_chart_jscss %}
+    <script>
+    function toggle(id) {
+        var e = document.getElementById(id);
+        if(e.style.display == 'block')
+            e.style.display = 'none';
+        else
+            e.style.display = 'block';
     }
+    </script>
+    <meta name="description" content="{% block meta_description %} {% endblock %}" />
+    <meta name="keywords" content="{% block meta_keywords %} {% endblock %}" />
+{% endblock %}
 
-    </style>
-<script>
-function toggle(id) {
-    var e = document.getElementById(id);
-    if(e.style.display == 'block')
-        e.style.display = 'none';
-    else
-        e.style.display = 'block';
-}
-</script>
 
-    <title>{% block title %}МПМ Былины: база данных по предметам{% endblock %}</title>
-{% block head %}{% endblock %}
+{% block wiki_contents %}
+    <div class="center">
+        <div id="article-container">
+        <ul class="nav nav-pills" id="article-menu">
+        <li class="pull-left" id="article-title-li">
+            <h1 id="article-title">
+            {% block page_title %}
+            {% endblock %}
+            </h1>
+        </li>
+    
+    {% block tab_menu %}
+    {% endblock %}
 
-<meta name="description" content="{% block meta_description %} {% endblock %}" />
-<meta name="keywords" content="{% block meta_keywords %} {% endblock %}" />
+    </ul>
+      {% block wiki_contents_tab %}
+       <div class="wiki-article">
+        {% block content %}
+        {% endblock %}
+      </div>
+      {% endblock %}
 
-</head>
+  </div>
 
-<body>
-<div class="layout">
-<div class="left">{% block menu %}{% endblock %}
-{% autoescape off %}
-{% for c in counters %}
-{{ c.body }}
-{% endfor %}
-{% endautoescape %}
-</div>
-<div class="center">{% block content %}{% endblock %}</div>
-</div>
 
-</body>
-</html>
+    {% autoescape off %}
+        {% for c in counters %}
+            {{ c.body }}
+        {% endfor %}
+    {% endautoescape %}
+    
+{% endblock %}
+

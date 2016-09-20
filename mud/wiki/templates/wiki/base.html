@@ -1,0 +1,19 @@
+{% extends "wiki/base_site.html" %}
+
+{# Intentionally empty, to allow easy customization with no copy-paste #}
+
+{% block wiki_site_title %} -- Вики {% endblock %}
+
+{% block wiki_header_branding %}
+<a class="navbar-brand" href="/">Главная</a>
+{% endblock %}
+
+{% block wiki_footer_logo %}
+{% endblock %}
+
+{% block wiki_header_navlinks %}
+    <ul class="nav navbar-nav">
+        <li><a href="{% url 'wiki:root' %}">Вики</a></li>
+        {% include "objects/menu.html" %}
+    </ul>
+{% endblock %}

@@ -11,7 +11,7 @@ from django.conf import settings
 import django
 django.setup()
 
-from channels.models import *
+from mud_channels.models import *
 
 p = sys.argv[1]
 d = codecs.open(p, "r", "utf-8").read()

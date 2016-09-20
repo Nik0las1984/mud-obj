@@ -1,14 +1,11 @@
-{% extends "objects/base.html" %}
-
-{% block menu %}
-{% include "objects/menu.html" %}
-{% endblock %}
+{% extends "objects/index.html" %}
 
 {% block title %}МПМ Былины. Добавить новый предмет в базу{% endblock %}
 
+{% block page_title %} Добавить новый предмет {% endblock %}
+
 {% block content %}
 
-<h2>Добавить:</h2>
 
 <p>Введите оригинальное описание из МАДа, просто скопировав вывод команды "опознать" или "характеристики".</p>
 <form method="post">

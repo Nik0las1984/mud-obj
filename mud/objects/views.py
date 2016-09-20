@@ -67,7 +67,7 @@ def add(request):
             except:
                 pass
         
-    context = {'form': f, 'added': added, 'exists': exists, }
+    context = {'form': f, 'added': added, 'exists': exists, 'menu_selected': 'objects', 'tab_selected': 'add', }
     return render(request, 'objects/add.html', context)
 
 def index(request):
@@ -91,7 +91,7 @@ def index(request):
     except EmptyPage:
         o = paginator.page(paginator.num_pages)
 
-    context = {'objects': o, 'name': name, }
+    context = {'objects': o, 'name': name, 'menu_selected': 'objects', 'tab_selected': 'all',}
     return render(request, 'objects/index.html', context)
 
 def obj(request, id):
@@ -102,7 +102,7 @@ def obj(request, id):
     
     f = clazz(initial = {'bad': o.id})
     fc = ObjectCommentForm(initial = {'text': o.comment, 'oid': o})
-    return render(request, 'objects/object.html', {'obj': o, 'form': f, 'comment_form': fc, })
+    return render(request, 'objects/object.html', {'obj': o, 'form': f, 'comment_form': fc, 'menu_selected': 'objects',})
 
 def obj_by_name(request, name):
     f = Object.objects.filter(name__iexact = name)
@@ -112,9 +112,9 @@ def obj_by_name(request, name):
             clazz = CreateObjectFormNoCaptcha
         
         form = clazz(initial = {'bad': f[0].id})
-        return render(request, 'objects/object.html', {'obj': f[0], 'form' : form})
+        return render(request, 'objects/object.html', {'obj': f[0], 'form' : form, 'menu_selected': 'objects',})
     if f.count() > 1:
-        context = {'objects': f, 'name': name, }
+        context = {'objects': f, 'name': name, 'menu_selected': 'objects',}
         return render(request, 'objects/index.html', context)
     raise Http404
 
@@ -141,7 +141,7 @@ def shop(request):
                 l.objs.add(o)
             l.save()
         
-    context = {'objs': objs, 'data': data, }
+    context = {'objs': objs, 'data': data, 'menu_selected': 'objects', 'tab_selected': 'shop',}
     return render(request, 'objects/shop.html', context)
 
 def params(request):
@@ -193,6 +193,6 @@ def params(request):
     # Logging
     Log.object_search(u'%s' % c, request)
         
-    context = {'form': f, 'objs': o, 'count': c, 'queries': queries_without_page}
+    context = {'form': f, 'objs': o, 'count': c, 'queries': queries_without_page, 'menu_selected': 'objects', 'tab_selected': 'params',}
     return render(request, 'objects/params.html', context)
     

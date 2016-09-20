@@ -7,19 +7,10 @@
 {% endblock %}
 
 
+{% block page_title %} Новости {% endblock %}
+
 {% block content %}
 
-<h2>МПМ Былины</h2>
-
-<p>Сайт посвященный игре <a href="http://www.mud.ru/"> МПМ "Былины"</a>.</p>
-
-<p>Содержит в себе некую игровую информацию. Прежде всего <a href="/objects/">база данных по предметам</a>.</p>
-
-<p>Также имеется <a href="/objects/params/">подбор предметов по параметрам</a> и <a href="/objects/shop/">по списку из магазина</a>. </p>
-
-<p>О всех замечаниях можно писать сюда: <a href="http://www.mud.ru/vbb/showthread.php?t=4305">http://www.mud.ru/vbb/showthread.php?t=4305</a>.</p>
-
-<h1>Новости:</h1>
 
 {%if news.paginator.num_pages > 1 %}
 <div class="pagination">

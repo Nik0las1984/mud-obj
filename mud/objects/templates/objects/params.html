@@ -1,18 +1,13 @@
-{% extends "objects/base.html" %}
+{% extends "objects/index.html" %}
 
 {% block title %}
 МПМ Былины. Подбор предметов по параметрам
 {% endblock %}
 
-
-{% block menu %}
-{% include "objects/menu.html" %}
-{% endblock %}
+{% block page_title %} Подбор по параметрам {% endblock %}
 
 
 {% block content %}
-
-<h2>Подбор по параметрам:</h2>
 
 <form method="get">
     {{ form.as_p }}

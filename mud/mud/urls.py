@@ -2,13 +2,22 @@ from django.conf.urls import *
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from wiki.urls import get_pattern as get_wiki_pattern
+from django_nyt.urls import get_pattern as get_nyt_pattern
 
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
+# Wiki
 urlpatterns = [
+    url(r'^wiki/notifications/', get_nyt_pattern()),
+    url(r'^wiki/', get_wiki_pattern())
+]
+
+
+urlpatterns += [
     # Examples:
     # url(r'^$', 'mud.views.home', name='home'),
     # url(r'^mud/', include('mud.foo.urls')),
@@ -19,7 +28,7 @@ urlpatterns = [
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^objects/', include('objects.urls')),
-    url(r'^channels/', include('channels.urls')),
+    url(r'^channels/', include('mud_channels.urls')),
     url(r'^boards/', include('boards.urls')),
     url(r'^zones/', include('zones.urls')),
     url(r'^squads/', include('squad.urls')),

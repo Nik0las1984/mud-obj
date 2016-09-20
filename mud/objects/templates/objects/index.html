@@ -1,7 +1,7 @@
 {% extends "objects/base.html" %}
 
 {% block title %}
-МПМ Былины. Список предметов
+МПМ Былины. Список вещей
 {% endblock %}
 
 {% block menu %}
@@ -9,12 +9,53 @@
 {% endblock %}
 
 
+
+{% block page_title %} Список вещей {% endblock %}
+
+
+{% block tab_menu %}
+    {% with tab_selected as selected %}
+        <li class="pull-right{% if selected == "params" %} active{% endif %}">
+        <a href="/objects/params/">
+            <span class="hidden-xs">Подбор по параметрам</span>
+        </a>
+        </li>
+
+        <li class="pull-right{% if selected == "shop" %} active{% endif %}">
+        <a href="/objects/shop/">
+            <span class="hidden-xs">Поиск по списку</span>
+        </a>
+        </li>
+
+        <li class="pull-right{% if selected == "add" %} active{% endif %}">
+        <a href="/objects/add/">
+            <span class="hidden-xs">Добавить</span>
+        </a>
+        </li>
+
+        <li class="pull-right {% if selected == "all" %} active{% endif %}">
+        <a href="/objects/">
+            <span class="hidden-xs">Вещи</span>
+        </a>
+        </li>
+    {% endwith %}
+{% endblock %}
+
+
 {% block content %}
-<h2>Поиск по названию:</h2>
-<form action="">
-    Введите название предмета: <input type="text" name="name" value="{{ name }}"></input>
-    <input type="submit" value="найти"></input>
-</form>
+    <h2>Поиск по названию:</h2>
+    <form action="">
+        <div class="input-group">
+            <input type="search" class="form-control search-query" name="name" placeholder="Введите название предмета..." value="{{ name }}"/>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                    <span class="fa fa-search"></span>
+                </button>
+            </span>
+        </div><!-- /input-group -->
+    </form>
+    
+    
 <table>
 <tr><td>
 <div class="pagination">
