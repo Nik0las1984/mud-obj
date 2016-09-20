@@ -4,10 +4,12 @@
 import codecs
 import sys
 
-from django.core.management import setup_environ
-from mud import settings
+import os
 
-setup_environ(settings)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mud.settings")
+from django.conf import settings
+import django
+django.setup()
 
 from zones.models import *
 from objects.models import *
