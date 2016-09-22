@@ -216,6 +216,13 @@ HAYSTACK_CONNECTIONS = {
   },
 }
 
+LOGIN_URL = "/forum/user/login/"
+LOGOUT_URL = "/forum/user/logout/"
+WIKI_SIGNUP_URL = "/forum/user/registr/"
+WIKI_ACCOUNT_HANDLING = False
+
+
+
 try:
     from local_settings import *
 except ImportError, e:
