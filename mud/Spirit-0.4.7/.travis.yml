@@ -1,0 +1,21 @@
+language: python
+
+# Use container-based infrastructure
+sudo: false
+
+python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+
+install:
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+  - pip install coveralls pep8==1.5.7 flake8
+script:
+  - flake8 --exit-zero
+  - ./runtests.py example
+  - coverage run --source=. runtests.py
+after_success:
+  - coveralls

@@ -1,6 +1,10 @@
 # Django settings for mud project.
-import os
+from __future__ import unicode_literals
 
+import os
+import sys
+
+from spirit.settings import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -86,76 +90,33 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '$llqqzvq^%l5$ifj2_uk9=r@ym@aat9at+53bhypx!ih&az%b6'
 
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'reversion.middleware.RevisionMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+# This will be the default in next version
+#ST_RATELIMIT_CACHE = 'st_rate_limit'
+ST_UNICODE_SLUGS = False
 
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
-
-ROOT_URLCONF = 'mud.urls'
-
-# Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'mud.wsgi.application'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'core.context_processors.counters',
-                'django.template.context_processors.i18n',
-                'django.template.context_processors.media',
-                'django.template.context_processors.static',
-                'django.template.context_processors.tz',
-                "sekizai.context_processors.sekizai",
-
-            ],
-        },
-    },
+gettext_noop = lambda s: s
+LANGUAGES = [
+    ('de', gettext_noop('German')),
+    ('en', gettext_noop('English')),
+    ('es', gettext_noop('Spanish')),
+    ('fr', gettext_noop('French')),
+    ('hu', gettext_noop('Hungarian')),
+    ('pl', gettext_noop('Polish')),
+    ('pl-pl', gettext_noop('Poland Polish')),
+    ('ru', gettext_noop('Russian')),
+    ('sv', gettext_noop('Swedish')),
+    ('tr', gettext_noop('Turkish')),
+    ('zh-hans', gettext_noop('Simplified Chinese')),
 ]
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+# Default language
+LANGUAGE_CODE = 'ru'
 
 
-INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
+# Extend the Spirit installed apps.
+# Check out the spirit.settings.py so you do not end up with duplicated apps.
+INSTALLED_APPS.extend([
     'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
     'django.contrib.flatpages',
 
     'django.contrib.humanize',
@@ -181,7 +142,40 @@ INSTALLED_APPS = (
     'reversion',
     #'django.contrib.markup',
     'zones'
-)
+])
+
+MIDDLEWARE_CLASSES.extend([
+])
+
+# same here
+TEMPLATES[0]['OPTIONS']['context_processors'].extend([
+    'core.context_processors.counters',
+    "sekizai.context_processors.sekizai",
+])
+
+CACHES.update({
+})
+
+ROOT_URLCONF = 'mud.urls'
+
+# Python dotted path to the WSGI application used by Django's runserver.
+WSGI_APPLICATION = 'mud.wsgi.application'
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -214,6 +208,13 @@ LOGGING = {
 
 NYT_CHANNELS_DISABLE = True
 WIKI_ACCOUNT_SIGNUP_ALLOWED = False
+
+HAYSTACK_CONNECTIONS = {
+  'default': {
+    'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+    'PATH': os.path.join(os.path.dirname(__file__), 'search_index'),
+  },
+}
 
 try:
     from local_settings import *

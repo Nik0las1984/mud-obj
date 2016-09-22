@@ -120,6 +120,51 @@
         .markItUp {
             background-color: white;
         }
+        
+        
+        html {
+            background-color: black;
+        }
+        .header-logo {
+            color: white;
+        }
+        .header-logo:hover {
+            color: gray;
+        }
+        .dropdown-button {
+            color: white;
+        }
+        .dropdown-button:hover {
+            color: gray;
+        }
+        a {
+            color: white;
+            font-weight: bold;
+        }
+        a:hover {
+            color: gray;
+            font-weight: bold;
+        }
+        
+        
+        .menu-link {
+            background-color: #292929;
+        }
+        
+        input {
+            color: black;
+        }
+        textarea {
+            color: black;
+        }
+        
+        .username.is-admin {
+            color: white;
+            background-color: black;
+        }
+
+
+
                 
         
 .ansi_terminal { white-space: pre; font-family: monospace; }

@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from wiki.urls import get_pattern as get_wiki_pattern
 from django_nyt.urls import get_pattern as get_nyt_pattern
+import spirit.urls
 
 
 # Uncomment the next two lines to enable the admin:
@@ -14,6 +15,10 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^wiki/notifications/', get_nyt_pattern()),
     url(r'^wiki/', get_wiki_pattern())
+]
+
+urlpatterns += [
+    url(r'^forum/', include(spirit.urls)),
 ]
 
 
