@@ -5,3 +5,9 @@
 			<a class="footer-logo" href="http://www.mudportal.ru/" >Мадпортал</a>
 		</div>
 	</footer>
+	
+    {% autoescape off %}
+        {% for c in counters %}
+            {{ c.body }}
+        {% endfor %}
+    {% endautoescape %}
