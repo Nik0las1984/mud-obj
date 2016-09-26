@@ -8,6 +8,7 @@ from wiki.core.plugins import registry
 
 log = logging.getLogger(__name__)
 
+from core.models import Log
 
 class ArticleMixin(TemplateResponseMixin):
 
@@ -16,6 +17,7 @@ class ArticleMixin(TemplateResponseMixin):
     template context."""
 
     def dispatch(self, request, article, *args, **kwargs):
+        Log.log('Wiki', request)
         self.urlpath = kwargs.pop('urlpath', None)
         self.article = article
         self.children_slice = []
