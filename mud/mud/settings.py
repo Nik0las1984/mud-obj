@@ -223,6 +223,15 @@ LOGOUT_URL = "/forum/user/logout/"
 WIKI_SIGNUP_URL = "/forum/user/registr/"
 WIKI_ACCOUNT_HANDLING = False
 
+WIKI_MARKDOWN_KWARGS = {
+    'extensions': [
+        'custom_span_class',
+        'attr_list',
+        'extra',
+        'codehilite',
+        'sane_lists',
+    ],
+}
 
 
 try:
