@@ -108,9 +108,11 @@ class LogId(models.Model):
 class Log(models.Model):
     ADD_OBJ = 0
     SEARCH_OBJ = 1
+    OTHER = 2
     LOG_TYPES = (
         (ADD_OBJ, u'Добавлен объект'),
         (SEARCH_OBJ, u'Поиск объектов'),
+        (OTHER, u'Другое'),
     )
     date = models.DateTimeField(auto_now_add = True)
     value = models.TextField(null = True)
@@ -137,6 +139,16 @@ class Log(models.Model):
         l = Log()
         l.value = name
         l.type = Log.SEARCH_OBJ
+        #l.ua = request.META['HTTP_USER_AGENT']
+        l.lid = LogId.get_or_create(request)
+        l.path = request.get_full_path()
+        l.save()
+    
+    @staticmethod
+    def log(value, request):
+        l = Log()
+        l.value = value
+        l.type = Log.OTHER
         #l.ua = request.META['HTTP_USER_AGENT']
         l.lid = LogId.get_or_create(request)
         l.path = request.get_full_path()

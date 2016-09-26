@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 import qsstats
 
 from .models import *
+from core.models import Log
 
 def channel(request, o, title, tab_selected = 'all'):
     paginator = Paginator(o.order_by('date'), 50)
@@ -20,6 +21,8 @@ def channel(request, o, title, tab_selected = 'all'):
         o = paginator.page(paginator.num_pages)
     except EmptyPage:
         o = paginator.page(paginator.num_pages)
+    
+    Log.log(u'Просмотр каналов', request)
 
     context = {'mud_messages': o, 'title': title, 'menu_selected': 'channels', 'tab_selected': tab_selected,}
     return render(request, 'channels/index.html', context)

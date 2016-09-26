@@ -91,5 +91,7 @@ def news(request):
     except EmptyPage:
         o = paginator.page(paginator.num_pages)
 
+    Log.log(u'Новости', request)
+    
     context = {'news': o, }
     return render(request, 'core/news.html', context)

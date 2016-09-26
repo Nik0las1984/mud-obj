@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
 
 from boards.models import *
+from core.models import Log
 
 def boards_list(request, o, title, flag, tab_selected = 'boards'):
     paginator = Paginator(o.order_by('mud_date').reverse(), 20)
@@ -15,6 +16,8 @@ def boards_list(request, o, title, flag, tab_selected = 'boards'):
         o = paginator.page(1)
     except EmptyPage:
         o = paginator.page(paginator.num_pages)
+    
+    Log.log(u'Просмотр досок', request)
 
     context = {'mud_messages': o, 'title': title, 'flag': flag, 'menu_selected': 'boards', 'tab_selected': tab_selected, }
     return render(request, 'boards/index.html', context)
