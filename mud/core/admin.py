@@ -11,9 +11,15 @@ class StatisticAdmin(admin.ModelAdmin):
 
 admin.site.register(Statistic, StatisticAdmin)
 
+class LogIdAdmin(admin.ModelAdmin):
+    list_display = ['desc', 'date', 'ua', 'pk', 'user']
+
+admin.site.register(LogId, LogIdAdmin)
+
+
 class LogAdmin(admin.ModelAdmin):
     list_filter = ['type',]
-    list_display = ['type', 'value', 'date', 'ua', 'path']
+    list_display = ['type', 'value', 'date', 'lid', 'path']
 
 admin.site.register(Log, LogAdmin)
 

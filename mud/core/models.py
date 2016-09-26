@@ -67,6 +67,44 @@ class Statistic(models.Model):
         st.save()
         return st
 
+class LogId(models.Model):
+    user = models.ForeignKey(DjangoUser, null = True)
+    ua = models.TextField(null = True)
+    date = models.DateTimeField(auto_now_add = True)
+    desc = models.CharField(max_length = 1024, null = True)
+    
+    def __unicode__(self):
+        return self.desc
+    
+    @staticmethod
+    def get_or_create(request):
+        lid = LogId()
+        if request.user.is_authenticated():
+            q = LogId.objects.filter(user = request.user)
+            if q.count() > 0:
+                return q[0]
+            else:
+                lid.user = request.user
+        
+        ses = request.session.get('lid', None)
+        print ses
+        if ses:
+            q = LogId.objects.filter(pk = ses)
+            if q.count() > 0:
+                return q[0]
+        lid.ua = request.META['HTTP_USER_AGENT']
+        lid.save()
+        if request.user.is_authenticated():
+            lid.desc = u'%s' % lid.user
+        else:
+            lid.desc = lid.date.strftime('%Y-%m-%d %H:%M')
+        
+        lid.save()
+        request.session['lid'] = lid.pk
+        return lid
+
+            
+
 class Log(models.Model):
     ADD_OBJ = 0
     SEARCH_OBJ = 1
@@ -77,7 +115,8 @@ class Log(models.Model):
     date = models.DateTimeField(auto_now_add = True)
     value = models.TextField(null = True)
     type = models.IntegerField(choices = LOG_TYPES)
-    ua = models.TextField(null = True)
+    #ua = models.TextField(null = True)
+    lid = models.ForeignKey(LogId, null = True)
     path = models.TextField(null = True)
 
     def __unicode__(self):
@@ -88,7 +127,8 @@ class Log(models.Model):
         l = Log()
         l.value = name
         l.type = Log.ADD_OBJ
-        l.ua = request.META['HTTP_USER_AGENT']
+        #l.ua = request.META['HTTP_USER_AGENT']
+        l.lid = LogId.get_or_create(request)
         l.path = request.get_full_path()
         l.save()
     
@@ -97,7 +137,8 @@ class Log(models.Model):
         l = Log()
         l.value = name
         l.type = Log.SEARCH_OBJ
-        l.ua = request.META['HTTP_USER_AGENT']
+        #l.ua = request.META['HTTP_USER_AGENT']
+        l.lid = LogId.get_or_create(request)
         l.path = request.get_full_path()
         l.save()
 
