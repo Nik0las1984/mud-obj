@@ -13,6 +13,7 @@ admin.site.register(Statistic, StatisticAdmin)
 
 class LogIdAdmin(admin.ModelAdmin):
     list_display = ['desc', 'date', 'ua', 'pk', 'user']
+    fields = ['desc', ]
 
 admin.site.register(LogId, LogIdAdmin)
 
