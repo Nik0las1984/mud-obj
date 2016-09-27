@@ -5,6 +5,8 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
 
+import re
+
 class User(models.Model):
     name = models.TextField()
     
@@ -68,6 +70,17 @@ class Statistic(models.Model):
         return st
 
 class LogId(models.Model):
+    ROBOTS = (
+        ('YandexMetrika', r'YandexMetrika'),
+        ('YandexBot', r'YandexBot'),
+        ('Googlebot', r'Googlebot'),
+        ('bingbot', r'bingbot'),
+        ('SputnikBot', r'SputnikBot'),
+        ('Googlebot-Mobile', r'Googlebot-Mobile'),
+        ('pr-cy.ru', r'a.pr-cy.ru'),
+        )
+    
+    
     user = models.ForeignKey(DjangoUser, null = True)
     ua = models.TextField(null = True)
     date = models.DateTimeField(auto_now_add = True)
@@ -98,6 +111,10 @@ class LogId(models.Model):
             lid.desc = u'%s' % lid.user
         else:
             lid.desc = lid.date.strftime('%Y-%m-%d %H:%M')
+            
+            for r in LogId.ROBOTS:
+                if r[1].search(lid.ua):
+                    lid.desc = r[0]
         
         lid.save()
         request.session['lid'] = lid.pk
