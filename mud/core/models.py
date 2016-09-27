@@ -71,13 +71,13 @@ class Statistic(models.Model):
 
 class LogId(models.Model):
     ROBOTS = (
-        ('YandexMetrika', r'YandexMetrika'),
-        ('YandexBot', r'YandexBot'),
-        ('Googlebot', r'Googlebot'),
-        ('bingbot', r'bingbot'),
-        ('SputnikBot', r'SputnikBot'),
-        ('Googlebot-Mobile', r'Googlebot-Mobile'),
-        ('pr-cy.ru', r'a.pr-cy.ru'),
+        ('YandexMetrika', re.compile(r'YandexMetrika')),
+        ('YandexBot', re.compile(r'YandexBot')),
+        ('Googlebot', re.compile(r'Googlebot')),
+        ('bingbot', re.compile(r'bingbot')),
+        ('SputnikBot', re.compile(r'SputnikBot')),
+        ('Googlebot-Mobile', re.compile(r'Googlebot-Mobile')),
+        ('pr-cy.ru', re.compile(r'a.pr-cy.ru')),
         )
     
     
