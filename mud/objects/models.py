@@ -24,7 +24,7 @@ re_take = re.compile(ur'^Можно взять в (.+)\.')
 re_take_strength = re.compile(ur'^Можно взять в (.+)\s\(требуется\s(\d+)\sсилы\)\.')
 re_weapon = re.compile(ur'^Принадлежит к классу "(.+)"\.')
 re_damage = re.compile(ur'^Наносимые повреждения \'([\dD]+)\' среднее ([\d\.,]+)\.')
-re_spell = re.compile(ur'^содержит заклинание\s*:\s*"(.+)"$')
+re_spell = re.compile(ur'^[Сс]одержит\s*заклинани[ея]\s*:\s*"*(.+)"*$')
 re_recipe = re.compile(ur'^содержит\s+рецепт\s+отвара\s*:\s*"(.+)"$')
 re_capacity = re.compile(ur'^Максимально вместимый вес:\s*(.+).')
 
