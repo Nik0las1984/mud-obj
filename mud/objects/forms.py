@@ -17,6 +17,7 @@ class ParamsForm(forms.Form):
     extra = forms.ModelChoiceField(label = u'Экстрафлаги', queryset = ExtraFlag.objects.filter().order_by('name'), required = False)
     affects = forms.ModelChoiceField(label = u'Аффекты', queryset = Affect.objects.filter().order_by('name'), required = False)
     prop = forms.ModelChoiceField(label = u'Дополнительные свойства', queryset = ExtraProperty.objects.filter().order_by('name'), required = False)
+    dmg_avg = forms.FloatField(label = u'Среднее не ниже', required = False)
     
     def __init__(self, user, *args, **kwargs):
         self.user = user

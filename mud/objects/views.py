@@ -179,6 +179,8 @@ def params(request):
         objs = objs.filter(affects = f.cleaned_data['affects'])
     if f.cleaned_data['prop']:
         objs = objs.filter(prop__prop = f.cleaned_data['prop'])
+    if f.cleaned_data['dmg_avg']:
+        objs = objs.filter(dmg_avg__gt = f.cleaned_data['dmg_avg'])
     
     c = objs.count()
     paginator = Paginator(objs.order_by('name'), 25)
