@@ -20,7 +20,7 @@ admin.site.register(LogId, LogIdAdmin)
 
 class LogAdmin(admin.ModelAdmin):
     list_filter = ['type',]
-    list_display = ['type', 'value', 'date', 'lid', 'path']
+    list_display = ['type', 'value', 'date', 'get_lid_url', 'path']
 
 admin.site.register(Log, LogAdmin)
 

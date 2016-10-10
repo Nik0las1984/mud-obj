@@ -4,6 +4,7 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
+from django.core.urlresolvers import reverse
 
 import re
 
@@ -119,6 +120,10 @@ class LogId(models.Model):
         lid.save()
         request.session['lid'] = lid.pk
         return lid
+    
+    def get_change_url(self):
+        return reverse('admin:core_logid_change', args=[self.pk])
+
 
             
 
@@ -140,6 +145,16 @@ class Log(models.Model):
 
     def __unicode__(self):
         return u'%s: %s' % (self.type, self.value)
+    
+    
+    def get_lid_url(self):
+        if self.lid:
+            return '<a href="%s">%s</a>' % (self.lid.get_change_url(), self.lid)
+        else:
+            return 'None'
+    get_lid_url.allow_tags = True
+    get_lid_url.short_description = u'Перейти'
+
     
     @staticmethod
     def object_added(name, request):
