@@ -12,14 +12,15 @@ class StatisticAdmin(admin.ModelAdmin):
 admin.site.register(Statistic, StatisticAdmin)
 
 class LogIdAdmin(admin.ModelAdmin):
-    list_display = ['desc', 'date', 'ua', 'pk', 'user']
+    list_display = ['desc', 'date', 'ua', 'bot_flag', 'pk', 'user']
+    list_filter = ['bot_flag',]
     fields = ['desc', ]
 
 admin.site.register(LogId, LogIdAdmin)
 
 
 class LogAdmin(admin.ModelAdmin):
-    list_filter = ['type',]
+    list_filter = ['type', 'lid__bot_flag']
     list_display = ['type', 'value', 'date', 'get_lid_url', 'path']
 
 admin.site.register(Log, LogAdmin)

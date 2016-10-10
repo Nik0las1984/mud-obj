@@ -79,6 +79,9 @@ class LogId(models.Model):
         ('SputnikBot', re.compile(r'SputnikBot')),
         ('Googlebot-Mobile', re.compile(r'Googlebot-Mobile')),
         ('pr-cy.ru', re.compile(r'a.pr-cy.ru')),
+        ('MJ12bot', re.compile(r'MJ12bot')),
+        ('Baiduspider', re.compile(r'Baiduspider')),
+        ('openstat.ru', re.compile(r'openstat.ru')),
         )
     
     
@@ -86,6 +89,7 @@ class LogId(models.Model):
     ua = models.TextField(null = True)
     date = models.DateTimeField(auto_now_add = True)
     desc = models.CharField(max_length = 1024, null = True)
+    bot_flag = models.BooleanField(default = False)
     
     def __unicode__(self):
         return self.desc
@@ -116,6 +120,7 @@ class LogId(models.Model):
             for r in LogId.ROBOTS:
                 if r[1].search(lid.ua):
                     lid.desc = r[0]
+                    lid.bot_flag = True
         
         lid.save()
         request.session['lid'] = lid.pk
