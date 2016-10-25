@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.http import JsonResponse
 
 from objects.models import *
 from objects.forms import *
@@ -103,6 +104,12 @@ def obj(request, id):
     f = clazz(initial = {'bad': o.id})
     fc = ObjectCommentForm(initial = {'text': o.comment, 'oid': o})
     return render(request, 'objects/object.html', {'obj': o, 'form': f, 'comment_form': fc, 'menu_selected': 'objects',})
+
+def obj_by_name_json(request, name):
+    f = Object.objects.filter(name__iexact = name)
+    if f.count() > 0:
+        return JsonResponse(f[0].as_map())
+    return JsonResponse({})
 
 def obj_by_name(request, name):
     f = Object.objects.filter(name__iexact = name)

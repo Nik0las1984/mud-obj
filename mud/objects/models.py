@@ -199,6 +199,17 @@ class Object(models.Model):
             for p in self.prop.all():
                 print u'\033[93m\t%s\033[0m' % p
     
+    def as_map(self):
+        return {
+            'name': self.name,
+            'type': self.type.name,
+            'extra': ",".join(map(unicode, self.extra.all())),
+            'ac': self.ac,
+            'aff': ",".join(map(unicode, self.affects.all())),
+            'prop': ",".join(map(unicode, self.prop.all())),
+            'desc': self.mud_desc,
+            }
+    
     def update_from_desc(self):
         Object.create_from_string(self.mud_desc)
     
