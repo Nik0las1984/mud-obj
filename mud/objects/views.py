@@ -125,13 +125,13 @@ def add_by_bot(request):
                     if Object.has_obj_by_desc(i):
                         o = Object.get_obj_by_desc(i)
                         #exists.append(o)
-                        msg = ', %s - exist' % (msg, o)
+                        msg = '%s, %s - exist' % (msg, o)
                     else:
                         o = Object.create_from_string(i)
                         o.checked = False
                         o.save()
                         #added.append(o)
-                        msg = ', %s - added' % (msg, o)
+                        msg = '%s, %s - added' % (msg, o)
                         
                         # Logging
                         Log.object_added(o.name, request)
