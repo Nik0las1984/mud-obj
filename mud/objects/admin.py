@@ -36,16 +36,26 @@ class ObjectsListAdmin(admin.ModelAdmin):
 admin.site.register(ObjectsList, ObjectsListAdmin)
 
 class ExtraPropertyAdmin(admin.ModelAdmin):
-    list_display = ['name', ]
+    list_display = ['name', 'short_name', ]
     
 admin.site.register(ExtraProperty, ExtraPropertyAdmin)
 
 class AffectAdmin(admin.ModelAdmin):
-    list_display = ['name', ]
+    list_display = ['name', 'short_name', ]
     
 admin.site.register(Affect, AffectAdmin)
 
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ['name', ]
+    list_display = ['name', 'short_name', ]
     
 admin.site.register(Material, MaterialAdmin)
+
+class TypeAdmin(admin.ModelAdmin):
+    list_display = ['name', 'short_name', ]
+    
+admin.site.register(Type, TypeAdmin)
+
+class ExtraFlagAdmin(admin.ModelAdmin):
+    list_display = ['name', 'short_name', ]
+    
+admin.site.register(ExtraFlag, ExtraFlagAdmin)

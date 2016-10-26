@@ -32,6 +32,7 @@ NOTHING = u'ничего'
 
 class ObjCharacteristic(models.Model):
     name = models.CharField(max_length = 250)
+    short_name = models.CharField(blank = True, null = True, max_length = 250)
 
     def __unicode__(self):
         return self.name
@@ -43,6 +44,7 @@ class ObjCharacteristic(models.Model):
             return r[0]
         t = clazz()
         t.name = name
+        t.short_name = name
         t.save()
         return clazz.get_or_create(name)
 
