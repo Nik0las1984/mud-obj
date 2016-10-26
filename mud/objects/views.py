@@ -121,7 +121,6 @@ def add_by_bot(request):
             d = re.split(ur'\n\s*\n', data.strip().replace('\r', ''))
             print len(d)
             for i in d:
-                print i
                 try:
                     if Object.has_obj_by_desc(i):
                         o = Object.get_obj_by_desc(i)
