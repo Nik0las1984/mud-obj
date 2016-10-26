@@ -35,6 +35,8 @@ class ObjCharacteristic(models.Model):
     short_name = models.CharField(blank = True, null = True, max_length = 250)
 
     def __unicode__(self):
+        if self.short_name:
+            return self.short_name
         return self.name
     
     @staticmethod
@@ -107,10 +109,13 @@ class PropertyValue(models.Model):
     value = models.IntegerField()
     
     def __unicode__(self):
+        name = self.prop.name
+        if self.prop.short_name:
+            name = self.prop.short_name
         sign = ''
         if self.value > 0:
             sign = '+'
-        return '%s %s%s' % (self.prop.name, sign, self.value)
+        return '%s %s%s' % (name, sign, self.value)
     
     @staticmethod
     def get_or_create(name, value):
@@ -204,12 +209,15 @@ class Object(models.Model):
     def as_map(self):
         return {
             'name': self.name,
-            'type': self.type.name,
+            'type': '%s' % self.type,
             'extra': ",".join(map(unicode, self.extra.all())),
             'ac': self.ac,
             'aff': ",".join(map(unicode, self.affects.all())),
             'prop': ",".join(map(unicode, self.prop.all())),
             'desc': self.mud_desc,
+            'weapon': '%s' % self.weapon,
+            'dmg_str': self.dmg_str,
+            'dmg_avg': self.dmg_avg,
             }
     
     def update_from_desc(self):
