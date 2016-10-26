@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from objects.models import *
 from objects.forms import *
@@ -110,6 +111,38 @@ def obj_by_name_json(request, name):
     if f.count() > 0:
         return JsonResponse(f[0].as_map())
     return JsonResponse({})
+
+@csrf_exempt
+def add_by_bot(request):
+    msg = 'mudportal.ru: '
+    if request.method == 'POST':
+        try:
+            data = request.POST['data']
+            d = re.split(ur'\n\s*\n', data.strip().replace('\r', ''))
+            print len(d)
+            for i in d:
+                print i
+                try:
+                    if Object.has_obj_by_desc(i):
+                        o = Object.get_obj_by_desc(i)
+                        #exists.append(o)
+                        msg = ', %s - exist' % (msg, o)
+                    else:
+                        o = Object.create_from_string(i)
+                        o.checked = False
+                        o.save()
+                        #added.append(o)
+                        msg = ', %s - added' % (msg, o)
+                        
+                        # Logging
+                        Log.object_added(o.name, request)
+                except:
+                    print 'ERROR'
+                    pass
+        except:
+            msg = 'error'
+    return JsonResponse({'message': msg}, )
+
 
 def obj_by_name(request, name):
     f = Object.objects.filter(name__iexact = name)
