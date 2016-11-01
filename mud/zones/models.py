@@ -15,6 +15,17 @@ class Zone(models.Model):
     
     class Meta:
         ordering = ['name', 'level']
+    
+    @staticmethod
+    def has(name):
+        return Zone.objects.filter(name = name).count() > 0
+    
+    @staticmethod
+    def get_by_name(name):
+        q = Zone.objects.filter(name = name)
+        if q.count() > 0:
+            return q[0]
+        return None
 
 class ZoneLink(models.Model):
     WALK             = 0
@@ -36,4 +47,8 @@ class ZoneLink(models.Model):
     
     def __unicode__(self):
         return u'%s -> %s' % (self.z1, self.z2)
+    
+    @staticmethod
+    def has_link(z1, z2):
+        return ZoneLink.objects.filter(z1 = z1).filter(z2 = z2).count() > 0
 
