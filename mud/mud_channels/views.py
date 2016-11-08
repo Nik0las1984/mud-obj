@@ -6,11 +6,31 @@ import time
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 import qsstats
+import json
 
 from .models import *
 from core.models import Log
+
+@csrf_exempt
+def add_by_bot(request):
+    msg = 'mudportal.ru: '
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.POST['data'], encoding="utf-8")
+            if not Channel.has_message(data['date'], data['type']):
+                u = User.get_or_create(data['user'])
+                c = Channel.create(data['date'], u, data['text'], data['type'])
+                msg += 'added'
+            else:
+                msg += 'exist'
+        except Exception as e:
+            msg = 'error: %s' % e
+    return JsonResponse({'message': msg}, )
+
 
 def channel(request, o, title, tab_selected = 'all'):
     paginator = Paginator(o.order_by('date'), 50)

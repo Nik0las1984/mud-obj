@@ -12,4 +12,5 @@ urlpatterns = [
     url(ur'^charts/month/', views.charts_month, name='charts_month'),
     url(ur'^charts/3month/', views.charts_3month, name='charts_3month'),
     url(ur'^user/(?P<user>.+)/', views.by_user, name='by_user'),
+    url(r'^add_json/', views.add_by_bot, name='add_by_bot'),
 ]
