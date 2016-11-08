@@ -4,8 +4,10 @@ import re
 import sys
 import time
 
+from threading import Timer
+
 RE_STATUS = re.compile(r'\x1b\[0;32m(\d+)H\x1b\[0;37m \x1b\[0;32m(\d+)M\x1b\[0;37m (\d+)о Зауч:(\d+) (\d+)L (\d+)G Вых:(\S+)>')
-RE_STATUS_NO_GROUPS = re.compile(r'\x1b\[\d;\d\dm\d+H\x1b\[\d;\d\dm \x1b\[\d;\d\dm\d+M\x1b\[\d;\d\dm \d+о Зауч:\d+ \d+L \d+G Вых:\S+>')
+RE_STATUS_NO_GROUPS = re.compile(r'\x1b\[\d;\d\dm\d+H\x1b\[\d;\d\dm \x1b\[\d;\d\dm\d+M\x1b\[\d;\d\dm \d+о Зауч:\d+.*Вых:\S+>')
 
 class MudClient():
     def __init__(self):
@@ -16,7 +18,13 @@ class MudClient():
         self.plugins = []
         self.commands = {}
     
-    def command(self, c):
+    
+    def command(self, c, delay = 0):
+        def cmd():
+            self._command(c)
+        Timer(delay, cmd).start()
+    
+    def _command(self, c):
         if c != '' and c[0] == '#':
             com = c.split(' ')[0][1:].strip()
             if self.commands.has_key(com):

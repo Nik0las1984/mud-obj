@@ -3,8 +3,42 @@
 import re
 import datetime
 import time
+from threading import Timer
+
+#import config as cfg
 
 RE_HOUR = re.compile(r'\x1b\[1;31mМинул час\.\x1b\[0;37m')
+
+class LoginPlugin():
+    RE_SELECT_ONE = re.compile(r'^  5\) UTF\-8')
+    RE_LOGIN = re.compile(r'^\s+Включена поддержка протокола сжатия данных, возьмите клиент ')
+    RE_LOGIN1 = re.compile(r'^\s+Для более подробной игровой информации посетите')
+    RE_PASSWORD = re.compile(r'Персонаж с таким именем уже существует.')
+    RE_EMPTY = re.compile(r'^Последний раз вы заходили к нам')
+    
+    def __init__(self, login, password):
+        self.login = login
+        self.password = password
+    
+    def set_client(self, c):
+        self.client = c
+    
+    def on_line(self, l):
+        #print l
+        if LoginPlugin.RE_SELECT_ONE.match(l):
+            self.client.command('5')
+        if LoginPlugin.RE_LOGIN.match(l) or LoginPlugin.RE_LOGIN1.match(l):
+            self.client.command(self.login)
+            self.client.command(self.password, 1)
+        #if LoginPlugin.RE_PASSWORD.match(l):
+        if LoginPlugin.RE_EMPTY.match(l):
+            self.client.command('')
+    
+    def on_paragraph(self, p):
+        pass
+    
+    #if config.auto_login:
+    #c.login(config.user, config.password)
 
 class HourPlugin():
     def __init__(self):
@@ -87,8 +121,12 @@ class ScreamLogger():
         f.write('%s %s %s\n\n' % (datetime.datetime.now(), m[0], m[1]))
 
 class BoardsLogger():
-    RE_BOARDS = re.compile(r'\d\)[\s]+([\S]+)[\s]+\[[\s]*([\d]+)\|([\d]+)\][\s]+.*')
+    RE_BOARDS = re.compile(r'\s*\d\)[\s]+([\S]+)[\s]+\[\s*(\d+)\|\s*(\d+)\][\s]+.*')
     RE_MESSAGE = re.compile(r'\[([\d]+)\] (\d\d):(\d\d) (\d\d)-(\d\d)-(\d\d\d\d) \(([^\(^\)]+)\) ::([ \S]*)[\r\n.]*')
+    
+    RE_NEW1 = re.compile(r'^Вас ожидают сообщения:')
+    RE_NEW2 = re.compile(r'^Новое сообщение в разделе')
+    
     def __init__(self):
         self.client = None
         self.parse_boards = False
@@ -97,12 +135,15 @@ class BoardsLogger():
         self.boards = {}
         self.message = None
         
+        self.read_new_flag = False
+        
         self.bnames = {
             'veche': ('Вече', 'вече %s'),
             'news': ('Новости', 'новости %s'),
             'ideas': ('Идеи', 'идеи %s'),
             'anons': ('Анонсы', 'анонс %s'),
             #'coder': ('Кодер', 'кодер %s'),
+            'all': ('Все', '')
             }
     
     def update_boards(self):
@@ -133,30 +174,45 @@ class BoardsLogger():
     def on_command(self, c):
         c = c.split()
         if len(c) < 3:
-            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas|coder] num'
+            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas|coder|all] num'
             return None
-        if c[1] not in ['all', 'new', 'single']:
-            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas|coder] num'
+        if c[1] not in ['all', 'new', 'single', 'test']:
+            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas|coder|all] num'
             return None
         if c[2] not in self.bnames.keys():
-            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas|coder] num'
+            print 'Usage: #boards [all|new|single] [veche|news|anons|ideas|coder|all] num'
             return None
-            
+        
+        bns = [c[2],]
+        if c[2] == 'all':
+            bns = ['veche', 'news', 'anons', 'ideas']
+        
+        if c[1] == 'test':
+            print self.update_boards()
+        
         if c[1] == 'single':
-            self.log(c[2], self.read_message(c[2], c[3]))
+            for i in bns:
+                self.log(i, self.read_message(i, c[3]))
         
         if c[1] == 'new':
             b = self.update_boards()
-            cnt = int(b[self.bnames[c[2]][0]][1])
-            for i in range(cnt):
-                self.log(c[2], self.read_message(c[2], ''))
+            for j in bns:
+                cnt = int(b[self.bnames[j][0]][1])
+                for i in range(cnt):
+                    self.log(j, self.read_message(j, ''))
                 
         if c[1] == 'all':
             b = self.update_boards()
-            cnt = int(b[self.bnames[c[2]][0]][2])
-            for i in range(cnt):
-                self.log(c[2], self.read_message(c[2], '%s' % (i + 1)))
+            for j in bns:
+                cnt = int(b[self.bnames[j][0]][1])
+                for i in range(cnt):
+                    self.log(j, self.read_message(j, '%s' % (i + 1)))
     
+    
+    def read_all_new(self):
+        #b = self.update_boards()
+        self.read_new_flag = False
+        self.on_command('#boards new all')
     
     def read_message(self, b, num):
         m = self._read_message(b, num)
@@ -172,9 +228,15 @@ class BoardsLogger():
         return self.message
     
     def on_line(self, l):
-        pass
+        if BoardsLogger.RE_NEW1.match(l) or BoardsLogger.RE_NEW2.match(l):
+            self.read_new_flag = True
+            def t():
+                self.read_all_new()
+            Timer(3, t).start()
+
 
     def on_paragraph(self, p):
+        
         if self.parse_boards:
             l = p.split('\n')
             self.boards = {}
