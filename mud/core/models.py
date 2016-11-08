@@ -109,7 +109,11 @@ class LogId(models.Model):
         if ses:
             q = LogId.objects.filter(pk = ses)
             if q.count() > 0:
-                return q[0]
+                lid = q[0]
+                if request.user.is_authenticated():
+                    lid.user = request.user
+                    lid.save()
+                return lid
         lid.ua = request.META['HTTP_USER_AGENT']
         lid.save()
         if request.user.is_authenticated():
