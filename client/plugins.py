@@ -4,10 +4,79 @@ import re
 import datetime
 import time
 from threading import Timer
+import urllib
 
 #import config as cfg
 
 RE_HOUR = re.compile(r'\x1b\[1;31mМинул час\.\x1b\[0;37m')
+
+
+                                                   
+colour_pattern = re.compile( "\x1b" + #ESC
+                            r"\[" #open square bracket
+                            r"(\d+" #open group, initial digits
+                            r"(?:;\d{1,2})*" #following digits
+                            r")" #close the group
+                             "m" #just an 'm'
+                             )
+
+toremove = set('\000' #NUL
+               '\007' #BEL
+               '\013' #VT
+               '\014') #FF
+
+BS = '\010'
+
+HT = '\011' #AKA '\t' and tab.
+HT_replacement = '    ' #four spaces
+
+
+def clear_string(string):
+    for char in toremove:
+        string = string.replace(char, '')
+    while BS in string:
+        string = string.lstrip(BS)
+        string = re.sub('.' + BS, '', string, 1)
+    line = string.replace(HT, HT_replacement)
+    
+    text = ''
+    prev_end = 0
+    for match in colour_pattern.finditer(line):
+        text += line[prev_end:match.start()]
+        prev_end = match.end()
+        codes = match.group(1)
+
+    if len(line) - 1 > prev_end:
+        text += line[prev_end:]
+    return text
+
+
+class ObjAddPlugin():
+    OBJ_ADD = 'http://mudportal.ru/objects/add_json/'
+    OBJ_URL = 'http://mudportal.ru/objects/obj_json/%s/'
+    
+    RE_OPOZN = re.compile(r'^Вы узнали следующее:')
+    
+    def add_to_mudportal(self, desc):
+        data = urllib.urlencode({'data': desc,})
+        c = urllib.urlopen(ObjAddPlugin.OBJ_ADD, data)
+        print c.read()
+    
+    def __init__(self):
+        pass
+    
+    def set_client(self, c):
+        self.client = c
+    
+    def on_line(self, l):
+        pass
+    
+    def on_paragraph(self, p):
+        for l in p.split('\n'):
+            if ObjAddPlugin.RE_OPOZN.match(l.strip()):
+                self.add_to_mudportal(clear_string(p))
+                return
+
 
 class LoginPlugin():
     RE_SELECT_ONE = re.compile(r'^  5\) UTF\-8')
@@ -36,9 +105,6 @@ class LoginPlugin():
     
     def on_paragraph(self, p):
         pass
-    
-    #if config.auto_login:
-    #c.login(config.user, config.password)
 
 class HourPlugin():
     def __init__(self):
