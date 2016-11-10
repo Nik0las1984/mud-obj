@@ -162,6 +162,20 @@
             color: white;
             background-color: black;
         }
+        
+        .move-comments {
+            background-color: black;
+        }
+        .move-link {
+            background-color: #292929;
+        }
+        .comment.is-highlighted {
+            background-color: #292929;
+        }
+        select
+        {
+            background-color: black;
+        }
 
 
 
