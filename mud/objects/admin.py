@@ -40,6 +40,12 @@ class ExtraPropertyAdmin(admin.ModelAdmin):
     
 admin.site.register(ExtraProperty, ExtraPropertyAdmin)
 
+class NoPropertyAdmin(admin.ModelAdmin):
+    list_display = ['name', 'short_name', ]
+    
+admin.site.register(NoProperty, NoPropertyAdmin)
+
+
 class AffectAdmin(admin.ModelAdmin):
     list_display = ['name', 'short_name', ]
     
