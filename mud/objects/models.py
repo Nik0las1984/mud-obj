@@ -30,6 +30,46 @@ re_capacity = re.compile(ur'^Максимально вместимый вес:\s
 
 NOTHING = u'ничего'
 
+
+colour_pattern = re.compile( "\x1b" + #ESC
+                            r"\[" #open square bracket
+                            r"(\d+" #open group, initial digits
+                            r"(?:;\d{1,2})*" #following digits
+                            r")" #close the group
+                             "m" #just an 'm'
+                             )
+
+toremove = set('\000' #NUL
+               '\007' #BEL
+               '\013' #VT
+               '\014') #FF
+
+BS = '\010'
+
+HT = '\011' #AKA '\t' and tab.
+HT_replacement = '    ' #four spaces
+
+
+def clear_string(string):
+    for char in toremove:
+        string = string.replace(char, '')
+    while BS in string:
+        string = string.lstrip(BS)
+        string = re.sub('.' + BS, '', string, 1)
+    line = string.replace(HT, HT_replacement)
+    
+    text = ''
+    prev_end = 0
+    for match in colour_pattern.finditer(line):
+        text += line[prev_end:match.start()]
+        prev_end = match.end()
+        codes = match.group(1)
+
+    if len(line) - 1 > prev_end:
+        text += line[prev_end:]
+    return text
+
+
 class ObjCharacteristic(models.Model):
     name = models.CharField(max_length = 250)
     short_name = models.CharField(blank = True, null = True, max_length = 250)
@@ -244,6 +284,7 @@ class Object(models.Model):
         
         # Strip html tags. http://stackoverflow.com/questions/753052/strip-html-from-strings-in-python
         b = re.sub(u'<[^<]+?>', '', b)
+        b = clear_string(b)
         return b
     
     @staticmethod
