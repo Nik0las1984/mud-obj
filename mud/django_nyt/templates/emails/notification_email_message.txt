@@ -1,6 +1,6 @@
-{% load i18n %}{% autoescape off %}{% blocktrans with username as username %}Dear {{ username }},{% endblocktrans %}
+{% load i18n %}{% autoescape off %}{% blocktrans with username as username %}Уважаемый {{ username }},{% endblocktrans %}
 
-{% blocktrans with site.name as site %}These are the {{ digest }} notifications from {{ site }}.{% endblocktrans %}
+{% blocktrans with site.name as site %} Для вас есть {{ digest }} обновлений на сайте {{ site }}.{% endblocktrans %}
 {% for n in notifications %}
  * {{ n.message }}
    http://{{ site.domain }}{{n.url}}
