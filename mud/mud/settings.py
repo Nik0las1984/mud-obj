@@ -232,8 +232,9 @@ WIKI_MARKDOWN_KWARGS = {
         'sane_lists',
     ],
 }
-    
-WIKI_IMAGES_PATH = os.path.join(BASE_DIR, 'media/images/%aid/')
+
+
+WIKI_IMAGES_PATH = 'images/%aid/'
 
 
 try:
