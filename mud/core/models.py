@@ -82,6 +82,21 @@ class LogId(models.Model):
         ('MJ12bot', re.compile(r'MJ12bot')),
         ('Baiduspider', re.compile(r'Baiduspider')),
         ('openstat.ru', re.compile(r'openstat.ru')),
+        ('http://ramillion.com', re.compile(r'ramillion.com')),
+        ('webmeup-crawler.com', re.compile(r'webmeup-crawler.com')),
+        ('http://www.uptime.com/uptimebot', re.compile(r'www.uptime.com')),
+        ('Yahoo', re.compile(r'Yahoo')),
+        ('ahrefs.com', re.compile(r'ahrefs.com')),
+        ('StatOnlineRuBot', re.compile(r'StatOnlineRuBot')),
+        ('internetmemory.org', re.compile(r'internetmemory.org')),
+        ('www.linkdex.com', re.compile(r'linkdexbot')),
+        ('www.linkpad.ru', re.compile(r'LinkpadBot')),
+        ('BLEXBot', re.compile(r'BLEXBot')),
+        ('statdom.ru', re.compile(r'statdom.ru')),
+        ('SiteExplorer', re.compile(r'SiteExplorer')),
+        ('Mail.RU_Bot', re.compile(r'Mail.RU_Bot')),
+        ('oBot', re.compile(r'oBot')),
+        
         )
     
     
