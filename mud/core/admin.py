@@ -1,4 +1,8 @@
 from django.contrib import admin
+from djangoseo.admin import register_seo_admin
+from mud.seo import MyMetadata
+
+
 from core.models import *
 
 class CounterAdmin(admin.ModelAdmin):
@@ -29,3 +33,5 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ['title', 'user', 'date', ]
 
 admin.site.register(News, NewsAdmin)
+
+register_seo_admin(admin.site, MyMetadata)

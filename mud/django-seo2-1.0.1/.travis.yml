@@ -1,0 +1,32 @@
+language: python
+
+python:
+  - 3.5
+
+env:
+  - TOX_ENV=lint
+  - TOX_ENV=docs
+  - TOX_ENV=py35-django19
+  - TOX_ENV=py34-django19
+  - TOX_ENV=py27-django19
+  - TOX_ENV=py35-django18
+  - TOX_ENV=py34-django18
+  - TOX_ENV=py33-django18
+  - TOX_ENV=py27-django18
+  - TOX_ENV=py34-django17
+  - TOX_ENV=py33-django17
+  - TOX_ENV=py27-django17
+
+matrix:
+  allow_failures:
+    - env: TOX_ENV=lint
+    - env: TOX_ENV=docs
+
+install:
+  - pip install tox
+
+script:
+  - tox -e $TOX_ENV
+
+after_success:
+  - coveralls

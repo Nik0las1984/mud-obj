@@ -1,11 +1,18 @@
 {% extends "wiki/base.html" %}
 {% load wiki_tags i18n sekizai_tags %}
 {% load nvd3_tags %}
+{% load seo %}
 
-{% block wiki_pagetitle %}{% block title %}МПМ Былины: база данных по предметам{% endblock %}{% endblock %}{% block wiki_site_title %}{% endblock %}
+{% block wiki_pagetitle %}
+    {% get_metadata as my_meta %}
+    {% block title %}{{ my_meta.title.value }}{% endblock %}
+{% endblock %}
+
+{% block wiki_site_title %}{% endblock %}
 
 
 {% block head %}
+
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     {% include_chart_jscss %}
     <script>
@@ -17,8 +24,9 @@
             e.style.display = 'block';
     }
     </script>
-    <meta name="description" content="{% block meta_description %} {% endblock %}" />
-    <meta name="keywords" content="{% block meta_keywords %} {% endblock %}" />
+    {% get_metadata as my_meta %}
+    {{ my_meta.description }}
+    {{ my_meta.keywords }}
 {% endblock %}
 
 

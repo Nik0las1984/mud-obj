@@ -1,0 +1,9 @@
+include .coveragerc
+include AUTHORS
+include LICENSE
+include MANIFEST.in
+include *.rst
+recursive-include docs *
+recursive-include tests *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]

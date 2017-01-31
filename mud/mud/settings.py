@@ -129,6 +129,8 @@ INSTALLED_APPS.extend([
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
+    
+    'djangoseo',
 
 
     'captcha',
@@ -151,6 +153,7 @@ MIDDLEWARE_CLASSES.extend([
 TEMPLATES[0]['OPTIONS']['context_processors'].extend([
     'core.context_processors.counters',
     "sekizai.context_processors.sekizai",
+    'django.core.context_processors.request',
 ])
 
 CACHES.update({
