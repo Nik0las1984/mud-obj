@@ -5,6 +5,7 @@
 if %world.curobjs(38214)% == 0
   mload obj 38214
 end
+
 ~
 #38201
 помер перекраса~
@@ -13,12 +14,13 @@ end
 if %world.curobjs(38215)% == 0
   mload obj 38215
 end
+
 ~
 #38202
 топить печь~
 2 c 0
 топить растопить~
-if !(%arg.contains(печь)%) 
+if !(%arg.contains(печь)%)
   wsend       %actor% Что вы хотите растопить???
   return 0
   halt
@@ -32,6 +34,7 @@ wait 2
 wecho _"Как больно!" - заорал трубочист, осматриваясь в поисках обидчика.
 calcuid pechnikr 38232 room
 detach 38202 %pechnikr.id%
+
 ~
 #38203
 репоп тригеров~
@@ -45,12 +48,13 @@ attach 38204 %stol.id%
 calcuid qstoql 38233 mob
 detach 38207 %qstoql.id%
 attach 38206 %qstoql.id%
+
 ~
 #38204
 двигать стол~
 2 c 0
 двигать двинуть~
-if !(%arg.contains(стол)%) 
+if !(%arg.contains(стол)%)
   wsend %actor% Что вы хотите сдвинуть???
   return 0
   halt
@@ -58,37 +62,39 @@ end
 wsend %actor% Вы пододвинули стол к стене...
 wechoaround %actor% %actor.name% пододвинул%actor.g% стол к стене.
 wait 1
-wdoor 38245 up flags ab
-wdoor 38245 up room 38291 
-wdoor 38045 up name люк
-wdoor 38045 up description люк
-wdoor 38291 down flags ab
-wdoor 38291 down room 38245
-wdoor 38091 down name люк
-wdoor 38091 down description люк
+wdoor   38245 up flags ab
+wdoor   38245 up room  38291
 wecho Стало возможно пройти наверх.
 calcuid stol 38245 room
 detach 38204 %stol.id%
+
 ~
 #38205
 помер волхв~
 0 f 100
 ~
-if (%random.100% < 11)
-  mload obj 549
+if ( %world.curobjs(211)% < 20 ) && ( %random.5% == 1 )
+  mload obj 211
 end
+if (%random.10% == 1)
+  if %random.2% == 1
+    mload obj 549
+  else
+    mload obj 529
+  end
+  
 ~
 #38206
 даем шапку купцу~
 0 j 100
 ~
-if %object.vnum% == 38218 
+if %object.vnum% == 38218
   wait 2s
-  mpurge %object%
+  mpurge шапк
   wait 2s
   say Спасибо. Выручил%actor.g%! Я давно искал свою шапку...
   msend       %actor% _За доброе дело Вы получили 5000 очков опыта...
-  %actor.exp(+5000)%  
+  %actor.exp(+5000)%
   wait 2s
   say В нонешние времена не легко найти хорошего человека.
   wait 2s
@@ -102,10 +108,11 @@ if %object.vnum% == 38218
   attach 38207 %stoql.id%
 end
 else
-say  Зачем мне это? 
+say  Зачем мне это?
 eval getobject %object.name%
 брос %getobject.car%.%getobject.cdr%
 end
+
 ~
 #38207
 гриш помогу купцу~
@@ -128,12 +135,13 @@ say Вот бы мы тебя и отблагодарили.
 жда
 calcuid stoql 38233 mob
 detach 38207 %stoql.id%
+
 ~
 #38208
 развязуем купца~
 0 c 0
 развязать освободить~
-if !(%arg.contains(купец)%) 
+if !(%arg.contains(купец)%)
   msend %actor% Кого Вы хотите освободить???
   return 0
   halt
@@ -144,11 +152,44 @@ mechoaround %actor% %actor.name% развязал%actor.g% купца.
 mecho Купчина очень обрадовался и стал Вас благодарить!
 if %actor.level% > 20
   msend %actor%  За доброе дело Вы получили 80000 очков опыта...
-  %actor.exp(+80000)%  
+  %actor.exp(+80000)%
 end
 say Я пойду, расскажу хозяйке, что Вы меня освободили!!!
 mecho Купчина еще раз поклонился и ушел.
 wait 1
 mpurge %self%
+
 ~
-$~
+#38209
+пент в погребенный город~
+0 m 100
+~
+say My trigger commandlist is not complete!
+wait 1
+if %amount% < 1000
+  mecho Греческий купец пересчитал монеты
+  wait 1s
+  say Да за эту сумму ты сейчас так далеко пойдешь...
+else
+  mecho Купчина из Царьграда начал потирать белыми ручонками.
+  mecho Купчина из Царьграда достал из-под стола странный шар.
+  mecho Купчина из Царьграда дунул на шар.
+end
+mteleport all 56996
+~
+#38210
+Вошли к царьградскому купцу~
+0 h 100
+~
+wait 3
+mecho Придирчиво осмотрев Вас, купец задумался.
+say Слушай, странник, тебя не интересует возможность повидать прекрасный город?
+say Брат есть у меня, живет в городе Помпеи.
+say Так вот, беда у него там стряслась, сходил бы к нему в гости, помог да и город посмотрел?
+say За услуги свои немного возьму - 10 талгатов.
+mecho Купец стукнул себя по лбу ладонью.
+say Другой раз забываю, что я на руси.
+say По-вашему это 1000 кун.
+~
+$
+$

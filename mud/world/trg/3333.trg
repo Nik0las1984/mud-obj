@@ -512,17 +512,11 @@ say Ну хоть что-то...
 wait 1s
 хмур
 say Что стоите?! Марш!!!
-foreach firstchar %actor.group%
-  if (%firstchar.vnum% == -1) && (%firstchar.rentable%) && (%firstchar.realroom% == 333391))
-    mteleport %firstchar% 333300 horse
-    wait 1
-    if %firstchar.realroom% == 333300
-      msend %firstchar% Примерно поняв направление, Вы начали нелегкий путь...
-      wait 15
-      msend %firstchar% ...и через пару лет Вы добрались туда куда Вас послали...
-    end
-  end
-done
+msend %actor% Примерно поняв направление, Вы начали нелегкий путь...
+wait 1
+mteleport all 333300
+wait 15
+msend %actor% ...и через пару лет Вы добрались туда куда Вас послали...
 detach 333372 %self.id%
 detach 333371 %self.id%
 ~

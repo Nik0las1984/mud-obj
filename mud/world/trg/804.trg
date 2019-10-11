@@ -3,14 +3,14 @@
 0 r 100
 ~
 wait 1s
-взд   
+взд
 say Приветствую тебя %actor.iname%!
 дум
 if %quest804%
   halt
 end
 wait 2s
-say Зря ты сюда заш%actor.y%. 
+say Зря ты сюда заш%actor.y%.
 say Гиблое здесь место, проклятое.
 say Детинец тут рядом стоит заброшенный.
 say Давно как его разгромили, а всех защитников смерти тяжкой предали.
@@ -21,7 +21,7 @@ say Да не судьба...
 плак %actor.iname%
 wait 1s
 say Наслал на меня порчу их колдун наиглавнейший!
-say Не могу я теперь к людям, к живым вернуться... не могу. 
+say Не могу я теперь к людям, к живым вернуться... не могу.
 say И смерть меня тоже не берет...
 выть
 *плак %actor.iname%
@@ -30,6 +30,7 @@ say Только так с меня проклятие можно снять.
 say А я уж тебя отблагодарю как смогу.
 wait 2s
 say Поможешь ли ты мне?
+
 ~
 #80401
 Проклятый воин дает квест_2~
@@ -47,7 +48,7 @@ if !%quest804.name%
   wait 1s
   радов
   say Вот и хорошо.
-  say Вот тебе ключ от ворот. 
+  say Вот тебе ключ от ворот.
   say Я его прихватил, когда из детинца бежал.
   mload obj 80426
   give ключ %actor.iname%
@@ -61,11 +62,12 @@ if !%quest804.name%
   say Я уж и пробовал, да только не по силам это мне...
   say Так что %actor.iname%, осторожней там.
   wait 1s
-  проща %actor.iname% 
+  проща %actor.iname%
   calcuid for_mb 80400 mob
   detach 80400 %for_mb.id%
   detach 80401 %for_mb.id%
 end
+
 ~
 #80402
 Проклятый воин принимает квест~
@@ -77,14 +79,14 @@ end
 wait 1s
 say Наконец-то избавился я от этих пут!
 say %actor.iname%, держи свою награду.
-if (( %world.curobjs(591)% < 1 :) && ( %random.4% == 1 :))
+if (( %world.curobjs(591)% < 1 :) && ( %random.4% <= 1 :))
   mload obj 591
-  give all %actor.name% 
+  give all %actor.name%
   say Я даю тебе эту заповедь, и если тебе хватит ума, чтобы понять ее.
   say То ты сможешь всегда вернуть своих близких и любимых...
 elseif (( %world.curobjs(588)% < 1) && ( %random.4% == 1))
   mload obj 588
-  give all %actor.name% 
+  give all %actor.name%
   say Я даю тебе эту летопись, и если тебе хватит ума, чтобы понять ее.
   say То ты сможешь использовать холод себе на пользу...
 else
@@ -103,7 +105,7 @@ mpurge %self%
 2 f 100
 ~
 calcuid for_mb 80400 mob
-rdelete quest804 %for_mb.id%   
+rdelete quest804 %for_mb.id%
 detach 80400 %for_mb.id%
 detach 80401 %for_mb.id%
 detach 80402 %for_mb.id%
@@ -137,7 +139,7 @@ set room2_west no
 set room2_east no
 set room3_west no
 set room3_east no
-eval dungeon 0  
+eval dungeon 0
 foreach %i% 1 2 3 4 5 6
   switch %dungeon%
     case 0
@@ -157,63 +159,64 @@ foreach %i% 1 2 3 4 5 6
     break
     case 80485
       eval dungeon 80486
+  done
+  eval doors no_ok
+  while !(%doors% == ok)
+    switch %random.3%
+      case 1
+        if %room1_west% == no
+          wdoor 80469 w room %dungeon%
+          wdoor 80469 w flags ab
+          wdoor %dungeon% e room 80469
+          wdoor %dungeon% e flags ab
+          eval room1_west yes
+          eval doors ok
+        elseif %room1_east% == no
+          wdoor 80469 e room %dungeon%
+          wdoor 80469 e flags ab
+          wdoor %dungeon% w room 80469
+          wdoor %dungeon% w flags ab
+          eval room1_east yes
+          eval doors ok
+        end
+      break
+      case 2
+        if %room2_west% == no
+          wdoor 80482 w room %dungeon%
+          wdoor 80482 w flags ab
+          wdoor %dungeon% e room 80482
+          wdoor %dungeon% e flags ab
+          eval room2_west yes
+          eval doors ok
+        elseif %room2_east% == no
+          wdoor 80482 e room %dungeon%
+          wdoor 80482 e flags ab
+          wdoor %dungeon% w room 80482
+          wdoor %dungeon% w flags ab
+          eval room2_east yes
+          eval doors ok
+        end
+      break
+      default
+        if %room3_west% == no
+          wdoor 80483 w room %dungeon%
+          wdoor 80483 w flags ab
+          wdoor %dungeon% e room 80483
+          wdoor %dungeon% e flags ab
+          eval room3_west yes
+          eval doors ok
+        elseif %room3_east% == no
+          wdoor 80483 e room %dungeon%
+          wdoor 80483 e flags ab
+          wdoor %dungeon% w room 80483
+          wdoor %dungeon% w flags ab
+          eval room3_east yes
+          eval doors ok
+        end
     done
-    eval doors no_ok
-    while !(%doors% == ok) 
-      switch %random.3%
-        case 1
-          if %room1_west% == no
-            wdoor 80469 w room %dungeon%
-            wdoor 80469 w flags ab
-            wdoor %dungeon% e room 80469
-            wdoor %dungeon% e flags ab
-            eval room1_west yes
-            eval doors ok
-          elseif %room1_east% == no
-            wdoor 80469 e room %dungeon%
-            wdoor 80469 e flags ab 
-            wdoor %dungeon% w room 80469
-            wdoor %dungeon% w flags ab
-            eval room1_east yes
-            eval doors ok
-          end
-        break
-        case 2
-          if %room2_west% == no
-            wdoor 80482 w room %dungeon%
-            wdoor 80482 w flags ab 
-            wdoor %dungeon% e room 80482
-            wdoor %dungeon% e flags ab 
-            eval room2_west yes
-            eval doors ok
-          elseif %room2_east% == no
-            wdoor 80482 e room %dungeon%
-            wdoor 80482 e flags ab 
-            wdoor %dungeon% w room 80482
-            wdoor %dungeon% w flags ab 
-            eval room2_east yes
-            eval doors ok
-          end
-        break
-        default
-          if %room3_west% == no
-            wdoor 80483 w room %dungeon%
-            wdoor 80483 w flags ab
-            wdoor %dungeon% e room 80483
-            wdoor %dungeon% e flags ab
-            eval room3_west yes
-            eval doors ok
-          elseif %room3_east% == no
-            wdoor 80483 e room %dungeon%
-            wdoor 80483 e flags ab
-            wdoor %dungeon% w room 80483
-            wdoor %dungeon% w flags ab
-            eval room3_east yes
-            eval doors ok
-          end
-        done
-      done
-    done
+  done
+done
+
 ~
 #80404
 бой с костяным духом~
@@ -228,6 +231,7 @@ mdamage %actor% 50
 if %random.3% == 2
   cast !лед шторм! %actor.name%
 end
+
 ~
 #80405
 чернокнижник приказывает атаковать~
@@ -245,6 +249,7 @@ if %target%
 else
   приказ все помочь %self.name%
 end
+
 ~
 #80406
 чернокнижник поднимает трупы~
@@ -258,6 +263,7 @@ else
   dg_cast 'ожив труп'  труп
   dg_cast 'поднять труп'  труп
 end
+
 ~
 #80407
 телепортим труп к черноку вероятность 2/5~
@@ -285,6 +291,7 @@ mteleport %self% %target_room%
 mechoaround %necro% Обезображенный ранами труп вдруг выпал из воздуха!
 exec 80406 %necro.id%
 detach 80407 %self.id%
+
 ~
 #80408
 убили слугу чернобога~
@@ -302,6 +309,7 @@ mechoaound %actor% _%actor.name% содрогнулся от боли, услышав сказанное слугой ч
 eval damage %actor.hitp%/3
 *сносим 1/3 жизни
 mdamage %actor% %damage%
+
 ~
 #80409
 триггер нечто (нападаем на кастеров)~
@@ -315,10 +323,11 @@ if %random.100% < 50
   switch %random.2%
     case 1
       cast !sielence! %actor.name%
-      default
-        cast !blind! %actor.name%
-      done
-    end
+    default
+      cast !blind! %actor.name%
+  done
+end
+
 ~
 #80410
 триггер нежити (башим кастеров)~
@@ -332,6 +341,7 @@ if %random.100% < 75
   отступить
   mkill %actor%
 end
+
 ~
 #80411
 вошли к призраку воеводы~
@@ -352,6 +362,7 @@ say Отнял ты у меня и память и волю , но когда-нибудь я все вспомню и освобожусь
 wait 2s
 emot глухо застонал
 emot погрузился в тяжкие раздумия, и перестал обращать внимание на окружающее
+
 ~
 #80412
 сказал "помогу" у священника (выдача вторичного квеста)~
@@ -369,7 +380,7 @@ if %actor.level% < 24
   if %actor.sex% ==  1
     say Ступай, сын мой... Да будет тебе удача в делах добрых.
   else
-    say Ступай, дочь моя... Да будет тебе удача в делах добрых. 
+    say Ступай, дочь моя... Да будет тебе удача в делах добрых.
   end
   emot отвернулся и стал внимательно разглядывать обломки церковной утвари
   halt
@@ -416,85 +427,86 @@ switch %random.3%
     attach 80415 %tun1.id%
     attach 80415 %tun2.id%
     attach 80414 %tun3.id%
-  done
-  *грузим тиуна с обломком 
-  *третий обломок все время лежит в хоромах но ключ от них у тиуна
-  eval room1 80407+%random.26%
-  calcuid tiun %room1% room
-  attach 80417 %tiun.id%
-  exec 80417 %tiun.id%
-  *выбираем отрывок для квеста
-  switch %random.10%
-    case 1
-      set otr1 "Твое, да приидет "
-      set otr2 "Да святится имя"
-      set otr3 "Царствие Твое"
-      set otr Да святится имя Твое, да приидет Царствие Твое
-    break
-    case 2
-      set otr1 "земле, как на небе"
-      set otr2 "Твоя и на "
-      set otr3 "Да будет воля"
-      set otr Да будет воля Твоя и на земле, как на небе
-    break 
-    case 3
-      set otr1 "прощаем должникам нашим"
-      set otr2 "...и прости нам грехи наши,"
-      set otr3 "как и мы "
-      set otr и прости нам грехи наши, как и мы прощаем должникам нашим
-    break
-    case 4
-      set otr1 "искушение, но "
-      set otr2 "...и не введи нас во "
-      set otr3 "избави нас от Лукавого"
-      set otr и не введи нас во искушение, но избави нас от Лукавого
-    break
-    case 5
-      set otr1 "и слава вовеки"
-      set otr2 "Царствие и сила,"
-      set otr3 "Ибо твое есть "
-      set otr Ибо Твое есть Царствие и сила, и слава вовеки
-    break
-    case 6
-      set otr1 "Его враги"
-      set otr2 "Да воскреснет"
-      set otr3 "Бог, и разсеются"
-      set otr Да воскреснет Бог, и разсеются Его враги
-    break
-    case 7
-      set otr1 "Мария, исполненная"
-      set otr2 "благодати Божией, радуйся! "
-      set otr3 "Богородица Дева"
-      set otr Богородица Дева Мария, исполненная благодати Божией, радуйся!
-    break
-    case 8
-      set otr1 "лукавому демону"
-      set otr2 "Не дай воли"
-      set otr3 "завладеть мною"
-      set otr Не дай воли лукавому демону завладеть мною
-    break
-    case 9
-      set otr1 "Святый, приди "
-      set otr2 "безсилие наше"
-      set otr3 "и уврачуй"
-      set otr Святый, приди и уврачуй безсилие наше
-    break
-    default
-      set otr1 "души"
-      set otr2 "и спаси,"
-      set otr3 "Милосердный, наши "
-      set otr и спаси, Милосердный, наши души
-    done
-    set crash 0
-    global crash
-    global otr1
-    global otr2
-    global otr3
-    global otr
-    calcuid warrior 80431 mob
-    remote otr %warrior.id%
-    attach 80418 %self.id% 
-    detach 80412 %self.id%
+done
+*грузим тиуна с обломком
+*третий обломок все время лежит в хоромах но ключ от них у тиуна
+eval room1 80407+%random.26%
+calcuid tiun %room1% room
+attach 80417 %tiun.id%
+exec 80417 %tiun.id%
+*выбираем отрывок для квеста
+switch %random.10%
+  case 1
+    set otr1 "Твое, да приидет "
+    set otr2 "Да святится имя"
+    set otr3 "Царствие Твое"
+    set otr Да святится имя Твое, да приидет Царствие Твое
+  break
+  case 2
+    set otr1 "земле, как на небе"
+    set otr2 "Твоя и на "
+    set otr3 "Да будет воля"
+    set otr Да будет воля Твоя и на земле, как на небе
+  break
+  case 3
+    set otr1 "прощаем должникам нашим"
+    set otr2 "...и прости нам грехи наши,"
+    set otr3 "как и мы "
+    set otr и прости нам грехи наши, как и мы прощаем должникам нашим
+  break
+  case 4
+    set otr1 "искушение, но "
+    set otr2 "...и не введи нас во "
+    set otr3 "избави нас от Лукавого"
+    set otr и не введи нас во искушение, но избави нас от Лукавого
+  break
+  case 5
+    set otr1 "и слава вовеки"
+    set otr2 "Царствие и сила,"
+    set otr3 "Ибо твое есть "
+    set otr Ибо Твое есть Царствие и сила, и слава вовеки
+  break
+  case 6
+    set otr1 "Его враги"
+    set otr2 "Да воскреснет"
+    set otr3 "Бог, и разсеются"
+    set otr Да воскреснет Бог, и разсеются Его враги
+  break
+  case 7
+    set otr1 "Мария, исполненная"
+    set otr2 "благодати Божией, радуйся! "
+    set otr3 "Богородица Дева"
+    set otr Богородица Дева Мария, исполненная благодати Божией, радуйся!
+  break
+  case 8
+    set otr1 "лукавому демону"
+    set otr2 "Не дай воли"
+    set otr3 "завладеть мною"
+    set otr Не дай воли лукавому демону завладеть мною
+  break
+  case 9
+    set otr1 "Святый, приди "
+    set otr2 "безсилие наше"
+    set otr3 "и уврачуй"
+    set otr Святый, приди и уврачуй безсилие наше
+  break
+  default
+    set otr1 "души"
+    set otr2 "и спаси,"
+    set otr3 "Милосердный, наши "
+    set otr и спаси, Милосердный, наши души
+done
+set crash 0
+global crash
+global otr1
+global otr2
+global otr3
+global otr
+calcuid warrior 80431 mob
+remote otr %warrior.id%
+attach 80418 %self.id%
+detach 80412 %self.id%
+
 ~
 #80413
 напали на призрак священника~
@@ -504,6 +516,7 @@ say Да будь ты проклят во веки веков, премерзкий язычник!
 dg_cast 'проклят' %actor.name%
 *народ бывает всякий, может и не догонит без намека, что на язычников только агрит
 detach 80413 %self.id%
+
 ~
 #80414
 разбили бочку с обломком~
@@ -528,6 +541,7 @@ oecho Выпивка растеклась по полу... Варварство!
 oecho Из обломков бочки выпало что-то, блеснувшее золотом.
 oload obj 80433
 opurge %self%
+
 ~
 #80415
 разбили бочку с тварями~
@@ -565,14 +579,16 @@ switch %random.3%
     oload mob 80412
     oload mob 80427
     oload mob 80424
-  done
-  opurge %self%
+done
+opurge %self%
+
 ~
 #80416
 зарезали призрак тиуна~
 0 f 0
 ~
 mload obj 80438
+
 ~
 #80417
 Загрузка призрака тиуна~
@@ -581,6 +597,7 @@ mload obj 80438
 wload mob 80433
 wecho  Призрак тиуна внезапно возник здесь!
 detach 80417 %self.id%
+
 ~
 #80418
 дали обломок священнику~
@@ -598,7 +615,7 @@ switch %crash%
     say Да, это то самое!
     say Что же тут написано....
     wait 1s
-    say Вот, что тут говорится: %otr1% 
+    say Вот, что тут говорится: %otr1%
     say Пожалуй, этого мало...
     mpurge %object%
     halt
@@ -607,7 +624,7 @@ switch %crash%
     say Ты наш%actor.y% еще один?
     say Прекрасно...
     wait 1s
-    say Дай-ка прочесть... : %otr2% 
+    say Дай-ка прочесть... : %otr2%
     say Нет... нужно еще хотя бы один
     mpurge %object%
     halt
@@ -621,8 +638,9 @@ switch %crash%
     say Но как все это вместе сложить? Не помню я... Может ты подскажешь?
     attach 80419 %self.id%
     mpurge %object%
-  done
-  detach 80418 %self.id%
+done
+detach 80418 %self.id%
+
 ~
 #80419
 сказали отрывок священнику~
@@ -632,7 +650,7 @@ if (%actor.religion% == 0) || !(%actor.vnum% == -1)
   halt
 end
 if %speech% == %otr%
-  say Да! именно так... 
+  say Да! именно так...
   wait 4
   emot умиротворенно улыбнулся
   say %otr%
@@ -654,6 +672,7 @@ else
     emot тяжело задумался
   end
 end
+
 ~
 #80420
 сказали отрывок воеводе~
@@ -667,7 +686,7 @@ if %speech% == %otr%
   detach 80411 %self.id%
   wait 2s
   emot недоуменно посмотрел на Вас
-  say ?... 
+  say ?...
   wait 4
   emot внезапно встрепянулся и выпрямился, расправляя сведенные плечи
   wait 1s
@@ -676,13 +695,14 @@ if %speech% == %otr%
   улы
   emot опустился на колени и горячечно зашептал молитву
   wait 5
-  emot осветился исходящим с незримых небес светом и медленно истаял в воздухе..   
+  emot осветился исходящим с незримых небес светом и медленно истаял в воздухе..
   if %actor.level% > 24
     msend %actor% _За это доброе дело Вы получили 80000 очков опыта.
-    %actor.exp(+90000)%  
+    %actor.exp(+90000)%
   end
   mpurge %self%
 end
+
 ~
 #80421
 убили огненный морок~
@@ -691,6 +711,7 @@ end
 if (%random.5% == 2) && (%world.curobjs(80430)% < 7)
   mload obj 80430
 end
+
 ~
 #80422
 убили ледяной морок~
@@ -699,6 +720,7 @@ end
 if (%random.5% == 2) && (%world.curobjs(80429)% < 7)
   mload obj 80429
 end
+
 ~
 #80423
 убили созидателя~
@@ -709,6 +731,7 @@ calcuid dark 80400 mob
 attach 80402 %dark.id%
 makeuid Killer %actor.id%
 remote Killer %dark.id%
+
 ~
 #80424
 отперли сундук в сокровищнице~
@@ -720,6 +743,7 @@ calcuid key 80439 obj
 exec 80426 %key.id%
 osend %actor% _От вашего неловкого движения серебряный ключ переломился пополом.
 oechoaround %actor% _%actor.name% неловко повернул%actor.g% ключ, и тот сломался пополам... Растяпа!
+
 ~
 #80425
 повернули светильник ~
@@ -727,7 +751,7 @@ oechoaround %actor% _%actor.name% неловко повернул%actor.g% ключ, и тот сломался
 повернуть~
 if !(%actor.vnum% == -1)
   halt
-end           
+end
 if !%arg.contains(светильник)%
   osend %actor% _Что вы желаете повернуть?
   halt
@@ -735,23 +759,26 @@ end
 osend %actor% Вы взялись выкручивать светильник из стены... Интересно - что сейчас будет?
 oechoaround %actor% _%actor.name% повернул%actor.g% торчащий из стены светильник и стал%actor.g% дожидаться результата.
 osend %actor%  Внезапно пол под Вами провалился и Вы полетели куда-то в темноту!
-oechoaround %actor%  Внезапно пол под %actor.tname% провалился и он%actor.g% с диким воплем исчез из виду.                 
+oechoaround %actor%  Внезапно пол под %actor.tname% провалился и он%actor.g% с диким воплем исчез из виду.
 oteleport %actor% 80404
+
 ~
 #80426
 пуржим ключ~
 1 z 0
 ~
 opurge %self%
+
 ~
 #80427
 бой с созидателем (99%)~
 0 l 100
 ~
 mecho _%self.iname% взмахнул полами своего плаща, и они заслонили весь свет!
-dg_cast 'dark' %self.name%  
+dg_cast 'dark' %self.name%
 attach 80432 %self.id%
 detach 80427 %self.id%
+
 ~
 #80428
 выгоняем нечиcть из темницы~
@@ -763,6 +790,7 @@ if (%temn.west% == west)
 else
   east
 end
+
 ~
 #80429
 запуск триггера 80428 и 80430~
@@ -774,7 +802,7 @@ if %exist.mob(80418)%
 end
 if %exist.mob(80421)%
   calcuid nechto2 80421 mob
-  exec 80428 %nechto2.id%   
+  exec 80428 %nechto2.id%
 end
 if %exist.mob(80434)%
   calcuid fire 80434 mob
@@ -784,6 +812,7 @@ if %exist.mob(80438)%
   calcuid fire2 80438 mob
   exec 80430 %fire2.id%
 end
+
 ~
 #80430
 ловушка с огненным вихрем~
@@ -810,6 +839,7 @@ while %secondchar%
   mdamage %firstchar% 200
 done
 mpurge %self%
+
 ~
 #80431
 ловушка с грудой костей~
@@ -822,6 +852,7 @@ oecho _Костяной дух возник на ваших глазах.
 eval target %random.pc%
 oforce костяной.дух kill %target.name%
 opurge %self%
+
 ~
 #80432
 бой с созидателем (50%)~
@@ -829,7 +860,7 @@ opurge %self%
 ~
 mecho _Созидатель тьмы взревел: "Ко мне, силы тьмы и безумия! Помогите своему хозяину!!!"
 wait 1s
-mecho _Тьма в комнате забурлила, потекла потоками.... 
+mecho _Тьма в комнате забурлила, потекла потоками....
 mecho _Черные тени вдруг зашевелились, обретая форму, и кинулись на Вас!
 mload mob 80436
 mload mob 80427
@@ -837,6 +868,7 @@ mecho  Несколько страшных призраков вынырнуло из темноты!
 mload mob 80437
 mload mob 80437
 detach 80432 %self.id%
+
 ~
 #80433
 в бою с вурдалаком~
@@ -853,16 +885,18 @@ mechoaround %meat% _Вурдалак выпил крови %meat.rname% и его раны мгновенно затян
 eval blood %random.200%
 mdamage %meat% %blood%
 %self.hitp(+%blood%)%
+
 ~
 #80434
 делит мобов из погреба и лоад бочек~
 2 f 100
 ~
 *удяляем всех тварей, загруженых по триггеру и грузим бочки
-wpurge 
+wpurge
 wload obj 80434
 wload obj 80435
 wload obj 80436
+
 ~
 #80435
 убили созидателя~
@@ -877,6 +911,7 @@ end
 calcuid dark 80401 mob
 attach 80402 %dark.id%
 remote Killer %dark.id%
+
 ~
 #80436
 Убили последнего вурдалака~
@@ -885,5 +920,7 @@ remote Killer %dark.id%
 if (%world.curmobs(80402)% <= 1)
   mload obj 80450
 end
+
 ~
-$~
+$
+$

@@ -7,13 +7,14 @@ if %exist.mob(96319)%
   eval victim %random.pc%
   %echo% Неожиданно откуда-то сверху послышались громкие хлопки.
   %echo% Из-за ветвей показался громадный ястреб, летящий прямо на Вас!
-  %send% %victim% Сделав резкий поворот ястреб ухватил Вас своими острыми шпорамии вновь взмыл вверх! 
+  %send% %victim% Сделав резкий поворот ястреб ухватил Вас своими острыми шпорамии вновь взмыл вверх!
   %echoaround% %victim% Сделав резкий поворот ястреб ухватил %victim.vname% своими острыми шпорамии вновь взмыл вверх!
   wait 1
   %send% %victim% Спустя пару минут ястреб разжал когти и вы кубарем скатились в гнездо.
   %teleport% %victim% 96388
   detach 96300 %self.id%
 end
+
 ~
 #96301
 Ястреб видит как кто-то заходит в пенту~
@@ -21,6 +22,7 @@ end
 пентаграммы.~
 wait 1s
 к !суд бог!
+
 ~
 #96302
 Червь глотает~
@@ -36,6 +38,7 @@ if (%random.100% <= 51)
   mechoaround %victim% Неудачно споткнувшись, %victim.name% угодил прямо в пасть меланхолично ползущего червя!
   mteleport %victim% 96391
 end
+
 ~
 #96303
 Убили червя~
@@ -52,31 +55,33 @@ done
 if %random.10% <= 3
   %load% obj 96316
 end
+
 ~
 #96304
 Гризачка клонируется~
 0 v 1
 ~
-if (%world.curmobs(96313)% < 1) 
+if (%world.curmobs(96313)% < 1)
   mecho Гризачка прикрыла глаза и прошептала : 'пусть будет много меня'.
   mecho Гризачка раздвоилась !
   mload mob 96313
 end
-if (%world.curmobs(96314)% < 1) 
+if (%world.curmobs(96314)% < 1)
   mecho Гризачка прикрыла глаза и прошептала : 'пусть будет много меня'.
   mecho Гризачка раздвоилась !
   mload mob 96314
-end 
-if (%world.curmobs(96315)% < 1) 
+end
+if (%world.curmobs(96315)% < 1)
   mecho Гризачка прикрыла глаза и прошептала : 'пусть будет много меня'.
   mecho Гризачка раздвоилась !
   mload mob 96315
 end
-if (%world.curmobs(96328)% < 1) 
+if (%world.curmobs(96328)% < 1)
   mecho Гризачка прикрыла глаза и прошептала : 'пусть будет много меня'.
   mecho Гризачка раздвоилась !
   mload mob 96328
 end
+
 ~
 #96305
 Лезем из червя~
@@ -100,6 +105,7 @@ if ((%random.100% < 90) && %exist.mob(96311)%)
 end
 wsend %actor% Наконец-то вы выбрались наружу! Но в каком виде...
 wteleport %actor% 96303
+
 ~
 #96306
 Велет скидывает чара на уровень ниже~
@@ -112,9 +118,10 @@ if (%random.100% <= 15)
   mechoaround %actor% Не удержав равновесия, %actor.name% начал неумолимо падать вниз!
   mteleport %actor% 96322
   wait 1
-  mdamage %actor% 100 
+  mdamage %actor% 100
   msend %actor% К счастью, Вы упали на ветку уровнем ниже, отделавшись лишь парой ссадин.
 end
+
 ~
 #96307
 Рип одной из сестер (лоад стафа)~
@@ -126,12 +133,13 @@ if (%rnd% < 10) && (%world.curobjs(96302)% < 5)
 elseif  (%rnd% < 20) && (%world.curobjs(96303)% < 5)
   mload obj 96303
 elseif (%rnd% < 30)  && (%world.curobjs(96304)% < 5)
-  mload obj 96304 
+  mload obj 96304
 elseif (%rnd% < 40) && (%world.curobjs(96312)% < 5)
   mload obj 96312
 elseif (%rnd% < 50) && (%world.curobjs(96313)% < 5)
   mload obj 96313
 end
+
 ~
 #96308
 Рип муравья~
@@ -140,6 +148,7 @@ end
 if (%random.100% <= 7) && (%world.curobjs(96308)% < %world.maxobj(96308)%)
   mload obj 96308
 end
+
 ~
 #96309
 Отражения заклов в чара у ведого~
@@ -151,6 +160,7 @@ if (%actor.vnum% == -1)
 else
   dg_cast '%castname%' %actor.name%
 end
+
 ~
 #96310
 Лякливица сумонит духов~
@@ -161,6 +171,7 @@ if %random.20% < 15
   mecho Мелкий дух медленно появился из пустоты.
   mload mob 96331
 end
+
 ~
 #96311
 Хил Ломоты~
@@ -172,6 +183,7 @@ if %exist.mob(96334)% && %exist.mob(96301)%
   %force% %abc% к 'исц' ломота
   %force% %abc% запад
 end
+
 ~
 #96312
 Раздвоение Черевухи~
@@ -185,6 +197,7 @@ if %castname% == камнепад
   %echo% Яркая вспышка разорвала Черевуху пополам! Но ей все нипочем!
   %load% mob 96335
 end
+
 ~
 #96313
 Коркуша орет~
@@ -197,6 +210,7 @@ if %random.20% < 3
     %victim.wait(3)%
   done
 end
+
 ~
 #96314
 Репоп зоны~
@@ -204,6 +218,7 @@ end
 ~
 wdoor 96300 north purge
 wdoor 96303 south purge
+
 ~
 #96315
 Входим к Велесу~
@@ -242,6 +257,7 @@ attach 96319 %voron.id%
 calcuid voron2 96558 room
 attach 96321 %voron2.id%
 detach 96315 %self.id%
+
 ~
 #96316
 Играем на свирели~
@@ -295,6 +311,7 @@ if (%moonanimal.realroom% != %actor.realroom%)
   oecho Лунный зверь со свистом причался откуда-то, и подлетел к вам.
   oteleport %moonanimal% %actor.realroom%
 end
+
 ~
 #96317
 Людница призывает зверя~
@@ -310,6 +327,7 @@ calcuid abc 96338 mob
 %force% %abc% пом людница
 detach 96317 %self.id%
 end
+
 ~
 #96318
 Читаем книжку~
@@ -338,6 +356,7 @@ if %actor.class% == 3
 else
   %send% %actor% Какие-то совершенно не интересные Вам записки.
 end
+
 ~
 #96319
 Ворон телепортит в след зону~
@@ -345,8 +364,9 @@ end
 ~
 wait 1s
 %echo% Ворон недовольно поглядел на Вас.
-%echo% Ворон сказал : 'Кар-р-р-р-р-р!' 
+%echo% Ворон сказал : 'Кар-р-р-р-р-р!'
 %portal% 96558 1
+
 ~
 #96320
 Репоп зоны~
@@ -356,6 +376,7 @@ calcuid voron 96339 room
 detach 96319 %voron.id%
 calcuid voron2 96558 room
 detach 96321 %voron2.id%
+
 ~
 #96321
 Ворон телепортит назад~
@@ -363,8 +384,9 @@ detach 96321 %voron2.id%
 ~
 wait 1s
 %echo% Ворон недовольно поглядел на Вас.
-%echo% Ворон сказал : 'Кар-р-р-р-р-р!' 
+%echo% Ворон сказал : 'Кар-р-р-р-р-р!'
 %portal% 96339 1
+
 ~
 #96322
 Даем Гунгнир Велесу~
@@ -403,6 +425,7 @@ else
     брос стату
   end
 end
+
 ~
 #96323
 Одеваем ведых при лоаде~
@@ -411,7 +434,7 @@ end
 eval rnd %random.50%
 if (%rnd% < 10) && (%world.curobjs(96301)% < 5)
   mload obj 96301
-elseif (%rnd% < 20) && (%world.curobjs(96309)% < 5)
+elseif (%rnd% < 50) && (%world.curobjs(96309)% < 5)
   mload obj 96309
 elseif (%rnd% < 30) && (%world.curobjs(96310)% < 5)
   mload obj 96310
@@ -430,6 +453,7 @@ end
 if %self.vnum% == 96324
   след лап.древ
 end
+
 ~
 #96325
 даем ворону глазики~
@@ -451,5 +475,7 @@ if (%object.vnum%==753)
   г Кар-р-р-р-р-р-р!
   detach 96325 %self.id%
 end
+
 ~
-$~
+$
+$

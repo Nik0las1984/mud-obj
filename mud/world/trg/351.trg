@@ -5,7 +5,7 @@
 if (!(%exist.mob(35110)%) && !(%exist.mob(3511)%) && !(%exist.mob(35112)%))
   halt
 end
-if !(%exist.mob(35103)%) 
+if !(%exist.mob(35103)%)
   halt
 end
 улыб %actor.name%
@@ -14,6 +14,7 @@ msend %actor% - Нечасто бывают у меня здесь гости.
 msend %actor% - Могу ли я рассчитывать на твои услуги в важном деле?
 attach 35103 %self.id%
 detach 35100 %self.id%
+
 ~
 #35101
 портал из капища к Пуду~
@@ -21,6 +22,7 @@ detach 35100 %self.id%
 ~
 wportal 35184 2
 detach 35101 %self.id%
+
 ~
 #35102
 убит идол~
@@ -32,6 +34,7 @@ if ((%world.curobss(553)% < 1) && (%random.100% < 10))
   *книга "звуковая волна"
   *mload obj 553
 end
+
 ~
 #35103
 персонаж говорит да~
@@ -42,7 +45,7 @@ if !(%exist.mob(35103)%)
 end
 say - В нашем пристанище стали проявляться разные нехристи...
 say - Я думаю что это проделки язычников, которые уже несколько раз
-say - пытались выжить нас с этой благодатной земли, завоеванной 
+say - пытались выжить нас с этой благодатной земли, завоеванной
 say - нашими пращурами.
 wait 1s
 say - Недавно несколько язычников сумели даже пробраться
@@ -52,13 +55,14 @@ say - кознями и склонился к язычеству.
 say - Попытайся разузнать что-нибудь об этом, да смотри - крови зря не проливай!
 attach 35109 %self.id%
 detach 35103 %self.id%
+
 ~
 #35104
 оплата квеста~
 0 j 100
 *~
 wait 1s
-if (%object.vnum%==35102) 
+if (%object.vnum%==35102)
   wait 1
   mpurge %object%
   if (%actor.sex% == 1)
@@ -69,7 +73,7 @@ if (%object.vnum%==35102)
     msend %actor% Пуд Волкорез ласково погладил Вас по волосам.
   else
     msend %actor% - Спасибо тебе, %actor.name% , помог ты лесомыкам своим делом.
-  end     
+  end
   wechoaround %actor% Пуд Волкорез поблагодарил %actor.rname%.
   switch %actor.class%
     * лекарь
@@ -82,12 +86,22 @@ if (%object.vnum%==35102)
         дать 3000 кун %actor.name%
       end
     break
+    * колдун
+    case 1
+      if (%random.10% <= 5)
+        mload obj 35107
+        дать кого.веле %actor.name%
+      else
+        %self.gold(+3000)%
+        дать 3000 кун %actor.name%
+      end
+    break
     * вор
     case 2
       if (%world.curobjs(35109)% < 10) && (%random.10% <= 5)
         mload obj 35109
         дать ржа.заточ %actor.name%
-      elseif (%world.curobjs(35110)% < 7) && (%random.10% <= 2)
+      elseif (%world.curobjs(35110)% < 7) && (%random.10% <= 5)
         mload obj 35110
         дать остр.заточ %actor.name%
       else
@@ -110,7 +124,7 @@ if (%object.vnum%==35102)
       if (%world.curobjs(35109)% < 10) && (%random.10% <= 5)
         mload obj 35109
         дать ржа.заточ %actor.name%
-      elseif (%world.curobjs(35110)% < 7) && (%random.10% <= 2)
+      elseif (%world.curobjs(35110)% < 7) && (%random.10% <= 5)
         mload obj 35110
         дать остр.заточ %actor.name%
       else
@@ -123,12 +137,32 @@ if (%object.vnum%==35102)
       if (%world.curobjs(35105)% < 15) && (%random.10% <= 1)
         mload obj 35105
         дать был.щит %actor.name%
-      elseif (%world.curobjs(35106)% < 10) && (%random.10% <= 3)
+      elseif (%world.curobjs(35106)% < 10) && (%random.10% <= 5)
         mload obj 35106
         дать кистень %actor.name%
       else
         %self.gold(+1500)%
         дать 1500 кун %actor.name%
+      end
+    break
+    * волшебник
+    case 7
+      if (%random.10% <= 5)
+        mload obj 35107
+        дать кого.веле %actor.name%
+      else
+        %self.gold(+3000)%
+        дать 3000 кун %actor.name%
+      end
+    break
+    * Чернокнижник
+    case 8
+      if (%world.curobjs(35114)% < 5) && (%random.10% <= 5)
+        mload obj 35114
+        дать амул.хел %actor.name%
+      else
+        %self.gold(+3000)%
+        дать 3000 кун %actor.name%
       end
     break
     * витязь
@@ -142,6 +176,16 @@ if (%object.vnum%==35102)
       else
         %self.gold(+1500)%
         дать 1500 кун %actor.name%
+      end
+    break
+    * охотник
+    case 10
+      if (%world.curobjs(35101)% < 5) && (%random.10% <= 5)
+        mload obj 35101
+        дать дре.лук %actor.name%
+      else
+        %self.gold(+3000)%
+        дать 3000 кун %actor.name%
       end
     break
     default
@@ -158,6 +202,7 @@ end
 if ((%random.100% < 10 ) && (%world.curobjs(35112)% < 3))
   mload obj 35112
 end
+
 ~
 #35107
 репоп зоны Пристанище лесомык~
@@ -183,6 +228,7 @@ detach 35104 %pud.id%
 detach 35109 %pud.id%
 detach 35110 %pud.id%
 attach 35100 %pud.id%
+
 ~
 #35108
 лоад амулета~
@@ -191,6 +237,7 @@ attach 35100 %pud.id%
 mjunk all
 mload obj 35111
 detach 35108 %self.id%
+
 ~
 #35109
 волкорезу сдали амулет~
@@ -238,6 +285,7 @@ set questor %actor%
 global questor
 attach 35110 %self.id%
 detach 35109 %self.id%
+
 ~
 #35110
 волкорез отсылает на капище~
@@ -251,12 +299,14 @@ say Когда захочешь вернуться - просто брось его наземь.
 give questitem351 .%questor.name%
 attach 35104 %self.id%
 detach 35110 %self.id%
+
 ~
 #35111
 портал от Пуда на капище~
 2 z 0
 ~
 wportal 35193 2
+
 ~
 #35112
 бросили амулет на капище~
@@ -275,5 +325,7 @@ attach 35101 %selfroom.id%
 exec 35101 %selfroom.id%
 wait 1
 %purge% %self%
+
 ~
-$~
+$
+$

@@ -142,6 +142,11 @@ switch %object.vnum%
       msend %actor% Старик дал небольшую кучку кун.
       %actor.gold(+1000)%
     end
+    if (%random.4% <= 2)
+      mload obj 418
+      дать книг %actor.name%
+      say Есть у меня книга с рецептами самых вкусных блюд, теперь она твоя.
+    end
     detach 77307 %self.id%
   break
   default

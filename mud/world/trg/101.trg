@@ -11,10 +11,10 @@ end
 if (%world.curobjs(10108)% < 10) && (%random.1000% <= 50)
   mload obj 10108
 end
-if (%world.curobjs(558)% == 0) && (%random.1000% <= 50)
+if (%world.curobjs(558)% == 0) && (%random.5% <= 1)
   mload obj 558
 end
-if (%world.curobjs(529)% == 0) && (%random.1000% <= 50)
+if (%world.curobjs(529)% == 0) && (%random.5% <= 1)
   mload obj 529
 end
 ~
@@ -156,7 +156,7 @@ end
 wait 1s
 if !%self.fighting%
   mecho - Спасибо, что освободил%actor.g% меня, %actor.name%.
-  if (%world.curobjs(534)% < 10) && (%random.100% <= 25)
+  if (%world.curobjs(534)% < 10) && (%random.4% <= 1)
     mload obj 534
     mecho - Я хотел ее продать, но пусть это будет твоей наградой.
     give книг %actor.name%

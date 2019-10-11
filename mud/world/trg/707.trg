@@ -21,12 +21,14 @@ say Скучно мне тут сидеть.
 say Помоги мне пробить выход - я тебе последние капли меда отдам,
 attach 70706 %self.id%
 detach 70700 %self.id%
+
 ~
 #70701
 пояснения2~
 0  0
 ~
 *
+
 ~
 #70702
 зашли к скальду~
@@ -34,6 +36,7 @@ detach 70700 %self.id%
 ~
 wait 2s
 say Приветствую тебя, путник, хочешь послушать одну старую историю?
+
 ~
 #70703
 слушаем  скальда~
@@ -102,6 +105,7 @@ say Не хочешь послушать как достался тот мед асам?
 attach 70704 %self.id%
 detach 70702 %self.id%
 detach 70703 %self.id%
+
 ~
 #70704
 продолжение истории~
@@ -187,6 +191,7 @@ wait 2s
 say Ну как? Согласен отправиться за ним?
 attach 70705 %self.id%
 detach 70704 %self.id%
+
 ~
 #70705
 отправляемся квестить~
@@ -199,6 +204,7 @@ mteleport all 70721
 wait 2s
 mat %actor.realroom% mecho Вы очутились около незнакомых скал!
 detach 70705 %self.id%
+
 ~
 #70706
 согласилася помочь  гуннлед~
@@ -217,6 +223,7 @@ say Зарабатывай свой мед.
 calcuid rum %self.realroom% room
 attach 70709 %rum.id%
 detach 70706 %self.id%
+
 ~
 #70707
 гуннлед гневается~
@@ -228,6 +235,7 @@ dg_cast 'исцеление'
 mkill %hero%
 wait 2s
 detach 70707 %self.id%
+
 ~
 #70708
 гуннлед в  бою~
@@ -240,6 +248,7 @@ if %random.5% == 1
   exec 70707 %self.id%
   detach 70708 %self.id%
 end
+
 ~
 #70709
 долбим  скалу~
@@ -304,6 +313,7 @@ end
 %actor.wait(3)%
 eval num %num% + %plus%
 remote num %self.id%
+
 ~
 #70710
 взяли мед~
@@ -329,6 +339,7 @@ else
     exec 70716 %troom.id%
   end
 end
+
 ~
 #70711
 дали каплю скальду~
@@ -339,61 +350,61 @@ set i  0
 %actor.wait(2)%
 switch %object.vnum%
   case 70705
-    case 70716
-      case 70717
-        calcuid ca1 70705 obj
-        calcuid ca2 70716 obj
-        calcuid ca3 70717 obj
-        wait 1s
-        mecho %self.name% внимательно оглядел каплю меда.
-        if (( %ca1.carried_by% == %ca2.carried_by% ) && ( %ca1.carried_by% == %ca3.carried_by% ))
-          set i 1
-        else
-          say И правда мед поэзии, значит я был прав, а где остальные капли ?
-        end
-      break
-      case 70704
-        mecho %self.name% Внимательно оглядел каплю меда.
-        say Где ты ее взял%actor.g% %actor.name%?
-        wait 1s
-        say Подобрал где нибудь на стороне и за мед поэзии хочешь выдать ?
-        say С обманщиками я и разговаривать не буду!
-        mecho %self.name% взмахнул рукой исчез!
-        wait 1s
-        mpurge %self%
-      break
-      default
-        say Это по-твоему похоже на мед ?
-        хих
-        return 0
-      break
-    done
-    if !%i%
-      halt
-    end
-    mpurge %ca1%
-    mpurge %ca2%
-    mpurge %ca3%
-    say Я обещал тебя наградить?
+  case 70716
+  case 70717
+    calcuid ca1 70705 obj
+    calcuid ca2 70716 obj
+    calcuid ca3 70717 obj
     wait 1s
-    осм %actor.name%
-    wait 1s
-    * а так можно и руны  и книги и скиллы  тут  положить :-)
-    * сеты убраны
-    if ( %random.100% <= 15 )
-      mload obj 579
-      say Вот эту шкатулку со словами взял я у одного черного жреца, из тех, что молятся кресту.
-      say Мне в ней нет проку - возьми, коли хочешь.
-      give книг .%actor.name%
-    elseif %actor.level% > 18
-      wait 1s
-      msend %actor% За доброе деяние вы получили 300000 очков опыта!
-      %actor.exp(+300000)%
+    mecho %self.name% внимательно оглядел каплю меда.
+    if (( %ca1.carried_by% == %ca2.carried_by% ) && ( %ca1.carried_by% == %ca3.carried_by% ))
+      set i 1
     else
-      %self.gold(+12000)%
-      дать 12000 кун %actor.name%
+      say И правда мед поэзии, значит я был прав, а где остальные капли ?
     end
-    detach 70711 %self.id%
+  break
+  case 70704
+    mecho %self.name% Внимательно оглядел каплю меда.
+    say Где ты ее взял%actor.g% %actor.name%?
+    wait 1s
+    say Подобрал где нибудь на стороне и за мед поэзии хочешь выдать ?
+    say С обманщиками я и разговаривать не буду!
+    mecho %self.name% взмахнул рукой исчез!
+    wait 1s
+    mpurge %self%
+  break
+  default
+    say Это по-твоему похоже на мед ?
+    хих
+    return 0
+  break
+done
+if !%i%
+  halt
+end
+mpurge %ca1%
+mpurge %ca2%
+mpurge %ca3%
+say Я обещал тебя наградить?
+wait 1s
+осм %actor.name%
+wait 1s
+* а так можно и руны  и книги и скиллы  тут  положить :-)
+* сеты убраны
+if ( %random.2% <= 1 )
+  mload obj 579
+  say Вот эту шкатулку со словами взял я у одного черного жреца, из тех, что молятся кресту.
+  say Мне в ней нет проку - возьми, коли хочешь.
+  give книг .%actor.name%
+elseif %actor.level% > 18
+  wait 1s
+  msend %actor% За доброе деяние вы получили 300000 очков опыта!
+  %actor.exp(+300000)%
+else
+  %self.gold(+12000)%
+  дать 12000 кун %actor.name%
+end
+detach 70711 %self.id%
 ~
 #70712
 последняя  стенка~
@@ -423,6 +434,7 @@ wait 1s
 wecho Вы услышали грохот падающих камней,
 wecho заваливших прорубленный с таким трудом выход.
 detach 70712 %self.id%
+
 ~
 #70713
 долбим  скалу -2~
@@ -488,6 +500,7 @@ end
 %actor.wait(3)%
 eval num %num% + %plus%
 remote num %self.id%
+
 ~
 #70714
 репоп первого прохода~
@@ -496,6 +509,7 @@ remote num %self.id%
 wdoor 70749 east purge
 wdoor 70750 west purge
 detach 70714  %self.id%
+
 ~
 #70715
 репоп первого прохода~
@@ -504,6 +518,7 @@ detach 70714  %self.id%
 wdoor 70752 east purge
 wdoor 70756 west purge
 detach 70715  %self.id%
+
 ~
 #70716
 телепорт к скальду~
@@ -517,5 +532,7 @@ if (%exist.mob(70703)%)
   wteleport all %skald.realroom%
 end
 detach 70716 %self.id%
+
 ~
-$~
+$
+$

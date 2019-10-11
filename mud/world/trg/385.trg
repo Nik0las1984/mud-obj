@@ -17,6 +17,7 @@ else
   oload mob 38509
 end
 opurge  %self%
+
 ~
 #38501
 ломаем амфору 38508~
@@ -43,6 +44,7 @@ else
   oload mob 38510
 end
 opurge  %self%
+
 ~
 #38502
 очистка  зоны после смерти  чернока и быстрый репоп~
@@ -51,13 +53,13 @@ opurge  %self%
 set fmob 38502
 while %fmob% < 38535
   set i %world.curmobs(%fmob%)%
-  while %i% > 0  
+  while %i% > 0
     calcuid pm %fmob% mob %i%
     exec 38517 %pm%
     eval i %i%-1
   done
   eval fmob %fmob%+1
-done    
+done
 wait 3t
 if %world.curmobs(38511)%
   halt
@@ -66,6 +68,7 @@ wait 5t
 if !%world.curmobs(38511)%
   %world.zreset(385)%
 end
+
 ~
 #38503
 подходят к драконам ~
@@ -82,6 +85,7 @@ if %actor.class% == 8
     say Рад видеть тебя, Хозяин.
   end
 end
+
 ~
 #38504
 подходят к безголовому~
@@ -98,6 +102,7 @@ else
   поклон %actor%.
 end
 end
+
 ~
 #38505
 лоад мобов бывшей 386-й зоны~
@@ -109,25 +114,25 @@ if !%world.curmobs(38511)%
 end
 set i 0
 set j %random.7%
-switch %random.8%  
+switch %random.8%
   case 1
     set vnum 38527
   break
   case 2
     set vnum 38528
-  break         
+  break
   case 3
     set vnum 38529
   break
   case 4
     set vnum 38534
-  break 
-  default         
+  break
+  default
     set vnum 38534
     set i 10
   break
-done       
-foreach mogila 38512 38515 38523 38527 38531 38536 38553   
+done
+foreach mogila 38512 38515 38523 38527 38531 38536 38553
   if %world.curmobs(%vnum%)% > 2
   break
 end
@@ -136,28 +141,28 @@ if %i% == %j%
   wload mob %vnum%
   wdoor 38597 up room %mogila%
   wforce моб_385 вст
-  wforce моб_385 вверх  
+  wforce моб_385 вверх
   wait 1s
   wdoor 38597 up purge
 end
 done
 wait 3s
-switch %random.4%  
+switch %random.4%
   case 1
     set j %random.4%
     set spis 38524 38525 38537 38552
     set vnum 38533
-  break         
-  default                  
+  break
+  default
     set j %random.5%
     set spis 38585 38565 38579 38588 38592
     set vnum 38530
   break
-done  
+done
 if %world.curmobs(%vnum%)% > %j%
   halt
 end
-set i 0     
+set i 0
 foreach mogila %spis%
   eval i  %i%+1
   if %i% == %j%
@@ -169,6 +174,7 @@ foreach mogila %spis%
     wdoor 38597 down purge
   end
 done
+
 ~
 #38506
 подходят к безголовому!~
@@ -176,7 +182,7 @@ done
 ~
 if !(%actor.class% == 8)
   встать
-  if (%world.curobjs(38501)% < 20) && (%random.2% == 1)  
+  if (%world.curobjs(38501)% < 20) && (%random.2% == 1)
     mload obj 38501
     mecho _Безголовый скелет выломал у себя кость.
     вооруж кость
@@ -188,6 +194,7 @@ else
   поклон %actor%.
 end
 end
+
 ~
 #38507
 подходят к злому мобу ~
@@ -201,6 +208,7 @@ else
   улыб %actor%.
 end
 end
+
 ~
 #38508
 чернок приходит в склеп~
@@ -224,6 +232,7 @@ if %self.realroom% == 38562
     end
   end
 end
+
 ~
 #38510
 трахаем паутину~
@@ -241,13 +250,14 @@ oecho _Вскоре появился большой разноцветный паук, и стал искать тупым взглядом с
 oload mob 38508
 wait 1
 opurge %self%
+
 ~
 #38511
 ведьма приходит в склеп~
 0 s 100
 ~
 if %self.realroom% == 38547
-  if %world.curobjs(38508)% 
+  if %world.curobjs(38508)%
     wait 1s
     wecho _Ведьма осторожно осмотрела амфору и подсыпала туда еще что-то.
   else
@@ -255,6 +265,7 @@ if %self.realroom% == 38547
     wecho _Ведьма не нашла амфору, задумалась, а потом облегченно вздохнула.
   end
 end
+
 ~
 #38512
 помер безголовый~
@@ -264,6 +275,7 @@ if (%world.curobjs(38500)% < 10) && (%random.4% == 1)
   mecho _Безголовый труп бросил пусту голову на землю и рассыпался в прах.
   mload obj 38500
 end
+
 ~
 #38513
 помер ведьма~
@@ -272,12 +284,13 @@ end
 if (%world.curobjs(38513)% < 15) && (%random.2% == 1)
   mload obj 38513
 end
+
 ~
 #38514
 свежуем паука~
 1 c 4
 освежевать~
-if !(%arg.contains(паук)%) 
+if !(%arg.contains(паук)%)
   osend       %actor% Что Вы хотите освежевать ?!!
   return 0
   halt
@@ -288,6 +301,7 @@ oecho _Маленький ключик звонко упал на каменный пол.
 oload obj 38515
 wait 1
 opurge %self%
+
 ~
 #38515
 помер паук~
@@ -295,8 +309,9 @@ opurge %self%
 ~
 if !%world.curobjs(559)% && %random.10%==1
   mload obj 559
-end     
+end
 mload obj 38528
+
 ~
 #38516
 помер главный~
@@ -307,9 +322,10 @@ while %exist.mob(38532)%
   %purge% %badwind%
 done
 mload obj 38516
-mecho _Злые силы, покрывавшие округу, рассеялись. 
+mecho _Злые силы, покрывавшие округу, рассеялись.
 calcuid komn 38595 room
-exec 38502 %komn.id%  
+exec 38502 %komn.id%
+
 ~
 #38517
 пуржим себя~
@@ -317,16 +333,18 @@ exec 38502 %komn.id%
 ~
 wait 1
 mpurge %self%
+
 ~
 #38518
 вызов  проклятых ветров~
 0 k 100
 ~
-wait 1s   
+wait 1s
 if ((%random.100% < 51) && (%world.curmobs(38532)% < 3))
   mecho _Проклятый ветер влетел в окно!
-  mload mob 38532                                 
+  mload mob 38532
 end
+
 ~
 #38520
 лоад мил человека~
@@ -352,6 +370,7 @@ say Уж не Кащей ли над ней потешается, уж не Соловей ли развлекается..?
 пла
 calcuid chelow 38521 mob
 detach 38520 %chelow.id%
+
 ~
 #38521
 говорим следуй мил человеку~
@@ -361,12 +380,13 @@ wait 1s
 say Проводи же меня...
 след %actor.name%
 detach 38521 %self.id%
+
 ~
 #38522
 целуем мыш~
 0 c 0
 целовать ласкать обнять трахать тронуть~
-if !(%arg.contains(мышка)%) 
+if !(%arg.contains(мышка)%)
   msend %actor% Кого вы хотите тронуть???
   return 0
   halt
@@ -377,6 +397,7 @@ wait 1s
 mecho _Внезапно мышь резко увеличилась и превратилась в высокую красавицу..
 mload mob 38524
 mpurge %self%
+
 ~
 #38523
 говориш челу что надо делать~
@@ -419,7 +440,7 @@ calcuid a2mfor 38523 mob
 if %a2mfor%
   mpurge %a2mfor%
 end
-switch %random.10%
+switch %random.3%
   case 1
     if (%world.curobjs(566)% < 1)
       mload obj 566
@@ -452,6 +473,7 @@ mpurge %self%
 ~
 *пуста тута
 nop
+
 ~
 #38527
 открываем стол~
@@ -461,7 +483,8 @@ wait 1
 oecho _Из стола выскочил маленький зеленый демон.
 oload mob 38525
 oecho _Маленький зеленый демон мерзко захихикал.
-detach 38527 %self.id% 
+detach 38527 %self.id%
+
 ~
 #38528
 вооружаемся головой~
@@ -469,6 +492,7 @@ detach 38527 %self.id%
 ~
 osend       %actor% _Вы подбросили пусту голову и ловко поймали ее пальцами за глазницы.
 oechoaround %actor% _%actor.name% подбросил%actor.g% пусту голову и ловко поймал%actor.g% ее за пустые глазницы.
+
 ~
 #38529
 вооружаемся палкой~
@@ -485,6 +509,7 @@ if %world.curobjs(38517)% < 4
     opurge %self%
   end
 end
+
 ~
 #38530
 помер чернокнижник молодой~
@@ -492,6 +517,7 @@ end
 ~
 mecho _Дух чернокнижника восстал из мертвых и будет вечно преследовать Вас!
 mload mob 38526
+
 ~
 #38535
 помер скелет со стабером~
@@ -500,6 +526,7 @@ mload mob 38526
 if (%world.curobjs(38518)% < 15) && (%random.2% == 1)
   mload obj 38518
 end
+
 ~
 #38537
 помер бесовка с ребрами~
@@ -508,6 +535,7 @@ end
 if (%world.curobjs(38519)% < 11) && (%random.2% == 1)
   mload obj 38519
 end
+
 ~
 #38538
 помер упырь с кафтаном~
@@ -516,6 +544,7 @@ end
 if (%world.curobjs(38520)% < 10) && (%random.2% == 1)
   mload obj 38520
 end
+
 ~
 #38539
 помер упыренок~
@@ -524,6 +553,7 @@ end
 if (%world.curobjs(38521)% < 15) && (%random.2% == 1)
   mload obj 38521
 end
+
 ~
 #38540
 помер красавица~
@@ -532,6 +562,7 @@ end
 if (%world.curobjs(38522)% < 10) && (%random.2% == 1)
   mload obj 38522
 end
+
 ~
 #38542
 подходим к ползущему~
@@ -544,6 +575,7 @@ else
   wait 2s
   mecho Безногий скелет попытался поклониться но лишь ткнулся черепом в землю...
 end
+
 ~
 #38543
 подходим к дракону~
@@ -557,6 +589,7 @@ else
   wait 1s
   mecho _Костяной дракон вежливо помахал Вам крылами.
 end
+
 ~
 #38544
 ноги встречают тело~
@@ -572,6 +605,7 @@ if %actor.vnum% == 38528
   mload mob 38531
   mpurge %self%
 end
+
 ~
 #38545
 тело встречает ноги~
@@ -587,6 +621,7 @@ if %actor.vnum% == 38529
   mload mob 38531
   mpurge %self%
 end
+
 ~
 #38546
 тело встречает ноги~
@@ -598,6 +633,7 @@ if %actor.vnum% == 38529
   say Не мои!
   плак
 end
+
 ~
 #38547
 подходим к гнилому 2~
@@ -610,6 +646,7 @@ else
   wait 2s
   mecho _Гнилой скелет склонился перед вами в глубоком реверансе.
 end
+
 ~
 #38548
 помер грязный~
@@ -618,6 +655,7 @@ end
 if (%world.curobjs(38529)% < 15) && (%random.3% == 1)
   mload obj 38529
 end
+
 ~
 #38549
 помер гнилой~
@@ -626,5 +664,7 @@ end
 if (%world.gameobjs(38530)% < 15) && (%random.2% == 1)
   mload obj 38530
 end
+
 ~
-$~
+$
+$

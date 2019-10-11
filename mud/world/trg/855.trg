@@ -15,14 +15,17 @@ if %world.curmobs(85511)% > 50
   osend %actor% ...и ничего не произошло!
   halt
 end
+opurge %horseact.id%
 oload mob 85511
+calcuid horseact 85511 mob
+wait 5
+global horseact
 osend %actor% Вы страстно поцеловали высушенную голову.
 oechoaround %actor% %actor.name% поцеловал%actor.g% высушенную конскую голову.
 oecho Высушенная голова рассыпалась в ваших руках.
 oecho Призрак коня без головы беззвучно появился перед вами!
 oforce %actor% оседлать конь
 wait 1
-opurge %self%
 ~
 #85501
 Пощекотать коня~
@@ -48,9 +51,7 @@ if ((%actor.clan% != бу) || (%self.leader% && (%self.leader% != %actor%)))
 end
 msend %actor% Вы осторожно пощекотали коня промеж ног.
 mechoaround %actor% %actor.name% смело пощекотал%actor.g% коня, кхм, кое-где.
-mload obj 85520
 mecho Вокруг раздалось истеричное лошадиное ржание, конь резко уменьшился и превратился в усохшую лошадиную голову.
-give голова .%actor.name%
 wait 1
 mpurge %self%
 ~
@@ -59,6 +60,7 @@ mpurge %self%
 0 f 100
 ~
 mload obj 85520
+
 ~
 #85503
 Дикей кланстафа~
@@ -76,6 +78,7 @@ if %actor.clan% != бу
   wait 1
   opurge %self%
 end
+
 ~
 #85504
 Ругань духа~
@@ -107,6 +110,7 @@ else
   wait 1s
   эмо мерзко захихикал.
 end
+
 ~
 #85505
 Комар информирует~
@@ -120,6 +124,7 @@ if %actor.clan% != бу
 else
   эмоц приветливо замахал призрачными крылышками
 end
+
 ~
 #85506
 Гости~
@@ -131,12 +136,14 @@ if %actor.clan% != рк
   calcuid Upir 85510 mob
   run 85507 %Upir%
 end
+
 ~
 #85507
 Информирование о гостях~
 0 a 0
 ~
 say Эй упыри, вылезайте из гробов!! %pc% сам на наше кладбище пожаловал!!
+
 ~
 #85508
 Упал в могилу~
@@ -150,5 +157,17 @@ wait 1
 eval %actor.hitp(1)%
 %actor.position(6)%
 %actor.wait(3)%
+
 ~
-$~
+#85509
+получение головы коня~
+0 d 0
+коня мне~
+wait 4
+mload obj 85520
+say Совсем новый конь, не бит, не крашен, почти без пробега по Киевской Руси.
+дать голова %actor.name%
+
+~
+$
+$

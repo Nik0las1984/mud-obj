@@ -86,15 +86,21 @@ T 63710
 зорко смотрит по сторонам, держа в руках огромный меч.
 ~
 c0d0e0f0g0l0m0n0o0A0 d0f0h0k0m0r0x0q1r1z1 -600 E
-27 3 -5 3d10+1600 7d7+15
-0d0+0 120000
+30 -11 -5 3d10+5000 15d15+30
+0d0+0 4000000
 8 8 1
+Resistances: 10 10 10 10 0 0 0 0
+Armour: 30
+Absorbe: 10
+AResist: 10
+MResist: 10
+PResist: 10
 BareHandAttack: 3
-Str: 28
-Dex: 26
+Str: 40
+Dex: 35
 Int: 24
 Wis: 25
-Con: 30
+Con: 40
 Cha: 17
 Size: 100
 LikeWork: 35
@@ -150,17 +156,23 @@ E
 туманную пустошь.
 ~
 c0d0f0g0l0m0n0o0A0 d0f0h0k0m0x0p1y1 -600 E
-25 2 -5 2d10+1700 6d6+22
-0d0+0 100000
+31 -15 -20 2d10+5000 15d15+30
+0d0+0 4000000
 8 8 1
-Str: 31
-Dex: 22
+Resistances: 10 10 10 10 0 0 0 0
+Armour: 30
+Absorbe: 20
+AResist: 10
+MResist: 10
+PResist: 10
+Str: 40
+Dex: 34
 Int: 17
 Wis: 18
-Con: 24
+Con: 45
 Cha: 25
 Size: 100
-LikeWork: 15
+LikeWork: 30
 MaxFactor: 3
 ExtraAttack: 3
 Class: 104
@@ -216,18 +228,25 @@ T 63723
    Странное семикрылое существо.
 ~
 a0b0c0d0f0g0l0m0n0o0x0A0c2h2u2 d0e0f0k0m0n0r0x0z0A0C0a1m1x1y1z1 -600 E
-29 2 -5 3d10+4000 9d7+25
-7d7+5200 220000
+33 -20 -20 3d10+12000 15d15+40
+7d7+5200 7000000
 8 8 1
+Resistances: 15 15 15 15 20 30 20 0
+Armour: 60
+Success: 10
+Absorbe: 20
+AResist: 15
+MResist: 15
+PResist: 15
 BareHandAttack: 4
-Str: 36
-Dex: 20
-Int: 28
-Wis: 28
-Con: 22
-Cha: 16
-Size: 100
-LikeWork: 30
+Str: 45
+Dex: 35
+Int: 40
+Wis: 40
+Con: 45
+Cha: 35
+Size: 1
+LikeWork: 90
 MaxFactor: 3
 ExtraAttack: 1
 Class: 105
@@ -265,17 +284,24 @@ T 63707
    Очень странное существо о семи крылах.
 ~
 c0d0f0g0l0m0n0o0A0b2 d0f0h0k0m0r0x0z0x1y1 -600 E
-26 5 -4 2d10+2000 8d8+20
-5d5+110 110000
+32 -20 -20 2d10+7000 15d15+35
+5d5+110 4000000
 8 8 1
-Str: 25
-Dex: 24
-Int: 24
-Wis: 23
-Con: 24
-Cha: 16
+Resistances: 10 10 10 10 10 10 10 0
+Armour: 30
+CastSuccess: 10
+Absorbe: 30
+AResist: 10
+MResist: 10
+PResist: 10
+Str: 40
+Dex: 45
+Int: 40
+Wis: 40
+Con: 45
+Cha: 40
 Size: 100
-LikeWork: 15
+LikeWork: 50
 MaxFactor: 3
 ExtraAttack: 2
 Class: 103
@@ -311,18 +337,25 @@ E
    Странное существо, окруженное мерцанием бешено машущих крыльев.
 ~
 c0d0f0g0l0m0n0o0A0 d0f0h0k0x0z0A0q1z1 -600 E
-27 1 -5 3d9+1990 8d12+19
-5d5+120 120000
+33 -15 -20 3d9+5000 15d15+35
+5d5+120 5000000
 8 8 1
+Resistances: 15 15 15 15 10 10 10 0
+Armour: 50
+CastSuccess: 15
+Absorbe: 30
+AResist: 10
+MResist: 10
+PResist: 10
 BareHandAttack: 1
-Str: 33
-Dex: 27
-Int: 23
-Wis: 26
-Con: 32
-Cha: 18
+Str: 40
+Dex: 40
+Int: 35
+Wis: 40
+Con: 45
+Cha: 45
 Size: 100
-LikeWork: 15
+LikeWork: 50
 MaxFactor: 3
 ExtraAttack: 2
 Class: 103
@@ -355,18 +388,25 @@ E
    Странное существо, о семи крылах.
 ~
 c0d0f0g0h0l0m0n0o0A0d2 c0d0f0h0k0x0z0y1z1 -600 E
-24 4 -3 2d10+1000 6d9+11
-2d2+40 80000
+32 -15 -20 2d10+3500 15d15+30
+2d2+40 3500000
 8 8 1
+Resistances: 10 10 10 10 15 10 10 0
+Armour: 40
+CastSuccess: 20
+Absorbe: 40
+AResist: 10
+MResist: 10
+PResist: 10
 BareHandAttack: 4
-Str: 31
-Dex: 24
-Int: 14
-Wis: 17
-Con: 19
-Cha: 14
+Str: 30
+Dex: 35
+Int: 30
+Wis: 30
+Con: 35
+Cha: 45
 Size: 100
-LikeWork: 11
+LikeWork: 50
 MaxFactor: 6
 ExtraAttack: 1
 Class: 103
@@ -396,18 +436,24 @@ E
 снабженными острыми, как бритва, когтями, длиной с хороший меч.
 ~
 c0d0e0f0g0l0m0n0o0z0A0b2h2 d0f0h0k0m0x0z0A0m1q1z1 -600 E
-27 4 -7 2d5+1500 5d6+9
-0d0+0 121000
+32 -10 -20 2d5+5000 15d15+22
+0d0+0 4000000
 8 8 1
+Resistances: 10 10 10 10 0 0 0 0
+Armour: 20
+Absorbe: 10
+AResist: 10
+MResist: 10
+PResist: 10
 BareHandAttack: 1
-Str: 28
-Dex: 24
-Int: 27
-Wis: 28
-Con: 25
-Cha: 10
+Str: 34
+Dex: 40
+Int: 35
+Wis: 35
+Con: 45
+Cha: 35
 Size: 90
-LikeWork: 10
+LikeWork: 30
 MaxFactor: 6
 ExtraAttack: 1
 Class: 101
@@ -444,18 +490,24 @@ T 63716
    Ужасное лесное существо.
 ~
 c0d0f0g0l0m0n0o0A0 d0f0k0m0n0r0z0A0m1p1 -600 E
-26 1 -9 7d2+1660 7d9+19
-0d0+0 105000
+31 -14 -20 7d2+4000 15d14+25
+0d0+0 3500000
 8 8 1
+Resistances: 10 10 10 10 0 0 0 0
+Armour: 30
+Absorbe: 20
+AResist: 10
+MResist: 10
+PResist: 10
 BareHandAttack: 4
-Str: 28
-Dex: 29
+Str: 31
+Dex: 45
 Int: 23
 Wis: 21
-Con: 22
+Con: 45
 Cha: 14
 Size: 100
-LikeWork: 11
+LikeWork: 30
 MaxFactor: 6
 ExtraAttack: 3
 Class: 103
@@ -495,17 +547,24 @@ E
    Ужасное лесное существо.
 ~
 c0d0f0g0l0m0n0o0z0A0 d0f0h0k0x0z0A0q1x1 -600 E
-25 3 -10 4d9+2000 11d4+15
-0d0+0 100000
+31 -15 -20 4d9+5000 15d15+30
+0d0+0 3500000
 8 8 1
-Str: 32
-Dex: 30
+Resistances: 10 10 10 10 10 0 0 0
+Armour: 30
+Success: 5
+Absorbe: 10
+AResist: 10
+MResist: 10
+PResist: 10
+Str: 35
+Dex: 40
 Int: 33
 Wis: 20
-Con: 23
+Con: 40
 Cha: 12
 Size: 100
-LikeWork: 15
+LikeWork: 35
 MaxFactor: 4
 ExtraAttack: 2
 Class: 101
@@ -557,14 +616,20 @@ E
 подошедшего к нему.
 ~
 b0c0d0f0g0l0m0n0o0x0A0 d0f0h0k0m0n0r0z0A0C0p1q1x1y1z1 -600 E
-29 1 -8 5d10+7501 6d9+29
-4d4+1000 250000
+34 -25 -20 5d10+10000 15d15+40
+4d4+1000 7000000
 8 8 1
-Str: 36
-Dex: 36
-Int: 36
-Wis: 36
-Con: 36
+Resistances: 15 15 15 15 10 20 15 0
+Armour: 50
+Absorbe: 15
+AResist: 10
+MResist: 10
+PResist: 10
+Str: 45
+Dex: 45
+Int: 50
+Wis: 50
+Con: 55
 Cha: 16
 Size: 100
 LikeWork: 40
@@ -636,17 +701,25 @@ L 1483 12 0 0
 призрачные огоньки глаз.
 ~
 b0c0d0f0g0l0n0o0x0 d0f0h0k0m0n0r0x0z0A0a1q1r1x1y1z1 -600 E
-30 0 -10 5d10+9000 9d9+25
-5d5+5000 300000
+34 -30 -20 5d10+18000 15d20+50
+5d5+5000 10000000
 8 8 1
-Str: 36
-Dex: 36
-Int: 36
-Wis: 36
-Con: 36
+Resistances: 15 15 15 15 20 20 20 0
+HPreg: 30
+Armour: 80
+Success: 20
+Absorbe: 30
+AResist: 15
+MResist: 15
+PResist: 15
+Str: 55
+Dex: 50
+Int: 50
+Wis: 50
+Con: 55
 Cha: 36
 Size: 100
-LikeWork: 40
+LikeWork: 100
 MaxFactor: 2
 ExtraAttack: 5
 Class: 104
@@ -722,15 +795,22 @@ T 63728
    Огромная черная тень колышется в воздухе.
 ~
 c0d0f0g0l0m0n0o0u0z0 d0f0h0k0r0x0z0A0x1z1 -600 E
-28 0 -10 10d2+2700 9d9+19
-0d0+0 180000
+32 -15 -20 10d2+5000 15d15+20
+0d0+0 4000000
 8 8 2
+Resistances: 10 10 10 10 10 20 20 0
+Armour: 50
+Success: 10
+Absorbe: 20
+AResist: 10
+MResist: 10
+PResist: 10
 BareHandAttack: 5
-Str: 36
-Dex: 25
+Str: 40
+Dex: 35
 Int: 20
 Wis: 25
-Con: 35
+Con: 40
 Cha: 16
 Size: 100
 LikeWork: 35
@@ -773,17 +853,23 @@ E
 крючковатых колючек его ветви кажутся вчетверо толще, чем на самом деле.
 ~
 b0c0d0e0f0n0o0p0q0r0u0x0A0l1m1n1g2h2u2 c0d0f0k0r0C0 -600 E
-31 -4 -10 50d20+2000 8d8+10
-0d0+0 410000
+33 -20 -20 50d20+8000 15d15+35
+0d0+0 6000000
 8 8 0
 Saves: -10 -10 -10 -10
+Resistances: 15 15 15 15 30 10 30 0
+Armour: 50
 CastSuccess: 20
+Absorbe: 30
+AResist: 10
+MResist: 10
+PResist: 10
 BareHandAttack: 1
-Str: 35
-Dex: 20
+Str: 40
+Dex: 35
 Int: 35
 Wis: 35
-Con: 35
+Con: 50
 Cha: 35
 Size: 100
 LikeWork: 95
@@ -863,15 +949,16 @@ E
 крючковатых колючек его ветви кажутся вчетверо толще, чем на самом деле.
 ~
 b0c0d0e0f0n0o0p0q0r0u0x0A0k1g2h2u2 c0d0f0k0r0C0 -600 E
-29 -4 -10 50d20+2000 8d8+10
-0d0+0 200000
+33 -20 -20 50d20+8000 15d15+35
+0d0+0 6000000
 4 4 0
+Resistances: 15 15 15 15 30 20 20 0
 BareHandAttack: 1
-Str: 30
-Dex: 20
+Str: 40
+Dex: 35
 Int: 35
 Wis: 35
-Con: 35
+Con: 50
 Cha: 35
 Size: 100
 LikeWork: 95
@@ -953,19 +1040,26 @@ E
 живые глаза.
 ~
 b0c0d0f0m0n0o0p0r0x0z0A0r1 d0f0k0r0z0C0m1p1t1 -600 E
-29 3 -9 20d40+1200 6d7+17
-30d10+366 220000
+33 -20 -20 20d40+8000 15d15+40
+30d10+366 4000000
 8 8 1
+Resistances: 10 10 10 10 20 0 20 0
+HPreg: 10
+Armour: 60
+Absorbe: 30
+AResist: 10
+MResist: 10
+PResist: 10
 BareHandAttack: 3
-Str: 31
-Dex: 25
+Str: 40
+Dex: 40
 Int: 25
 Wis: 20
-Con: 36
+Con: 45
 Cha: 10
 Size: 100
 MaxFactor: 4
-ExtraAttack: 1
+ExtraAttack: 2
 Class: 104
 Race: 104
 Height: 175
@@ -1053,17 +1147,23 @@ T 63725
 невидимую паутину.
 ~
 c0d0l0m0n0o0r0A0b1p1 d0f0k0p0r0s0t0c1m1x1 -600 E
-32 3 -8 20d50+1000 6d6+10
-200d50+0 500000
+34 -25 -20 20d50+7000 15d15+35
+200d50+0 4200000
 8 8 1
 Saves: -14 -14 -14 -14
+Resistances: 10 10 10 10 10 0 10 0
+Armour: 40
 CastSuccess: 23
+Absorbe: 15
+AResist: 10
+MResist: 10
+PResist: 10
 BareHandAttack: 2
-Str: 30
-Dex: 36
+Str: 45
+Dex: 50
 Int: 36
 Wis: 36
-Con: 30
+Con: 50
 Cha: 36
 Size: 100
 LikeWork: 100
@@ -1332,16 +1432,22 @@ T 63730
    Огромная лесная кошка яростно сверкнула на Вас глазами!
 ~
 d0f0m0n0o0 f0k0s0A0m1 -600 E
-25 2 -6 10d10+1000 8d8+9
-0d0+0 90000
+31 -15 -20 10d10+4000 15d15+35
+0d0+0 1500000
 8 8 2
+Resistances: 10 10 10 10 10 0 10 0
+Armour: 40
+Absorbe: 10
+AResist: 10
+MResist: 10
+PResist: 10
 BareHandAttack: 8
-Str: 32
-Dex: 27
-Int: 23
-Wis: 13
-Con: 26
-Cha: 10
+Str: 42
+Dex: 50
+Int: 35
+Wis: 30
+Con: 45
+Cha: 50
 Size: 100
 ExtraAttack: 3
 Class: 103
@@ -1371,15 +1477,21 @@ E
 носом свистит и поносит вас на все лады.
 ~
 d0f0m0n0o0r0x0z0A0 d0f0k0r0A0m1x1 -600 E
-26 8 -4 50d10+1000 5d6+6
-0d0+0 110000
+31 5 -20 50d10+5000 18d15+30
+0d0+0 1500000
 8 8 2
+Resistances: 10 10 10 10 20 10 10 0
+Armour: 40
+Absorbe: 10
+AResist: 5
+MResist: 5
+PResist: 5
 BareHandAttack: 12
-Str: 13
-Dex: 25
+Str: 35
+Dex: 40
 Int: 33
 Wis: 33
-Con: 17
+Con: 45
 Cha: 31
 Size: 100
 LikeWork: 99
