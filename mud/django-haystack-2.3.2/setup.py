@@ -15,7 +15,7 @@ tests_require = [
     'elasticsearch',
     'pysolr>=3.2.0',
     'whoosh==2.5.4',
-    'lxml==3.2.3',
+    'lxml==4.6.2',
     'python-dateutil',
     'geopy==0.95.1',
     'httplib2==0.8',
