@@ -18,7 +18,7 @@ tests_require = [
     'lxml==3.2.3',
     'python-dateutil',
     'geopy==0.95.1',
-    'httplib2==0.8',
+    'httplib2==0.19.0',
 
     'nose',
     'mock',
